@@ -1,0 +1,346 @@
+<Window x:Class="By_ProV2.SutAlimFormu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="clr-namespace:By_ProV2.Helpers"
+        Title="Çiğ Süt Alım Formu"
+        Height="1000" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#F9F9F9"
+        Loaded="Window_Loaded">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 🟦 Başlık -->
+        <Border Background="#2C3E50" CornerRadius="6" Padding="12" Margin="0,0,0,15">
+            <TextBlock Text="ÇİĞ SÜT ALIM FORMU"
+                       Foreground="White"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- 🔢 Belge Numarası ve İşlem Türü -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Center">
+            <StackPanel Margin="0,0,30,0">
+                <TextBlock Text="Belge No:" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox x:Name="txtBelgeNo" Width="150" Height="25" IsReadOnly="True" 
+                         HorizontalAlignment="Center" Margin="0,5,0,0" FontSize="12" 
+                         TextAlignment="Center" Background="#F0F0F0"/>
+            </StackPanel>
+            
+            <StackPanel Margin="30,0,0,0">
+                <TextBlock Text="İşlem Türü:" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <RadioButton x:Name="rbDepoAlim" Content="Depoya Alım" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
+                    <RadioButton x:Name="rbDirekSevk" Content="Direkt Sevk" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
+                    <RadioButton x:Name="rbDepodanSevk" Content="Depodan Sevk" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 🧾 Tedarikçi / Müşteri Seçimi -->
+        <Grid Grid.Row="2" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Tedarikçi -->
+            <GroupBox Header="Tedarikçi Bilgisi" FontWeight="Bold" Margin="0,0,10,0">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Button x:Name="btnTedarikciSec" Content="Seç" Width="80" Height="25" Click="btnTedarikciSec_Click"/>
+                    <TextBox x:Name="txtTedarikciKod"
+                             Width="120" Height="25"
+                             Margin="10,0"
+                             IsReadOnly="True"
+                             />
+                    <TextBox x:Name="txtTedarikciAdi"
+                             Width="260" Height="25"
+                             IsReadOnly="True"
+                            />
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Müşteri -->
+            <GroupBox Header="Müşteri Bilgisi" FontWeight="Bold" Grid.Column="1" Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Button x:Name="btnMusteriSec" Content="Seç" Width="80" Height="25" Click="btnMusteriSec_Click"/>
+                    <TextBox x:Name="txtMusteriKod"
+                             Width="120" Height="25"
+                             Margin="10,0"
+                             IsReadOnly="True"
+                             />
+                    <TextBox x:Name="txtMusteriAdi"
+                             Width="260" Height="25"
+                             IsReadOnly="True"
+                             />
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+
+        <!-- ⚗️ Analiz Alanları -->
+        <GroupBox Header="Süt Alım Bilgileri ve Analiz Değerleri"
+                  Grid.Row="3"
+                  FontWeight="Bold">
+            <Grid Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>                    
+                </Grid.RowDefinitions>
+
+                <!-- Sol sütun -->
+                <TextBlock Text="Tarih:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <DatePicker x:Name="dpTarih" Grid.Row="0" Grid.Column="1" Height="25" Width="120" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Miktar (Lt):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtMiktar"
+                         Grid.Row="1" Grid.Column="1"
+                         Width="120" Height="25"
+                         HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Birim Fiyat (₺):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtFiyat"
+                         Grid.Row="2" Grid.Column="1"
+                         Width="120" Height="25"
+                          HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Yağ (%):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtYag" Grid.Row="3" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Protein (%):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtProtein" Grid.Row="4" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Laktoz (%):" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtLaktoz" Grid.Row="5" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="TKM (%):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtTKM" Grid.Row="6" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="YKM (%):" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtYKM" Grid.Row="7" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <!-- Orta sütun -->
+                <TextBlock Text="pH:" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtpH" Grid.Row="0" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="İletkenlik (µS):" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtIletkenlik" Grid.Row="1" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Sıcaklık (°C):" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtSicaklik" Grid.Row="2" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Yoğunluk (g/cm³):" Grid.Row="3" Grid.Column="3" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtYogunluk" Grid.Row="3" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Kesinti (Lt):" Grid.Row="4" Grid.Column="3" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtKesinti" Grid.Row="4" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Antibiyotik:" Grid.Row="5" Grid.Column="3" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cmbAntibiyotik" Grid.Row="5" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0">
+                    <ComboBoxItem Content="Negatif" IsSelected="True"/>
+                    <ComboBoxItem Content="Pozitif"/>
+                </ComboBox>
+
+                <TextBlock Text="Araç Temizlik:" Grid.Row="6" Grid.Column="3" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cmbAracTemizlik" Grid.Row="6" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0">
+                    <ComboBoxItem Content="Temiz" IsSelected="True"/>
+                    <ComboBoxItem Content="Kirli"/>
+                </ComboBox>
+                
+                <TextBlock Text="Plaka:" Grid.Row="7" Grid.Column="3" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtPlaka" Grid.Row="7" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Durumu:" Grid.Row="8" Grid.Column="6" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cmbDurumu" Grid.Row="8" Grid.Column="7"
+          Width="120" Height="60"
+          SelectedIndex="0"
+          HorizontalContentAlignment="Center"
+          VerticalContentAlignment="Center">
+                    <ComboBox.Template>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Grid>
+                                <ToggleButton x:Name="ToggleButton"                             
+                              Grid.Column="2"
+                              Focusable="false"
+                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                              ClickMode="Press" />
+
+                                <ContentPresenter x:Name="ContentSite"
+                                  IsHitTestVisible="False"
+                                  Content="{TemplateBinding SelectionBoxItem}"
+                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                  Margin="3,3,23,3"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center" />
+                                <TextBox x:Name="PART_EditableTextBox"
+                         Style="{x:Null}"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         Margin="3,3,23,3"
+                         Focusable="True"
+                         Background="Transparent"
+                         Visibility="Hidden"
+                         IsReadOnly="{TemplateBinding IsReadOnly}" />
+                                <Popup x:Name="Popup"
+                       Placement="Bottom"
+                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                       AllowsTransparency="True"
+                       Focusable="False"
+                       PopupAnimation="Slide">
+                                    <Grid x:Name="DropDown"
+                          SnapsToDevicePixels="True"
+                          MinWidth="{TemplateBinding ActualWidth}"
+                          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder"
+                                Background="White"
+                                BorderThickness="1"
+                                BorderBrush="#888" />
+                                        <ScrollViewer Margin="4,6,4,6"
+                                      SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+
+                            <!-- 🔸 Renk değişimi için Trigger’lar -->
+                            <ControlTemplate.Triggers>
+                                <DataTrigger Binding="{Binding SelectedItem.Content, RelativeSource={RelativeSource Self}}" Value="Kabul">
+                                    <Setter TargetName="ToggleButton" Property="Background" Value="#C8E6C9"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedItem.Content, RelativeSource={RelativeSource Self}}" Value="Şartlı Kabul">
+                                    <Setter TargetName="ToggleButton" Property="Background" Value="#FFE0B2"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedItem.Content, RelativeSource={RelativeSource Self}}" Value="Ret">
+                                    <Setter TargetName="ToggleButton" Property="Background" Value="#EF9A9A"/>
+                                    <Setter TargetName="ContentSite" Property="TextElement.Foreground" Value="White"/>
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ComboBox.Template>
+
+                    <!-- ComboBox içeriği -->
+                    <ComboBoxItem Content="Kabul"/>
+                    <ComboBoxItem Content="Şartlı Kabul"/>
+                    <ComboBoxItem Content="Ret"/>
+                </ComboBox>
+
+
+
+                <!-- Sağ Sutün -->
+                <TextBlock Text="Donma Noktası:" Grid.Row="0" Grid.Column="6" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtDonma" Grid.Row="0" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                
+                <TextBlock Text="T.Bakteri (ml/kob):" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtBakteri" Grid.Row="1" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <TextBlock Text="Somatik Hücre:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtSomatik" Grid.Row="2" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+                <!-- Açıklama -->
+                <TextBlock Text="Açıklama:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtAciklama" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4"
+                         Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="5,5,0,0" />
+            </Grid>
+        </GroupBox>
+        <!-- 📋 Kayıt Listesi (DataGrid) -->
+        <GroupBox Header="Araçtaki Tedarikçi Listesi"
+          Grid.Row="4"
+          FontWeight="Bold"
+          Margin="0,10,0,0">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Üst Butonlar -->
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,0,10">
+                    <Button x:Name="btnListeyeEkle"
+                    Content="➕ Listeye Ekle"
+                    Width="140" Height="35" Margin="5" Click="btnListeyeEkle_Click"/>
+                    <Button x:Name="btnSecileniSil"
+                    Content="🗑️ Seçileni Sil"
+                    Width="130" Height="35" Margin="5" Click="btnSecileniSil_Click"/>
+                </StackPanel>
+
+                <!-- DataGrid -->
+                <DataGrid x:Name="dgTedarikciler"
+                          Grid.Row="1"                          
+                          RowHeight="25"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          AlternatingRowBackground="#F2F2F2"
+                          HeadersVisibility="Column"
+                          Margin="0,5,0,0"
+                          MouseDoubleClick="dgTedarikciler_MouseDoubleClick">                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Belge No" Binding="{Binding BelgeNo}" Width="*"/>
+                        <DataGridTextColumn Header="Tedarikçi Kod" Binding="{Binding TedarikciKod}" Width="*"/>
+                        <DataGridTextColumn Header="Tedarikçi Adı" Binding="{Binding TedarikciAdi}" Width="2*"/>
+                        <DataGridTextColumn Header="Müşteri Kod" Binding="{Binding MusteriKod}" Width="*"/>
+                        <DataGridTextColumn Header="Müşteri Adı" Binding="{Binding MusteriAdi}" Width="*"/>
+                        <DataGridTextColumn Header="Miktar (Lt)" Binding="{Binding Miktar}" Width="*"/>
+                        <DataGridTextColumn Header="Fiyat" Binding="{Binding Fiyat}" Width="*"/>
+                        <DataGridTextColumn Header="Yağ (%)" Binding="{Binding Yag}" Width="*"/>
+                        <DataGridTextColumn Header="Protein (%)" Binding="{Binding Protein}" Width="*"/>
+                        <DataGridTextColumn Header="Laktoz (%)" Binding="{Binding Laktoz}" Width="*"/>
+                        <DataGridTextColumn Header="TKM" Binding="{Binding TKM}" Width="*"/>
+                        <DataGridTextColumn Header="YKM" Binding="{Binding YKM}" Width="*"/>
+                        <DataGridTextColumn Header="pH" Binding="{Binding pH}" Width="*"/>
+                        <DataGridTextColumn Header="İletkenlik" Binding="{Binding Iletkenlik}" Width="*"/>
+                        <DataGridTextColumn Header="Sıcaklık" Binding="{Binding Sicaklik}" Width="*"/>
+                        <DataGridTextColumn Header="Yoğunluk" Binding="{Binding Yogunluk}" Width="*"/>
+                        <DataGridTextColumn Header="Kesinti" Binding="{Binding Kesinti}" Width="*"/>
+                        <DataGridTextColumn Header="Antibiyotik" Binding="{Binding Antibiyotik}" Width="*"/>
+                        <DataGridTextColumn Header="Araç" Binding="{Binding AracTemizlik}" Width="*"/>
+                        <DataGridTextColumn Header="Donma N." Binding="{Binding DonmaN}" Width="*"/>
+                        <DataGridTextColumn Header="Bakteri" Binding="{Binding Bakteri}" Width="*"/>
+                        <DataGridTextColumn Header="Somatik" Binding="{Binding Somatik}" Width="*"/>
+                        <DataGridTextColumn Header="Plaka" Binding="{Binding Plaka}" Width="*"/>
+                        <DataGridTextColumn Header="Durum" Binding="{Binding Durumu}" Width="*"/>
+                        <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+
+
+        <!-- 🔘 Alt Butonlar -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="💾 Kaydet" Width="130" Height="45" Margin="5" Click="btnKaydet_Click"/>
+            <Button Content="🆕 Yeni" Width="110" Height="45" Margin="5"/>
+            <Button Content="❌ Kapat" Width="110" Height="45" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,45 @@
+<Window x:Class="By_ProV2.TedarikciEkleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Yeni Tedarikçi Ekle" Height="400" Width="400"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Tedarikçi Adı -->
+        <Label Content="Tedarikçi Adı:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtTedarikciAdi" Grid.Row="0" Grid.Column="1" Margin="0,5"/>
+
+        <!-- Vergi No -->
+        <Label Content="Vergi No:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtVergiNo" Grid.Row="1" Grid.Column="1" Margin="0,5"/>
+
+        <!-- Telefon -->
+        <Label Content="Telefon:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtTelefon" Grid.Row="2" Grid.Column="1" Margin="0,5"/>
+
+        <!-- E-posta -->
+        <Label Content="E-posta:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="txtEposta" Grid.Row="3" Grid.Column="1" Margin="0,5"/>
+
+        <!-- Adres -->
+        <Label Content="Adres:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtAdres" Grid.Row="4" Grid.Column="1" VerticalAlignment="Top" Margin="0,5" AcceptsReturn="True" Height="100" TextWrapping="Wrap"/>
+
+        <!-- Kaydet Butonu -->
+        <Button Content="💾 Kaydet" Grid.Row="5" Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,10,0,0"
+                Click="btnKaydet_Click"/>
+    </Grid>
+</Window>

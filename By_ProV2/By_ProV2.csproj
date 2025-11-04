@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="ClosedXML.Parser" Version="2.0.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
+    <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
+    <PackageReference Include="HarfBuzzSharp" Version="8.3.1.2" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Win32" Version="8.3.1.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+    <PackageReference Include="Microsoft.SqlServer.Types" Version="160.1000.6" />
+    <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
+    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
+    <PackageReference Include="PDFsharp-gdi" Version="6.2.2" />
+    <PackageReference Include="PDFsharp-MigraDoc-gdi" Version="6.2.2" />
+    <PackageReference Include="SixLabors.Fonts" Version="2.1.3" />
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
+    <PackageReference Include="SkiaSharp.HarfBuzz" Version="3.119.1" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Resources\Logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Compile Update="BelgeSorgulama.xaml.cs">
+      <DependentUpon>BelgeSorgulama.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="CariKayitWindow.xaml.cs">
+      <DependentUpon>CariKayitWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="CariListesiWindow.xaml.cs">
+      <DependentUpon>CariListesiWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="EskiSiparisFormu.xaml.cs">
+      <DependentUpon>EskiSiparisFormu.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="FiyatGuncellemeApp.xaml.cs">
+      <DependentUpon>FiyatGuncellemeApp.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="IskontoGirWindow.xaml.cs">
+      <DependentUpon>IskontoGirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="RaporSayfasi.xaml.cs">
+      <DependentUpon>RaporSayfasi.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SiparisFormu.xaml.cs">
+      <DependentUpon>SiparisFormu.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="StokKayitWindow.xaml.cs">
+      <DependentUpon>StokKayitWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="StokListeWindow.xaml.cs">
+      <DependentUpon>StokListeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SutAlimFormu.xaml.cs">
+      <DependentUpon>SutAlimFormu.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SutDepoSevkFormu.xaml.cs">
+      <DependentUpon>SutDepoSevkFormu.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SutDirekSevkFormu.xaml.cs">
+      <DependentUpon>SutDirekSevkFormu.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SutRaporlari.xaml.cs">
+      <DependentUpon>SutRaporlari.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="TedarikciEkleWindow.xaml.cs">
+      <DependentUpon>TedarikciEkleWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Fonts\arial.ttf" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Remove="SqlServerTypes\Loader.cs" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,41 @@
+<Window x:Class="By_ProV2.CariListesiWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cari Listesi" Height="500" Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <!-- Arama kutuları -->
+            <ColumnDefinition Width="*"/>
+            <!-- DataGrid -->
+        </Grid.ColumnDefinitions>
+
+        <!-- 🔍 Arama Paneli (Sol) -->
+        <StackPanel Grid.Column="0" VerticalAlignment="Top">
+            <TextBlock Text="Cari Kod Ara:" Margin="0,0,0,5"/>
+            <TextBox x:Name="txtAraCariKod" Height="30" Margin="0,0,0,10" TextChanged="txtAraCariKod_TextChanged"/>
+
+            <TextBlock Text="Cari Adı Ara:" Margin="0,0,0,5"/>
+            <TextBox x:Name="txtAraCariAdi" Height="30" Margin="0,0,0,10" TextChanged="txtAraCariAdi_TextChanged"/>
+        </StackPanel>
+
+        <!-- 📋 DataGrid (Sağ) -->
+        <DataGrid x:Name="dataGridCariler"
+                  Grid.Column="1"
+                  Margin="10,0,0,0"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  MouseDoubleClick="dataGridCariler_MouseDoubleClick">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Cari Kod" Binding="{Binding CariKod}" Width="150"/>
+                <DataGridTextColumn Header="Cari Adı" Binding="{Binding CariAdi}" Width="*"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+    </Grid>
+</Window>

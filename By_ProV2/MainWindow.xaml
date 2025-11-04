@@ -1,0 +1,106 @@
+﻿<Window x:Class="By_ProV2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:By_ProV2"
+        mc:Ignorable="d"
+        Title="Beryem Tarım Ürünleri Gıda Nakliye Ticaret Ltd. Şti."
+        Height="1000" Width="1618"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel LastChildFill="True">
+            <!-- Menü Bar en üstte -->
+            <Menu DockPanel.Dock="Top" Background="#EEE" Height="25" FontWeight="Bold">
+                <!-- Dosya -->
+                <MenuItem Header="Dosya">
+                    <MenuItem Header="Parametreler" Click="BtnParametreler_Click" />
+                    <MenuItem Header="Kullanıcılar" Click="BtnKullanicilar_Click" />
+                </MenuItem>
+
+                <!-- Cari -->
+                <MenuItem Header="Cari">
+                    <MenuItem Header="Cari Kayıt" Click="BtnCariKayit_Click" />
+                    <MenuItem Header="Cari Listesi" Click="BtnCariListesi_Click" />
+                    <MenuItem Header="Cari Hareket" Click="BtnCariHareket_Click" />
+                    <MenuItem Header="Raporlar" Click="BtnRaporlar_Click" />
+                </MenuItem>
+
+                <!-- Stok -->
+                <MenuItem Header="Stok">
+                    <MenuItem Header="Stok Kayıt" Click="BtnStokKayit_Click" />
+                    <MenuItem Header="Stok Hareket" Click="BtnStokHareket_Click" />
+                    <MenuItem Header="Raporlar" Click="BtnStokRapor_Click" />
+                </MenuItem>
+
+                <!-- Yem -->
+                <MenuItem Header="Yem">
+                    <MenuItem Header="Alış / Satış" Click="BtnYemAlisSatis_Click" />
+                    <MenuItem Header="Eski Kayıt" Click="BtnEskiKayit_Click"/>
+                    <MenuItem Header="Fiyat Listeleri" Click="BtnYemFiyatListeleri_Click" />
+                    <MenuItem Header="Raporlar" Click="BtnYemRaporlar_Click" />
+                </MenuItem>
+
+                <!-- Süt -->
+                <MenuItem Header="Süt">
+                    <MenuItem Header="Süt Alım Formu" Click="BtnSutAlim_Click" />
+                    <MenuItem Header="Süt Alım Belge Sorgulama" Click="BtnSutAlimSorgulama_Click" />
+                    <MenuItem Header="Depodan Sevk" Click="BtnSutDepoSevk_Click"/>
+                    <MenuItem Header="Direkt Sevk" Click="BtnSutDirekSevk_Click" />
+                    <MenuItem Header="Süt Raporları" Click="BtnSutRapor_Click" />
+                </MenuItem>
+
+            <!-- Genel Rapor -->
+                <MenuItem Header="Raporlar" Click="BtnRapor_Click" />
+
+                <!-- Çıkış -->
+                <MenuItem Header="Çıkış" Click="BtnCikis_Click" />
+            </Menu>
+
+            <!-- ... (StatusBar ve Grid içerikleri burada kalacak) -->
+
+            <!-- StatusBar en altta -->
+        <StatusBar DockPanel.Dock="Bottom" Background="#EEE" Height="30">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Ellipse x:Name="ConnectionIndicator" Width="14" Height="14" Fill="LightGreen" Margin="0,0,8,0" />
+                <TextBlock x:Name="DurumText" FontWeight="Bold" VerticalAlignment="Center" />
+            </StackPanel>
+        </StatusBar>
+
+        <!-- Ana içerik ve Menü Grid'i -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Sol Menü -->
+            <StackPanel Grid.Column="0" Background="#2C3E50">
+                <TextBlock Foreground="White" FontSize="24" FontWeight="Bold"
+                           Margin="20" HorizontalAlignment="Left" FontFamily="Klavika Bd" VerticalAlignment="Center">
+                    <Run Language="tr-tr" Text="ANA MENU"/>
+                </TextBlock>
+
+                <Button Content="📁 Dosya" Style="{StaticResource MenuButtonStyle}" Click="BtnDosya_Click" Height="60"/>
+                <Button Content="👥 Cari" Style="{StaticResource MenuButtonStyle}" Click="BtnCari_Click" Height="60"/>
+                <Button Content="📦 Stok" Style="{StaticResource MenuButtonStyle}" Click="BtnStok_Click" Height="60"/>
+                <Button Content="🥛 Süt" Style="{StaticResource MenuButtonStyle}" Click="BtnSut_Click" Height="60"/>
+                <Button Content="🌾 Yem" Style="{StaticResource MenuButtonStyle}" Click="BtnYem_Click" Height="60"/>
+                <Button Content="📊 Raporlar" Style="{StaticResource MenuButtonStyle}" Click="BtnRapor_Click" Height="60"/>
+                <Button Content="🚪 Çıkış" Style="{StaticResource MenuButtonStyle}" Click="BtnCikis_Click" Height="60"/>
+            </StackPanel>
+
+            <!-- İçerik Alanı -->
+            <Grid Grid.Column="1" Background="White" x:Name="ContentArea">
+                <TextBlock 
+                    FontSize="95" 
+                    FontWeight="Bold" 
+                    Foreground="#34495E"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Opacity="0.45" Visibility="Visible" FontFamily="Klavika Bd">
+                    <Run Text="Beryem "/><LineBreak/><Run Text="    ERP"/>
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

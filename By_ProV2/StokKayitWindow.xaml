@@ -1,0 +1,288 @@
+<Window x:Class="By_ProV2.StokKayitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Stok Kayıt" Height="800" Width="1000"
+        ResizeMode="CanMinimize"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel LastChildFill="True">
+
+        <!-- Üst Bar -->
+        <Border Background="#FF2D2D30" Height="25" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0">
+                <Button Content="💾" Width="20" Height="20" Margin="3" ToolTip="Kaydet" Click="btnKaydet_Click"/>
+                <Button Content="✏️" Width="20" Height="20" Margin="3" ToolTip="Güncelle" Click="btnGuncelle_Click"/>
+                <Button Content="🗑️" Width="20" Height="20" Margin="3" ToolTip="Sil" Click="btnSil_Click"/>
+                <Button Content="🧹" Width="20" Height="20" Margin="3" ToolTip="Temizle" Click="btnTemizle_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 🔷 Ana Bilgiler: Sabit Üst Alan -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,20">
+            <GroupBox Header="Stok Temel Bilgileri" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- 0: Stok Kodu -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 1: Stok Adı -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 2: Birim -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 3: Ağırlık -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <!-- Stok Kodu -->
+                    <Label Content="Stok Kodu:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBox x:Name="txtStokKodu" Width="200" LostFocus="txtStokKodu_LostFocus" PreviewKeyDown="txtStokKodu_PreviewKeyDown"/>
+                        <Button Content="🔍" Width="30" Height="25" Margin="5,0,0,0" ToolTip="Stok Listesi" Click="btnStokListe_Click"/>
+                    </StackPanel>
+
+
+                    <!-- Stok Adı -->
+                    <Label Content="Stok Adı:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtStokAdi" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Grid.ColumnSpan="3"/>
+
+                    <!-- Birim -->
+                    <Label Content="Birim:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="cmbBirim" Grid.Row="2" Grid.Column="1" Width="250" HorizontalAlignment="Left" Margin="0,0,0,5">
+                        <ComboBoxItem Content="Adet" />
+                        <ComboBoxItem Content="Kg" />
+                        <ComboBoxItem Content="Lt" />
+                        <ComboBoxItem Content="Çvl" />
+                    </ComboBox>
+
+                    <!-- Ağırlık -->
+                    <Label Content="Ağırlık (kg):" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,0,5" HorizontalAlignment="Right"/>
+                    <TextBox x:Name="txtAgirlik" Grid.Row="2" Grid.Column="3" Margin="0,0,0,5" />
+
+                </Grid>
+            </GroupBox>
+
+
+        </StackPanel>
+
+        <TabControl Margin="10" DockPanel.Dock="Top" Height="400">
+            <!-- Sekme 1: Ürün ve Stok Bilgileri -->
+            <TabItem Header="Ürün ve Stok Bilgileri">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Yem Özelliği -->
+                    <Label Content="Yem Özelliği:" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" />
+                    <ComboBox x:Name="cmbYemOzelligi" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" >
+                        <ComboBoxItem Content="Pelet" HorizontalAlignment="Left" Width="312"/>
+                        <ComboBoxItem Content="Granül" HorizontalAlignment="Left" Width="312"/>
+                        <ComboBoxItem Content="Toz" HorizontalAlignment="Left" Width="312"/>
+                        <ComboBoxItem Content="Kırık" HorizontalAlignment="Left" Width="312"/>
+                        <ComboBoxItem Content="Diri" HorizontalAlignment="Left" Width="312"/>
+                    </ComboBox>
+
+                    <!-- Barkod Numarası -->
+                    <Label Content="Barkod Numarası:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,0,5" />
+                    <TextBox x:Name="txtBarkod" Grid.Row="0" Grid.Column="3" Margin="0,0,0,5" />
+
+                    <!-- Menşei -->
+                    <Label Content="Ürün Menşei:" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="cmbMensei" Grid.Row="1" Grid.Column="3" Margin="0,0,0,5">
+                        <ComboBoxItem Content="Yerli" />
+                        <ComboBoxItem Content="İthal" />
+                    </ComboBox>
+
+                    <!-- Depo -->
+                    <Label Content="Depo:" Grid.Row="2" Grid.Column="0" />
+                    <ComboBox x:Name="cmbDepo" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" />
+                    
+                    <!-- Parti No -->
+                    <Label Content="Parti No:" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtPartiNo" Grid.Row="2" Grid.Column="3" Margin="0,0,0,5"/>
+
+                    <!-- Parti No -->
+                    <Label Content="Protein Oranı(%):" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtProtein" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"/>
+                    
+                    <!-- Enerji Oranı-->
+                    <Label Content="Enerji (ME MJ/kg): " Grid.Row="4" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtEnerji" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5"/>
+
+                    <!-- Nem Oranı -->
+                    <Label Content="Nem Oranı(%):" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtNemOrani" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5"/>
+
+                    <!-- Açıklama -->
+                    <Label Content="Açıklama:" Grid.Row="6" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtAciklama" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Height="60" AcceptsReturn="True" Margin="0,0,0,5"/>
+
+
+
+
+                </Grid>
+            </TabItem>
+
+            <!-- Sekme 2: Genel Bilgiler -->
+            <TabItem Header="Genel Bilgiler">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- İşlem Tarihi -->
+                    <Label Content="İşlem Tarihi:" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5"/>
+                    <DatePicker x:Name="dpIslemTarihi" Grid.Row="0" Grid.Column="1" SelectedDate="{x:Static sys:DateTime.Now}" Margin="0,0,0,5"/>
+
+                    <!-- Fatura No -->
+                    <Label Content="Fatura No:" Grid.Row="0" Grid.Column="2" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtFaturaNo" Grid.Row="0" Grid.Column="3" Margin="0,0,0,5"/>
+
+                    <!-- Tedarikçi -->
+                    <Label Content="Tedarikçi:" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                        <ComboBox x:Name="cmbTedarikci" Width="237" Margin="0,0,5,5"/>
+                        <Button Content="➕" Width="25" Height="25" Click="btnTedarikciEkle_Click" ToolTip="Yeni Tedarikçi Ekle" Margin="0,0,0,5"/>
+                    </StackPanel>
+
+                    <!-- Teslim Alan -->
+                    <Label Content="Teslim Alan:" Grid.Row="1" Grid.Column="2" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtTeslimAlan" Grid.Row="1" Grid.Column="3" Margin="0,0,0,5"/>
+
+                    <!-- Araç Plakası -->
+                    <Label Content="Araç Plakası:" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtPlaka" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"/>
+
+                    <!-- Şoför Adı -->
+                    <Label Content="Şoför Adı:" Grid.Row="2" Grid.Column="2" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtSoforAdi" Grid.Row="2" Grid.Column="3" Margin="0,0,0,5"/>
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem Header="Muhasebe / Takip">
+                <Grid Margin="10">
+                    <!-- Ana grid satır ve sütun tanımları -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>                        <!-- Satır 0 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Satır 1 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Satır 2 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Satır 3 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Satır 4 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Yeni Grid için satır 5 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Yeni Grid için satır 6 -->
+                        <RowDefinition Height="Auto"/>                        <!-- Yeni Grid için satır 7 -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>                        <!-- Sütun 0 -->
+                        <ColumnDefinition Width="*"/>                        <!-- Sütun 1 -->
+                        <ColumnDefinition Width="200"/>                        <!-- Sütun 2 -->
+                        <ColumnDefinition Width="*"/>                        <!-- Sütun 3 -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Mevcut içerik örneği -->
+                    <Label Content="Liste Tarihi:" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5"/>
+                    <DatePicker x:Name="dpListeTarihi" Grid.Row="0" Grid.Column="1" SelectedDate="{x:Static sys:DateTime.Now}" Margin="0,0,0,5"/>
+
+                    <Label Content="KDV Oranı(%):" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtKDV" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"/> 
+                        
+                    <!--<Label Content="Satış Fiyatı (₺):" Grid.Row="1" Grid.Column="2" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtSatisOrt" Grid.Row="1" Grid.Column="3" Margin="0,0,0,5"/>-->
+
+                    <Label Content="Açıklama:" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtAciklama1" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Height="60" AcceptsReturn="True" Margin="0,0,0,5"/>
+
+                    <Label Content="Ek Belge (PDF/JPG):" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"/>
+                    <Button Content="Dosya Seç" Grid.Row="3" Grid.Column="1" Click="btnDosyaSec_Click" Margin="0,0,0,5"/>
+
+                    <Label Content="Oluşturan Kullanıcı:" Grid.Row="3" Grid.Column="2" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtOlusturan" Grid.Row="3" Grid.Column="3" IsReadOnly="True" Margin="0,0,0,5"/>
+
+                    <Label Content="Muhasebe Kodu:" Grid.Row="4" Grid.Column="2" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtMuhasebeKodu" Grid.Row="4" Grid.Column="3" Margin="0,0,0,5"/>
+
+                    
+                    <!-- Yeni 5 sütunlu Grid burada -->
+
+                    <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,20,0,0" Header="Alış Fiyat Giriş Tablosu" Padding="10" FontWeight="Bold" FontStyle="Italic" FontSize="14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>                                <!-- Label Row -->
+                                <RowDefinition Height="Auto"/>                                <!-- TextBox Row -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Label'lar -->
+                            <Label Grid.Row="0" Grid.Column="0" Content="Ön Ödeme" HorizontalAlignment="Center" Margin="5"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="15 Gün" HorizontalAlignment="Center" Margin="5"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="30 Gün" HorizontalAlignment="Center" Margin="5"/>
+                            <Label Grid.Row="0" Grid.Column="3" Content="45 Gün" HorizontalAlignment="Center" Margin="5"/>
+                            <Label Grid.Row="0" Grid.Column="4" Content="60 Gün" HorizontalAlignment="Center" Margin="5"/>
+
+                            <!-- TextBox'lar -->
+                            <TextBox x:Name="txtAlisFiyat" Grid.Row="1" Grid.Column="0" Margin="5" Height="25"/>
+                            <TextBox x:Name="txtAlisFiyat2" Grid.Row="1" Grid.Column="1" Margin="5" Height="25"/>
+                            <TextBox x:Name="txtAlisFiyat3" Grid.Row="1" Grid.Column="2" Margin="5" Height="25"/>
+                            <TextBox x:Name="txtAlisFiyat4" Grid.Row="1" Grid.Column="3" Margin="5" Height="25"/>
+                            <TextBox x:Name="txtAlisFiyat5" Grid.Row="1" Grid.Column="4" Margin="5" Height="25"/>
+                        </Grid>
+                    </GroupBox>
+
+
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
+        <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0,5,10,5"
+            Height="150"
+            DockPanel.Dock="Bottom">
+            <Button x:Name="btnKaydet" Content="💾 Kaydet" Width="120" Height="35" Margin="0,0,10,0" Click="btnKaydet_Click" />
+            <Button x:Name="btnGuncelle" Content="✏️ Güncelle" Width="120" Height="35" Margin="0,0,10,0" Click="btnGuncelle_Click"/>
+            <Button x:Name="btnSil" Content="🗑️ Sil" Width="120" Height="35" Click="btnSil_Click"/>
+        </StackPanel>
+        <TextBox x:Name="txtDosyaYolu" Visibility="Collapsed"/>
+
+
+    </DockPanel>
+    
+</Window>

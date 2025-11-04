@@ -1,0 +1,77 @@
+<Window x:Class="By_ProV2.RaporSayfasi"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:By_ProV2"
+        mc:Ignorable="d"
+        Title="Rapor Sayfası" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Filtre paneli -->
+            <RowDefinition Height="Auto"/>
+            <!-- Toplamlar -->
+            <RowDefinition Height="*"/>
+            <!-- Rapor listesi -->
+        </Grid.RowDefinitions>
+
+        <!-- 📌 FİLTRELEME PANELİ -->
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 15" Grid.Row="0" VerticalAlignment="Top">
+            <TextBlock Text="Tarih Aralığı:" VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding BaslangicTarihi}" Margin="5,0"/>
+            <TextBlock Text=" - " VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding BitisTarihi}" Margin="5,0,10,0"/>
+
+            <TextBlock Text="Cari Kod:" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding CariKodBaslangic}" Width="80" Margin="5,0"/>
+            <TextBlock Text=" - " VerticalAlignment="Center"/>
+            <TextBox Text="{Binding CariKodBitis}" Width="80" Margin="5,0"/>
+
+            <Button Content="Raporu Getir" Margin="15,0" Padding="10,5"
+                    Click="BtnRaporYukle_Click"/>
+            <Button Content="PDF Oluştur" Margin="15,0" Padding="10,5"
+                    Click="BtnPdfOlustur_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 15" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <TextBlock Text="Toplam Adet: " FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding ToplamAdet}" Margin="5,0,15,0" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Toplam Alış: " FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding ToplamAlisTutari, StringFormat=₺{0:N2}}" Margin="5,0,15,0" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Toplam Satış: " FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding ToplamSatisTutari, StringFormat=₺{0:N2}}" Margin="5,0,15,0" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Toplam Brüt Kâr: " FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding ToplamBrutKar, StringFormat=₺{0:N2}}" Margin="5,0,15,0" VerticalAlignment="Center"/>
+        </StackPanel>
+
+
+        <!-- 📋 RAPOR ÖNİZLEME LİSTESİ -->
+        <ScrollViewer Grid.Row="2">
+            <ItemsControl ItemsSource="{Binding Rapor}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="{Binding BelgeKodu, StringFormat='BelgeKodu: {0}'}" />
+                                <TextBlock Text="{Binding TeslimTarihi, StringFormat='Teslim Tarihi: {0:dd.MM.yyyy}'}" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding CariAdi, StringFormat='Cari: {0}'}" />
+                                <TextBlock Text="{Binding CariKodu, StringFormat='Kod: {0}'}" />
+                                <TextBlock Text="{Binding AlisTutari, StringFormat='Alış: ₺{0:N2}'}" />
+                                <TextBlock Text="{Binding SatisTutari, StringFormat='Satış: ₺{0:N2}'}" />
+                                <TextBlock Text="{Binding BrutKar, StringFormat='Kâr: ₺{0:N2}'}" />
+                                <TextBlock Text="{Binding KarYuzdesi, StringFormat='Kâr %: {0:F2}%'}" />
+                            </StackPanel>
+                            
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+    </Grid>
+</Window>

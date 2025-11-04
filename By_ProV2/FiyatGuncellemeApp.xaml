@@ -1,0 +1,101 @@
+<Window x:Class="By_ProV2.FiyatGuncellemeApp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:By_ProV2"
+        mc:Ignorable="d"
+        Title="FiyatGuncellemeApp" Height="900" Width="900"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="125"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Başlangıç Stok Kodu -->
+            <TextBox x:Name="txtBaslangicStokKodu" Grid.Column="0" 
+             VerticalContentAlignment="Center" Margin="0,0,5,0"/>
+
+            <Button Content="..." Grid.Column="1" Width="25" Click="BtnBaslangicStokSec_Click" 
+            ToolTip="Stok Seç" Margin="0,0,5,0"/>
+
+            <!-- Bitiş Stok Kodu -->
+            <TextBox x:Name="txtBitisStokKodu" Grid.Column="2" 
+             VerticalContentAlignment="Center" Margin="0,0,5,0"/>
+
+            <Button Content="..." Grid.Column="3" Width="25" Click="BtnBitisStokSec_Click" 
+            ToolTip="Stok Seç" Margin="0,0,5,0"/>
+
+            <!-- Filtrele -->
+            <Button Content="Filtrele" Grid.Column="4" Click="BtnFiltrele_Click" Margin="0,0,5,0"/>
+
+            <!-- Şablon Oluştur -->
+            <Button Content="Şablon Oluştur" Grid.Column="5" Click="BtnSablonOlustur_Click" Margin="0,0,5,0"/>
+
+            <!-- CSV Yükle -->
+            <Button Content="Excel Yükle/Önizle" Grid.Column="6" Click="btnDosyaYukle_Click" Margin="0,0,5,0"/>
+
+            <!-- Fiyat Güncelle -->
+            <Button Content="Fiyatları Güncelle" Grid.Column="7" Click="btnGuncelle_Click"/>
+
+            <!-- Fiyat Güncelle -->
+            <Button Content="Müşteri Fiyat Listesi" Grid.Column="8" Click="BtnMusteriFiyatListesi_Click" Margin="5,0,0,0"/>
+        </Grid>
+
+
+        <!-- DataGrid -->
+        <DataGrid x:Name="dgSablon" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
+                  IsReadOnly="False" SelectionMode="Extended" AlternationCount="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="StokID" Binding="{Binding STOKID}" IsReadOnly="True" Width="Auto"/>
+                <DataGridTextColumn Header="Stok Adı" Binding="{Binding STOKADI}" IsReadOnly="True" Width="3*"/>
+                <DataGridTextColumn Header="F1" Binding="{Binding ALISFIYAT1}" Width="*"/>
+                <DataGridTextColumn Header="F2" Binding="{Binding ALISFIYAT2}" Width="*"/>
+                <DataGridTextColumn Header="F3" Binding="{Binding ALISFIYAT3}" Width="*"/>
+                <DataGridTextColumn Header="F4" Binding="{Binding ALISFIYAT4}" Width="*"/>
+                <DataGridTextColumn Header="F5" Binding="{Binding ALISFIYAT5}" Width="*"/>
+                <DataGridTextColumn Header="KDV" Binding="{Binding KDVORANI}" Width="*"/>
+                <DataGridTextColumn Header="Para Birimi" Binding="{Binding PARABIRIMI}" Width="*"/>
+            </DataGrid.Columns>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="White"/>
+                    <Style.Triggers>
+                        <!-- AlternatingRowBackground etkisini elle sağlıyoruz -->
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </Trigger>
+
+                        <!-- Değişiklik varsa sarı -->
+                        <DataTrigger Binding="{Binding DegistiMi}" Value="True">
+                            <Setter Property="Background" Value="LightGoldenrodYellow"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+
+
+        </DataGrid>
+
+        <!-- Bilgi Metni -->
+        <TextBlock Grid.Row="2" Text="* Fiyat değerleri düzenlenebilir, stok ID ve stok adı düzenlenemez." 
+                   Foreground="DarkSlateGray" FontStyle="Italic" Margin="0,5,0,0"/>        
+    </Grid>
+</Window>

@@ -1,0 +1,55 @@
+<Window x:Class="By_ProV2.SutAlimSorgulama"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Süt Alım Belgesi Sorgulama"
+        Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#F9F9F9">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 🟦 Başlık -->
+        <Border Background="#2C3E50" CornerRadius="6" Padding="12" Margin="0,0,0,15">
+            <TextBlock Text="SÜT ALIM BELGE SORGULAMA"
+                       Foreground="White"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- 🔍 Arama Paneli -->
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,0,0,20">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Belge No:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,10,0"/>
+                <TextBox x:Name="txtBelgeNo" Width="200" Height="25" Margin="0,0,15,0" KeyDown="TxtBelgeNo_KeyDown"/>
+                <Button x:Name="btnSorgula" Content="Sorgula" Width="100" Height="25" Margin="0,0,15,0" Click="BtnSorgula_Click"/>
+                <Button x:Name="btnTumunuListele" Content="Tümünü Listele" Width="100" Height="25" Click="BtnTumunuListele_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <TextBlock Text="Tarih:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,10,0"/>
+                <DatePicker x:Name="dpSearchDate" Width="120" Height="25" Margin="0,0,15,0"/>
+                <Button x:Name="btnTarihSorgula" Content="Tarih Sorgula" Width="150" Height="25" Click="BtnTarihSorgula_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 📋 Sonuç Listesi -->
+        <DataGrid x:Name="dgBelgeler"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  AlternatingRowBackground="#F2F2F2"
+                  HeadersVisibility="Column"
+                  MouseDoubleClick="dgBelgeler_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Belge No" Binding="{Binding BelgeNo}" Width="*"/>
+                <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="*"/>
+                <DataGridTextColumn Header="İşlem Türü" Binding="{Binding IslemTuru}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
