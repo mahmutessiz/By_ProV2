@@ -322,3 +322,4 @@ C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\refint\By_Pr
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\By_ProV2.pdb
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\By_ProV2.genruntimeconfig.cache
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\ref\By_ProV2.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\By_ProV2.sourcelink.json

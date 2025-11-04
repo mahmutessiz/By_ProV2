@@ -162,3 +162,5 @@ Both options are excellent choices:
 - **For fastest setup and cost efficiency**: Choose **NeonDB**
 
 For your internal application with existing SQL Server knowledge, **Azure SQL** might be the most comfortable transition. However, if you're willing to make some code adjustments, **NeonDB** offers faster setup, better developer experience, and potentially lower costs.
+
+--- the end
