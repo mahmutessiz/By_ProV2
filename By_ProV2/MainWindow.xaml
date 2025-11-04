@@ -62,7 +62,7 @@
             <!-- StatusBar en altta -->
         <StatusBar DockPanel.Dock="Bottom" Background="#EEE" Height="30">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Ellipse x:Name="ConnectionIndicator" Width="14" Height="14" Fill="LightGreen" Margin="0,0,8,0" />
+                <Ellipse x:Name="ConnectionIndicator" Width="14" Height="14" Fill="LightGreen" Margin="8,0,8,0" />
                 <TextBlock x:Name="DurumText" FontWeight="Bold" VerticalAlignment="Center" />
             </StackPanel>
         </StatusBar>

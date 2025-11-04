@@ -18,6 +18,7 @@ namespace By_ProV2
         private readonly SutRepository _repo = new SutRepository();
         private SutKaydi currentEditRecord = null; // For single-record edit mode
         private bool isDocumentViewMode = false; // For multi-record document view/edit mode
+        private ObservableCollection<SutKaydi> _deletedRecords = new ObservableCollection<SutKaydi>(); // Track deleted records for database deletion
 
         public SutAlimFormu()
         {
@@ -42,6 +43,9 @@ namespace By_ProV2
             isDocumentViewMode = true;
             currentEditRecord = null;
             btnListeyeEkle.Content = "Kaydı Güncelle";
+            
+            // Clear any previously tracked deleted records when loading a new document
+            _deletedRecords.Clear();
 
             var kayitlar = _repo.GetSutKayitlariByBelgeNo(belgeNo);
             TedarikciListesi.Clear();
@@ -129,23 +133,35 @@ namespace By_ProV2
 
         private void btnKaydet_Click(object sender, RoutedEventArgs e)
         {
-            if (TedarikciListesi == null || !TedarikciListesi.Any())
-            {
-                MessageBox.Show("Kaydedilecek süt kaydı bulunamadı!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             try
             {
                 if (isDocumentViewMode)
                 {
+                    // Check if there's anything to save (either remaining records or deletions)
+                    if ((TedarikciListesi == null || !TedarikciListesi.Any()) && !_deletedRecords.Any())
+                    {
+                        MessageBox.Show("Kaydedilecek süt kaydı bulunamadı!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
                     var result = MessageBox.Show("Belgedeki tüm değişiklikleri kaydetmek istiyor musunuz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.No) return;
 
+                    // First, delete the records that were marked for deletion
+                    foreach (var deletedRecord in _deletedRecords)
+                    {
+                        _repo.SilSutKaydi(deletedRecord.SutKayitId);
+                    }
+
+                    // Then, update the remaining records (if any exist)
                     foreach (var kayit in TedarikciListesi)
                     {
                         _repo.GuncelleSutKaydi(kayit);
                     }
+                    
+                    // Clear the deleted records collection after successful save
+                    _deletedRecords.Clear();
+                    
                     MessageBox.Show("Belgedeki tüm kayıtlar başarıyla güncellendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else if (currentEditRecord != null)
@@ -159,6 +175,12 @@ namespace By_ProV2
                 }
                 else
                 {
+                    if (TedarikciListesi == null || !TedarikciListesi.Any())
+                    {
+                        MessageBox.Show("Kaydedilecek süt kaydı bulunamadı!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
                     DateTime tarih = dpTarih.SelectedDate ?? DateTime.Now;
                     string islemTuru = rbDepoAlim.IsChecked == true ? "Depoya Alım" : rbDepodanSevk.IsChecked == true ? "Depodan Sevk" : "Direkt Sevk";
                     foreach (var kayit in TedarikciListesi)
@@ -178,6 +200,7 @@ namespace By_ProV2
                 MessageBox.Show($"Kayıt sırasında hata oluştu:\n{ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        
 
         private void PopulateFieldsFromKayit(SutKaydi kayit)
         {
@@ -285,6 +308,13 @@ namespace By_ProV2
                 if (MessageBox.Show("Seçili satırı silmek istediğine emin misin?",
                                     "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
+                    // Add to deleted records collection to be removed from database on save
+                    if (secili.SutKayitId > 0) // Only if it's an existing record (has been saved to DB)
+                    {
+                        _deletedRecords.Add(secili);
+                    }
+                    
+                    // Remove from the display list
                     TedarikciListesi.Remove(secili);
                 }
             }
@@ -355,6 +385,72 @@ namespace By_ProV2
                 txtMusteriKod.Text = cariWindow.SecilenCari.CariKod;
                 txtMusteriAdi.Text = cariWindow.SecilenCari.CariAdi;
             }
+        }
+
+        private void btnKapat_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnYeni_Click(object sender, RoutedEventArgs e)
+        {
+            // Confirm if user wants to clear the current form
+            if (TedarikciListesi.Any())
+            {
+                var result = MessageBox.Show("Mevcut veriler silinecek. Yeni bir işlem başlatmak istediğinize emin misiniz?", 
+                                           "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
+
+            // Clear the data grid
+            TedarikciListesi.Clear();
+            
+            // Reset form fields to initial state
+            txtTedarikciKod.Clear();
+            txtTedarikciAdi.Clear();
+            txtMusteriKod.Clear();
+            txtMusteriAdi.Clear();
+            
+            // Reset analysis fields
+            txtMiktar.Clear();
+            txtFiyat.Clear();
+            txtYag.Clear();
+            txtProtein.Clear();
+            txtLaktoz.Clear();
+            txtTKM.Clear();
+            txtYKM.Clear();
+            txtpH.Clear();
+            txtIletkenlik.Clear();
+            txtSicaklik.Clear();
+            txtYogunluk.Clear();
+            txtKesinti.Clear();
+            txtDonma.Clear();
+            txtBakteri.Clear();
+            txtSomatik.Clear();
+            txtAciklama.Clear();
+            txtPlaka.Clear();
+            
+            // Reset checkboxes/selections
+            cmbAntibiyotik.SelectedIndex = 0; // "Negatif"
+            cmbAracTemizlik.SelectedIndex = 0; // "Temiz"
+            cmbDurumu.SelectedIndex = 0; // "Kabul"
+            
+            // Reset date to today
+            dpTarih.SelectedDate = DateTime.Today;
+            
+            // Reset operation type to default
+            rbDepoAlim.IsChecked = true;
+            IslemTuru_Checked(null, null); // Update UI based on selection
+            
+            // Generate new document number
+            txtBelgeNo.Text = DocumentNumberGenerator.GenerateSutAlimDocumentNumber();
+            
+            // Reset edit mode flags
+            currentEditRecord = null;
+            isDocumentViewMode = false;
+            btnListeyeEkle.IsEnabled = true;
+            btnListeyeEkle.Content = "➕ Listeye Ekle"; // Reset button text
         }
     }
 }

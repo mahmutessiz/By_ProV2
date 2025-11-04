@@ -283,5 +283,71 @@ namespace By_ProV2.DataAccess
             }
             return kayitlar;
         }
+
+        public bool SilSutKaydi(int sutKayitId)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    using (var trans = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            // First, delete any related stock movements if needed
+                            var stokRepo = new DepoStokRepository();
+                            // We need to get the record to know its details before deletion
+                            string selectQuery = "SELECT IslemTuru, TedarikciId, Tarih FROM SutKayit WHERE SutKayitId = @SutKayitId";
+                            SutKaydi kayitTemp = null;
+                            
+                            using (var selectCmd = new SqlCommand(selectQuery, conn, trans))
+                            {
+                                selectCmd.Parameters.AddWithValue("@SutKayitId", sutKayitId);
+                                using (var reader = selectCmd.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        kayitTemp = new SutKaydi
+                                        {
+                                            IslemTuru = reader["IslemTuru"].ToString(),
+                                            TedarikciId = reader["TedarikciId"] != DBNull.Value ? Convert.ToInt32(reader["TedarikciId"]) : 0,
+                                            Tarih = Convert.ToDateTime(reader["Tarih"])
+                                        };
+                                    }
+                                }
+                            }
+
+                            // Delete stock movement if needed
+                            if (kayitTemp != null && (kayitTemp.IslemTuru == "Depoya Alım" || kayitTemp.IslemTuru == "Depodan Sevk"))
+                            {
+                                stokRepo.SilStokHareketiByTedarikciVeTarih(kayitTemp.TedarikciId, kayitTemp.Tarih, conn, trans);
+                            }
+
+                            // Delete the main record
+                            string deleteQuery = "DELETE FROM SutKayit WHERE SutKayitId = @SutKayitId";
+                            using (var cmd = new SqlCommand(deleteQuery, conn, trans))
+                            {
+                                cmd.Parameters.AddWithValue("@SutKayitId", sutKayitId);
+                                int rowsAffected = cmd.ExecuteNonQuery();
+                            }
+                            
+                            trans.Commit();
+                            return true;
+                        }
+                        catch
+                        {
+                            trans.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception as needed
+                throw;
+            }
+        }
     }
 }

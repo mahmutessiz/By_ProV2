@@ -1,0 +1,131 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+[Ll]ogFiles/
+
+# Visual Studio files
+*.VC.db
+*.VC.VC.opendb
+*.sln.docstates
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.VC.opendb
+*.VC.db-shm
+*.VC.db-wal
+
+# Visual Studio 2015+ cache/options
+.vs/
+.vsconfig
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files
+*.sln.DotSettings.user
+*.userprefs
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*._i
+*.manifest
+*.res
+*.mft
+*.map
+
+# IDE
+*.swp
+*~
+.DS_Store
+
+# NuGet Packages
+*.nupkg
+packages/
+!src/**/packages
+!src/packages/*
+!**/src/**/packages
+!**/src/packages/*
+
+# Windows Forms Designer
+*.g.cs
+
+# CoreCLR
+core
+
+# Publish
+publish/
+app.publish/
+
+# Microsoft SQL Server Compact files
+*.sdf
+
+# macOS
+.DS_Store
+*.swp
+*.lock
+*~
+
+# IDE Generated files
+debug.log
+*.orig
+*.rej
+
+# OS generated files
+ehthumbs.db
+Thumbs.db
+
+# .NET
+**/bin/Debug/**
+**/bin/Release/**
+**/obj/**
+**/app.publish/**
+
+# Visual Studio specific
+.vs/
+*.VC.db
+*.VC.VC.opendb
+*.VC.VC.opendb-shm
+*.VC.VC.opendb-wal
+
+# Temporary files
+*.tmp
+*.temp
+*.log

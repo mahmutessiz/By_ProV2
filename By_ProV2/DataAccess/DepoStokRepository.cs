@@ -71,5 +71,18 @@ namespace By_ProV2.DataAccess
             }
         }
 
+        public void SilStokHareketiByTedarikciVeTarih(int tedarikciId, DateTime tarih, SqlConnection conn, SqlTransaction trans)
+        {
+            string deleteQuery = @"
+                DELETE FROM DepoStok 
+                WHERE TedarikciId = @TedarikciId AND Tarih = @Tarih";
+
+            using (var deleteCmd = new SqlCommand(deleteQuery, conn, trans))
+            {
+                deleteCmd.Parameters.AddWithValue("@TedarikciId", tedarikciId == 0 ? (object)DBNull.Value : tedarikciId);
+                deleteCmd.Parameters.AddWithValue("@Tarih", tarih);
+                deleteCmd.ExecuteNonQuery();
+            }
+        }
     }
 }

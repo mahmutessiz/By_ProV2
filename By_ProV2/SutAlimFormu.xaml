@@ -339,8 +339,8 @@
         <!-- 🔘 Alt Butonlar -->
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
             <Button Content="💾 Kaydet" Width="130" Height="45" Margin="5" Click="btnKaydet_Click"/>
-            <Button Content="🆕 Yeni" Width="110" Height="45" Margin="5"/>
-            <Button Content="❌ Kapat" Width="110" Height="45" Margin="5"/>
+            <Button Content="🆕 Yeni" Width="110" Height="45" Margin="5" Click="btnYeni_Click"/>
+            <Button Content="❌ Kapat" Width="110" Height="45" Margin="5" Click="btnKapat_Click"/>
         </StackPanel>
     </Grid>
 </Window>
