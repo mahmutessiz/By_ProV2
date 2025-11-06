@@ -43,6 +43,8 @@ namespace By_ProV2.DataAccess
                                     SET YagKesintiParametresi = @YagKesintiParametresi,
                                         ProteinParametresi = @ProteinParametresi,
                                         DizemBasiTl = @DizemBasiTl,
+                                        DonmaNoktasiReferansDegeri = @DonmaNoktasiReferansDegeri,
+                                        DonmaNoktasiKesintiAltLimit = @DonmaNoktasiKesintiAltLimit,
                                         CreatedAt = @CreatedAt
                                 ";
                                 using (var updateCmd = new SqlCommand(updateQuery, conn, tran))
@@ -50,6 +52,8 @@ namespace By_ProV2.DataAccess
                                     updateCmd.Parameters.AddWithValue("@YagKesintiParametresi", param.YagKesintiParametresi ?? (object)DBNull.Value);
                                     updateCmd.Parameters.AddWithValue("@ProteinParametresi", param.ProteinParametresi ?? (object)DBNull.Value);
                                     updateCmd.Parameters.AddWithValue("@DizemBasiTl", param.DizemBasiTl ?? (object)DBNull.Value);
+                                    updateCmd.Parameters.AddWithValue("@DonmaNoktasiReferansDegeri", param.DonmaNoktasiReferansDegeri ?? (object)DBNull.Value);
+                                    updateCmd.Parameters.AddWithValue("@DonmaNoktasiKesintiAltLimit", param.DonmaNoktasiKesintiAltLimit ?? (object)DBNull.Value);
                                     updateCmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
 
                                     updateCmd.ExecuteNonQuery();
@@ -59,14 +63,16 @@ namespace By_ProV2.DataAccess
                             {
                                 // If no records exist, insert a new one
                                 string insertQuery = @"
-                                    INSERT INTO Parametreler (YagKesintiParametresi, ProteinParametresi, DizemBasiTl, CreatedAt)
-                                    VALUES (@YagKesintiParametresi, @ProteinParametresi, @DizemBasiTl, @CreatedAt)
+                                    INSERT INTO Parametreler (YagKesintiParametresi, ProteinParametresi, DizemBasiTl, DonmaNoktasiReferansDegeri, DonmaNoktasiKesintiAltLimit, CreatedAt)
+                                    VALUES (@YagKesintiParametresi, @ProteinParametresi, @DizemBasiTl, @DonmaNoktasiReferansDegeri, @DonmaNoktasiKesintiAltLimit, @CreatedAt)
                                 ";
                                 using (var insertCmd = new SqlCommand(insertQuery, conn, tran))
                                 {
                                     insertCmd.Parameters.AddWithValue("@YagKesintiParametresi", param.YagKesintiParametresi ?? (object)DBNull.Value);
                                     insertCmd.Parameters.AddWithValue("@ProteinParametresi", param.ProteinParametresi ?? (object)DBNull.Value);
                                     insertCmd.Parameters.AddWithValue("@DizemBasiTl", param.DizemBasiTl ?? (object)DBNull.Value);
+                                    insertCmd.Parameters.AddWithValue("@DonmaNoktasiReferansDegeri", param.DonmaNoktasiReferansDegeri ?? (object)DBNull.Value);
+                                    insertCmd.Parameters.AddWithValue("@DonmaNoktasiKesintiAltLimit", param.DonmaNoktasiKesintiAltLimit ?? (object)DBNull.Value);
                                     insertCmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
 
                                     insertCmd.ExecuteNonQuery();
@@ -96,6 +102,8 @@ namespace By_ProV2.DataAccess
                         YagKesintiParametresi,
                         ProteinParametresi,
                         DizemBasiTl,
+                        DonmaNoktasiReferansDegeri,
+                        DonmaNoktasiKesintiAltLimit,
                         CreatedAt
                     FROM Parametreler
                     ORDER BY CreatedAt DESC"; // Most recent first
@@ -115,6 +123,8 @@ namespace By_ProV2.DataAccess
                                     YagKesintiParametresi = reader.IsDBNull(reader.GetOrdinal("YagKesintiParametresi")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("YagKesintiParametresi")),
                                     ProteinParametresi = reader.IsDBNull(reader.GetOrdinal("ProteinParametresi")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("ProteinParametresi")),
                                     DizemBasiTl = reader.IsDBNull(reader.GetOrdinal("DizemBasiTl")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("DizemBasiTl")),
+                                    DonmaNoktasiReferansDegeri = reader.IsDBNull(reader.GetOrdinal("DonmaNoktasiReferansDegeri")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("DonmaNoktasiReferansDegeri")),
+                                    DonmaNoktasiKesintiAltLimit = reader.IsDBNull(reader.GetOrdinal("DonmaNoktasiKesintiAltLimit")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("DonmaNoktasiKesintiAltLimit")),
                                     CreatedAt = reader.GetDateTime("CreatedAt")
                                 };
                                 parametreler.Add(param);
@@ -142,6 +152,8 @@ namespace By_ProV2.DataAccess
                         YagKesintiParametresi,
                         ProteinParametresi,
                         DizemBasiTl,
+                        DonmaNoktasiReferansDegeri,
+                        DonmaNoktasiKesintiAltLimit,
                         CreatedAt
                     FROM Parametreler
                     ORDER BY CreatedAt DESC";
@@ -161,6 +173,8 @@ namespace By_ProV2.DataAccess
                                     YagKesintiParametresi = reader.IsDBNull(reader.GetOrdinal("YagKesintiParametresi")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("YagKesintiParametresi")),
                                     ProteinParametresi = reader.IsDBNull(reader.GetOrdinal("ProteinParametresi")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("ProteinParametresi")),
                                     DizemBasiTl = reader.IsDBNull(reader.GetOrdinal("DizemBasiTl")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("DizemBasiTl")),
+                                    DonmaNoktasiReferansDegeri = reader.IsDBNull(reader.GetOrdinal("DonmaNoktasiReferansDegeri")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("DonmaNoktasiReferansDegeri")),
+                                    DonmaNoktasiKesintiAltLimit = reader.IsDBNull(reader.GetOrdinal("DonmaNoktasiKesintiAltLimit")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("DonmaNoktasiKesintiAltLimit")),
                                     CreatedAt = reader.GetDateTime("CreatedAt")
                                 };
                             }

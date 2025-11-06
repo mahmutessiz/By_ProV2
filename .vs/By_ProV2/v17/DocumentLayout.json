@@ -3,6 +3,26 @@
   "WorkspaceRootPath": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\sutalimformu.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\sutalimformu.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\helpers\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\helpers\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\businesslogic\\sutislemcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\businesslogic\\sutislemcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\parametrelerwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\parametrelerwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\docs\\net_miktar_calculation_method.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\docs\\net_miktar_calculation_method.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\stoklistesimainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\stoklistesimainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -25,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\eskisiparisformu.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\eskisiparisformu.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\sutalimformu.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\sutalimformu.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\sutalimformu.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -70,11 +86,49 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "SutIslemContext.cs",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\BusinessLogic\\SutIslemContext.cs",
+              "RelativeDocumentMoniker": "By_ProV2\\BusinessLogic\\SutIslemContext.cs",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\BusinessLogic\\SutIslemContext.cs",
+              "RelativeToolTip": "By_ProV2\\BusinessLogic\\SutIslemContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T14:11:03.166Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Net_Miktar_Calculation_Method.md",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\Docs\\Net_Miktar_Calculation_Method.md",
+              "RelativeDocumentMoniker": "By_ProV2\\Docs\\Net_Miktar_Calculation_Method.md",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\Docs\\Net_Miktar_Calculation_Method.md",
+              "RelativeToolTip": "By_ProV2\\Docs\\Net_Miktar_Calculation_Method.md",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAAB0AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-11-06T13:00:59.977Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ParametrelerWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\ParametrelerWindow.xaml",
+              "RelativeDocumentMoniker": "By_ProV2\\ParametrelerWindow.xaml",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\ParametrelerWindow.xaml",
+              "RelativeToolTip": "By_ProV2\\ParametrelerWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-06T12:06:20.775Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "StokListesiMainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\StokListesiMainWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\StokListesiMainWindow.xaml",
@@ -86,7 +140,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "SutAlimFormu.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml.cs",
+              "RelativeDocumentMoniker": "By_ProV2\\SutAlimFormu.xaml.cs",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml.cs",
+              "RelativeToolTip": "By_ProV2\\SutAlimFormu.xaml.cs",
+              "ViewState": "AgIAALUBAAAAAAAAAAApwMEBAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T13:41:07.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Helpers.cs",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\Helpers\\Helpers.cs",
+              "RelativeDocumentMoniker": "By_ProV2\\Helpers\\Helpers.cs",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\Helpers\\Helpers.cs",
+              "RelativeToolTip": "By_ProV2\\Helpers\\Helpers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T14:12:41.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "CariListesiMainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariListesiMainWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\CariListesiMainWindow.xaml",
@@ -98,7 +178,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "CariListesiWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariListesiWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\CariListesiWindow.xaml",
@@ -110,7 +190,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "EskiSiparisFormu.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\EskiSiparisFormu.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\EskiSiparisFormu.xaml",
@@ -122,7 +202,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "CariKayitWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariKayitWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\CariKayitWindow.xaml",
@@ -134,7 +214,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\appsettings.json",
               "RelativeDocumentMoniker": "By_ProV2\\appsettings.json",
@@ -147,19 +227,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "SutAlimFormu.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml.cs",
-              "RelativeDocumentMoniker": "By_ProV2\\SutAlimFormu.xaml.cs",
-              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml.cs",
-              "RelativeToolTip": "By_ProV2\\SutAlimFormu.xaml.cs",
-              "ViewState": "AgIAALMAAAAAAAAAAAAAAMoAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T13:41:07.284Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "SutAlimFormu.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutAlimFormu.xaml",
@@ -171,7 +239,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 16,
               "Title": "StokKayitWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\StokKayitWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\StokKayitWindow.xaml",
@@ -182,7 +250,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 17,
               "Title": "IskontoGirWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\IskontoGirWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\IskontoGirWindow.xaml",
@@ -194,7 +262,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\MainWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\MainWindow.xaml",
@@ -206,7 +274,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "SutAlimSorgulama.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutAlimSorgulama.xaml",
@@ -217,7 +285,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "App.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\App.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\App.xaml",
@@ -229,7 +297,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "BelgeSorgulama.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\BelgeSorgulama.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\BelgeSorgulama.xaml",
@@ -240,7 +308,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 18,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "By_ProV2\\MainWindow.xaml.cs",

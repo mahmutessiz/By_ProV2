@@ -59,7 +59,7 @@ namespace By_ProV2.Helpers
                     Yag DECIMAL(5, 2),
                     Protein DECIMAL(5, 2),
                     Laktoz DECIMAL(5, 2),
-                    Fiyat DECIMAL(18, 4),
+                    NetMiktar DECIMAL(18, 2),
                     TKM DECIMAL(5, 2),
                     YKM DECIMAL(5, 2),
                     pH DECIMAL(4, 2),
@@ -81,6 +81,25 @@ namespace By_ProV2.Helpers
                 using (var command = new SqlCommand(createSutKayitTable, connection))
                 {
                     command.ExecuteNonQuery();
+                }
+
+                // Migrate schema: Check if Fiyat column exists and remove it, add NetMiktar column
+                string migrateSutKayitSchema = @"
+                -- Add NetMiktar column if it doesn't exist
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('SutKayit') AND name = 'NetMiktar')
+                BEGIN
+                    ALTER TABLE SutKayit ADD NetMiktar DECIMAL(18, 2) DEFAULT 0;
+                END
+
+                -- Remove Fiyat column if it exists
+                IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('SutKayit') AND name = 'Fiyat')
+                BEGIN
+                    ALTER TABLE SutKayit DROP COLUMN Fiyat;
+                END";
+
+                using (var migrateCmd = new SqlCommand(migrateSutKayitSchema, connection))
+                {
+                    migrateCmd.ExecuteNonQuery();
                 }
 
                 // Check if BelgeNo column exists, and if not, add it
@@ -328,14 +347,54 @@ namespace By_ProV2.Helpers
                 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Parametreler' and xtype='U')
                 CREATE TABLE Parametreler (
                     ParametreId INT PRIMARY KEY IDENTITY(1,1),
-                    YagKesintiParametresi DECIMAL(5, 2),
-                    ProteinParametresi DECIMAL(5, 2),
-                    DizemBasiTl DECIMAL(5, 2),
+                    YagKesintiParametresi DECIMAL(10, 5),
+                    ProteinParametresi DECIMAL(10, 5),
+                    DizemBasiTl DECIMAL(10, 5),
+                    DonmaNoktasiReferansDegeri DECIMAL(10, 5),
+                    DonmaNoktasiKesintiAltLimit DECIMAL(10, 5),
                     CreatedAt DATETIME DEFAULT GETDATE()
                 )";
                 using (var command = new SqlCommand(createParametrelerTable, connection))
                 {
                     command.ExecuteNonQuery();
+                }
+
+                // Check if the new columns exist in Parametreler table, and if not, add them
+                string checkParametrelerNewColumns = @"
+                -- Modify existing columns to support more decimal places
+                IF COL_LENGTH('Parametreler', 'YagKesintiParametresi') IS NOT NULL
+                BEGIN
+                    ALTER TABLE Parametreler ALTER COLUMN YagKesintiParametresi DECIMAL(10, 5);
+                END
+                IF COL_LENGTH('Parametreler', 'ProteinParametresi') IS NOT NULL
+                BEGIN
+                    ALTER TABLE Parametreler ALTER COLUMN ProteinParametresi DECIMAL(10, 5);
+                END
+                IF COL_LENGTH('Parametreler', 'DizemBasiTl') IS NOT NULL
+                BEGIN
+                    ALTER TABLE Parametreler ALTER COLUMN DizemBasiTl DECIMAL(10, 5);
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Parametreler') AND name = 'DonmaNoktasiReferansDegeri')
+                BEGIN
+                    ALTER TABLE Parametreler ADD DonmaNoktasiReferansDegeri DECIMAL(10, 5);
+                END
+                ELSE
+                BEGIN
+                    -- Modify the column if it exists but has different precision
+                    ALTER TABLE Parametreler ALTER COLUMN DonmaNoktasiReferansDegeri DECIMAL(10, 5);
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Parametreler') AND name = 'DonmaNoktasiKesintiAltLimit')
+                BEGIN
+                    ALTER TABLE Parametreler ADD DonmaNoktasiKesintiAltLimit DECIMAL(10, 5);
+                END
+                ELSE
+                BEGIN
+                    -- Modify the column if it exists but has different precision
+                    ALTER TABLE Parametreler ALTER COLUMN DonmaNoktasiKesintiAltLimit DECIMAL(10, 5);
+                END";
+                using (var checkCmd = new SqlCommand(checkParametrelerNewColumns, connection))
+                {
+                    checkCmd.ExecuteNonQuery();
                 }
 
                 // Create Users Table for authentication

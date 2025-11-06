@@ -123,19 +123,23 @@
                 <TextBox x:Name="txtMiktar"
                          Grid.Row="1" Grid.Column="1"
                          Width="120" Height="25"
-                         HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                         HorizontalAlignment="Left" Margin="5,5,0,0"
+                         TextChanged="txtMiktar_TextChanged"/>
 
-                <TextBlock Text="Birim Fiyat (₺):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtFiyat"
+                <TextBlock Text="Net Miktar (Lt):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtNetMiktar"
                          Grid.Row="2" Grid.Column="1"
                          Width="120" Height="25"
-                          HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                         HorizontalAlignment="Left" Margin="5,5,0,0"
+                         IsReadOnly="True" Background="#F0F0F0"/>
 
                 <TextBlock Text="Yağ (%):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtYag" Grid.Row="3" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                <TextBox x:Name="txtYag" Grid.Row="3" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                         TextChanged="txtYag_TextChanged"/>
 
                 <TextBlock Text="Protein (%):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtProtein" Grid.Row="4" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                <TextBox x:Name="txtProtein" Grid.Row="4" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                         TextChanged="txtProtein_TextChanged"/>
 
                 <TextBlock Text="Laktoz (%):" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtLaktoz" Grid.Row="5" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
@@ -160,7 +164,8 @@
                 <TextBox x:Name="txtYogunluk" Grid.Row="3" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
 
                 <TextBlock Text="Kesinti (Lt):" Grid.Row="4" Grid.Column="3" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtKesinti" Grid.Row="4" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                <TextBox x:Name="txtKesinti" Grid.Row="4" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                         IsReadOnly="True" Background="#F0F0F0"/>
 
                 <TextBlock Text="Antibiyotik:" Grid.Row="5" Grid.Column="3" VerticalAlignment="Center"/>
                 <ComboBox x:Name="cmbAntibiyotik" Grid.Row="5" Grid.Column="4" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0">
@@ -258,13 +263,16 @@
 
                 <!-- Sağ Sutün -->
                 <TextBlock Text="Donma Noktası:" Grid.Row="0" Grid.Column="6" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtDonma" Grid.Row="0" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                <TextBox x:Name="txtDonma" Grid.Row="0" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                         TextChanged="txtDonma_TextChanged"/>
                 
                 <TextBlock Text="T.Bakteri (ml/kob):" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtBakteri" Grid.Row="1" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                <TextBox x:Name="txtBakteri" Grid.Row="1" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                         TextChanged="txtBakteri_TextChanged"/>
 
                 <TextBlock Text="Somatik Hücre:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtSomatik" Grid.Row="2" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                <TextBox x:Name="txtSomatik" Grid.Row="2" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
+                         TextChanged="txtSomatik_TextChanged"/>
 
                 <!-- Açıklama -->
                 <TextBlock Text="Açıklama:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Top"/>
@@ -311,7 +319,7 @@
                         <DataGridTextColumn Header="Müşteri Kod" Binding="{Binding MusteriKod}" Width="*"/>
                         <DataGridTextColumn Header="Müşteri Adı" Binding="{Binding MusteriAdi}" Width="*"/>
                         <DataGridTextColumn Header="Miktar (Lt)" Binding="{Binding Miktar}" Width="*"/>
-                        <DataGridTextColumn Header="Fiyat" Binding="{Binding Fiyat}" Width="*"/>
+                        <DataGridTextColumn Header="Net Miktar" Binding="{Binding NetMiktar}" Width="*"/>
                         <DataGridTextColumn Header="Yağ (%)" Binding="{Binding Yag}" Width="*"/>
                         <DataGridTextColumn Header="Protein (%)" Binding="{Binding Protein}" Width="*"/>
                         <DataGridTextColumn Header="Laktoz (%)" Binding="{Binding Laktoz}" Width="*"/>

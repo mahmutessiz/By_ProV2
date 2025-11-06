@@ -68,10 +68,10 @@ namespace By_ProV2.DataAccess
 
                         // 2️⃣ SutKayit tablosuna ekle
                         string insertQuery = @"
-                    INSERT INTO SutKayit (BelgeNo, Tarih, IslemTuru, TedarikciId, MusteriId, Miktar, Yag, Protein, Laktoz, Fiyat,
+                    INSERT INTO SutKayit (BelgeNo, Tarih, IslemTuru, TedarikciId, MusteriId, Miktar, Yag, Protein, Laktoz, NetMiktar,
                      TKM, YKM, pH, Iletkenlik, Sicaklik, Yogunluk, Kesinti, Antibiyotik, Arac, Plaka,
                      DonmaN, Bakteri, Somatik, Durumu, Aciklama, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
-                    VALUES (@BelgeNo, @Tarih, @IslemTuru, @TedarikciId, @MusteriId, @Miktar, @Yag, @Protein, @Laktoz, @Fiyat,
+                    VALUES (@BelgeNo, @Tarih, @IslemTuru, @TedarikciId, @MusteriId, @Miktar, @Yag, @Protein, @Laktoz, @NetMiktar,
                      @TKM, @YKM, @pH, @Iletkenlik, @Sicaklik, @Yogunluk, @Kesinti, @Antibiyotik, @Arac, @Plaka,
                      @DonmaN, @Bakteri, @Somatik, @Durumu, @Aciklama, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt);
                     SELECT CAST(SCOPE_IDENTITY() AS INT);";
@@ -88,7 +88,7 @@ namespace By_ProV2.DataAccess
                             cmd.Parameters.AddWithValue("@Yag", kayit.Yag ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Protein", kayit.Protein ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Laktoz", kayit.Laktoz ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@Fiyat", kayit.Fiyat);
+                            cmd.Parameters.AddWithValue("@NetMiktar", kayit.NetMiktar);
                             cmd.Parameters.AddWithValue("@TKM", kayit.TKM ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@YKM", kayit.YKM ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@pH", kayit.pH ?? (object)DBNull.Value);
@@ -169,7 +169,7 @@ namespace By_ProV2.DataAccess
                         Yag = @Yag,
                         Protein = @Protein,
                         Laktoz = @Laktoz,
-                        Fiyat = @Fiyat,
+                        NetMiktar = @NetMiktar,
                         TKM = @TKM,
                         YKM = @YKM,
                         pH = @pH,
@@ -202,7 +202,7 @@ namespace By_ProV2.DataAccess
                             cmd.Parameters.AddWithValue("@Yag", kayit.Yag ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Protein", kayit.Protein ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Laktoz", kayit.Laktoz ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@Fiyat", kayit.Fiyat);
+                            cmd.Parameters.AddWithValue("@NetMiktar", kayit.NetMiktar);
                             cmd.Parameters.AddWithValue("@TKM", kayit.TKM ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@YKM", kayit.YKM ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@pH", kayit.pH ?? (object)DBNull.Value);
@@ -256,7 +256,7 @@ namespace By_ProV2.DataAccess
                         sk.Yag,
                         sk.Protein,
                         sk.Laktoz,
-                        sk.Fiyat,
+                        sk.NetMiktar,
                         sk.TKM,
                         sk.YKM,
                         sk.pH,
@@ -309,7 +309,7 @@ namespace By_ProV2.DataAccess
                                     MusteriKod = reader["MusteriKod"] as string,
                                     MusteriAdi = reader["MusteriAdi"] as string,
                                     Miktar = reader.GetDecimal("Miktar"),
-                                    Fiyat = reader.GetDecimal("Fiyat"),
+                                    NetMiktar = reader.GetDecimal("NetMiktar"),
                                     Yag = reader.IsDBNull(reader.GetOrdinal("Yag")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Yag")),
                                     Protein = reader.IsDBNull(reader.GetOrdinal("Protein")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Protein")),
                                     Laktoz = reader.IsDBNull(reader.GetOrdinal("Laktoz")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Laktoz")),

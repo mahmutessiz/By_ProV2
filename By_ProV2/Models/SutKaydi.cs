@@ -20,7 +20,7 @@ namespace By_ProV2.Models
 
         // Miktar ve fiyat
         public decimal Miktar { get; set; }
-        public decimal Fiyat { get; set; }
+        public decimal NetMiktar { get; set; }
         public decimal Kesinti { get; set; }
 
         // Analiz Bilgileri (nullable olabilir)

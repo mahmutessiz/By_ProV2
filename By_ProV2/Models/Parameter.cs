@@ -8,6 +8,8 @@ namespace By_ProV2.Models
         public decimal? YagKesintiParametresi { get; set; }
         public decimal? ProteinParametresi { get; set; }
         public decimal? DizemBasiTl { get; set; }
+        public decimal? DonmaNoktasiReferansDegeri { get; set; }
+        public decimal? DonmaNoktasiKesintiAltLimit { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

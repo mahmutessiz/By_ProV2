@@ -43,6 +43,8 @@ namespace By_ProV2
                     txtYagKesinti.Text = latestParam.YagKesintiParametresi?.ToString();
                     txtProtein.Text = latestParam.ProteinParametresi?.ToString();
                     txtDizemBasiTl.Text = latestParam.DizemBasiTl?.ToString();
+                    txtDonmaNoktasiReferansDegeri.Text = latestParam.DonmaNoktasiReferansDegeri?.ToString();
+                    txtDonmaNoktasiKesintiAltLimit.Text = latestParam.DonmaNoktasiKesintiAltLimit?.ToString();
                 }
             }
             catch (Exception ex)
@@ -62,8 +64,32 @@ namespace By_ProV2
                     !decimal.TryParse(txtProtein.Text, NumberStyles.Any, tr, out decimal protein) ||
                     !decimal.TryParse(txtDizemBasiTl.Text, NumberStyles.Any, tr, out decimal dizemBasiTl))
                 {
-                    MessageBox.Show("Lütfen tüm parametre alanlarını doğru formatta girin!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Lütfen zorunlu parametre alanlarını doğru formatta girin!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
+                }
+
+                // Parse optional fields with null handling
+                decimal? donmaRef = null;
+                decimal? donmaAltLimit = null;
+
+                if (!string.IsNullOrWhiteSpace(txtDonmaNoktasiReferansDegeri.Text))
+                {
+                    if (!decimal.TryParse(txtDonmaNoktasiReferansDegeri.Text, NumberStyles.Any, tr, out decimal tempDonmaRef))
+                    {
+                        MessageBox.Show("Donma Noktası Referans Değeri alanı doğru formatta girilmelidir!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                    donmaRef = tempDonmaRef;
+                }
+
+                if (!string.IsNullOrWhiteSpace(txtDonmaNoktasiKesintiAltLimit.Text))
+                {
+                    if (!decimal.TryParse(txtDonmaNoktasiKesintiAltLimit.Text, NumberStyles.Any, tr, out decimal tempDonmaAltLimit))
+                    {
+                        MessageBox.Show("Donma Noktası Kesinti Alt Limit alanı doğru formatta girilmelidir!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                    donmaAltLimit = tempDonmaAltLimit;
                 }
 
                 // Create new parameter
@@ -71,7 +97,9 @@ namespace By_ProV2
                 {
                     YagKesintiParametresi = yagKesinti,
                     ProteinParametresi = protein,
-                    DizemBasiTl = dizemBasiTl
+                    DizemBasiTl = dizemBasiTl,
+                    DonmaNoktasiReferansDegeri = donmaRef,
+                    DonmaNoktasiKesintiAltLimit = donmaAltLimit
                 };
 
                 // Save the parameter - this will update existing records if they exist
@@ -101,6 +129,8 @@ namespace By_ProV2
                 txtYagKesinti.Text = selectedParam.YagKesintiParametresi?.ToString();
                 txtProtein.Text = selectedParam.ProteinParametresi?.ToString();
                 txtDizemBasiTl.Text = selectedParam.DizemBasiTl?.ToString();
+                txtDonmaNoktasiReferansDegeri.Text = selectedParam.DonmaNoktasiReferansDegeri?.ToString();
+                txtDonmaNoktasiKesintiAltLimit.Text = selectedParam.DonmaNoktasiKesintiAltLimit?.ToString();
             }
         }
     }

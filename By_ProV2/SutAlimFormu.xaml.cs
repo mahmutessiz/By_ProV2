@@ -16,6 +16,8 @@ namespace By_ProV2
     {
         public ObservableCollection<SutKaydi> TedarikciListesi { get; set; }
         private readonly SutRepository _repo = new SutRepository();
+        private readonly ParameterRepository _paramRepo = new ParameterRepository();
+        private Parameter _latestParameters;
         private SutKaydi currentEditRecord = null; // For single-record edit mode
         private bool isDocumentViewMode = false; // For multi-record document view/edit mode
         private ObservableCollection<SutKaydi> _deletedRecords = new ObservableCollection<SutKaydi>(); // Track deleted records for database deletion
@@ -71,6 +73,7 @@ namespace By_ProV2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _latestParameters = _paramRepo.GetLatestParametreler();
             // Only run for new record creation (Mode 3)
             if (currentEditRecord == null && !isDocumentViewMode)
             {
@@ -241,7 +244,7 @@ namespace By_ProV2
             txtMusteriKod.Text = kayit.MusteriKod;
             txtMusteriAdi.Text = kayit.MusteriAdi;
             txtMiktar.Text = kayit.Miktar.ToString();
-            txtFiyat.Text = kayit.Fiyat.ToString();
+            txtNetMiktar.Text = kayit.NetMiktar.ToString(); // Display stored value
             txtYag.Text = kayit.Yag?.ToString();
             txtProtein.Text = kayit.Protein?.ToString();
             txtLaktoz.Text = kayit.Laktoz?.ToString();
@@ -251,7 +254,7 @@ namespace By_ProV2
             txtIletkenlik.Text = kayit.Iletkenlik?.ToString();
             txtSicaklik.Text = kayit.Sicaklik?.ToString();
             txtYogunluk.Text = kayit.Yogunluk?.ToString();
-            txtKesinti.Text = kayit.Kesinti.ToString();
+            txtKesinti.Text = kayit.Kesinti.ToString(); // Display calculated/loaded value
             cmbAntibiyotik.SelectedItem = cmbAntibiyotik.Items.Cast<ComboBoxItem>().FirstOrDefault(x => x.Content.ToString() == kayit.Antibiyotik);
             cmbAracTemizlik.SelectedItem = cmbAracTemizlik.Items.Cast<ComboBoxItem>().FirstOrDefault(x => x.Content.ToString() == kayit.AracTemizlik);
             txtPlaka.Text = kayit.Plaka;
@@ -260,6 +263,10 @@ namespace By_ProV2
             txtBakteri.Text = kayit.Bakteri?.ToString();
             txtSomatik.Text = kayit.Somatik?.ToString();
             txtAciklama.Text = kayit.Aciklama;
+            
+            // After populating all values, recalculate to ensure consistency
+            // (especially important when editing existing records)
+            CalculateAndDisplayNetMiktar();
         }
 
         private void UpdateKayitFromFields(SutKaydi kayit)
@@ -274,21 +281,39 @@ namespace By_ProV2
             kayit.MusteriAdi = txtMusteriAdi.Text;
 
             kayit.Miktar = decimal.TryParse(txtMiktar.Text, NumberStyles.Any, tr, out decimal miktar) ? miktar : 0;
-            kayit.Fiyat = decimal.TryParse(txtFiyat.Text, NumberStyles.Any, tr, out decimal fiyat) ? fiyat : 0;
-            kayit.Kesinti = decimal.TryParse(txtKesinti.Text, NumberStyles.Any, tr, out decimal kesinti) ? kesinti : 0;
+            
+            // Calculate NetMiktar based on all quality parameters (automatic calculation)
+            kayit.NetMiktar = CalculateNetMiktar(miktar,
+                decimal.TryParse(txtDonma.Text, NumberStyles.Any, tr, out decimal donmaValue) ? donmaValue : (decimal?)null,
+                decimal.TryParse(txtYag.Text, NumberStyles.Any, tr, out decimal yagValue) ? yagValue : (decimal?)null,
+                decimal.TryParse(txtProtein.Text, NumberStyles.Any, tr, out decimal proteinValue) ? proteinValue : (decimal?)null,
+                decimal.TryParse(txtSomatik.Text, NumberStyles.Any, tr, out decimal somatikValue) ? somatikValue : (decimal?)null,
+                decimal.TryParse(txtBakteri.Text, NumberStyles.Any, tr, out decimal bakteriValue) ? bakteriValue : (decimal?)null,
+                decimal.TryParse(txtpH.Text, NumberStyles.Any, tr, out decimal phValue) ? phValue : (decimal?)null,
+                decimal.TryParse(txtYogunluk.Text, NumberStyles.Any, tr, out decimal yogunlukValue) ? yogunlukValue : (decimal?)null);
+            
+            // Calculate total kesinti automatically based on quality parameters
+            kayit.Kesinti = CalculateKesinti(miktar,
+                decimal.TryParse(txtDonma.Text, NumberStyles.Any, tr, out decimal donmaValue2) ? donmaValue2 : (decimal?)null,
+                decimal.TryParse(txtYag.Text, NumberStyles.Any, tr, out decimal yagValue2) ? yagValue2 : (decimal?)null,
+                decimal.TryParse(txtProtein.Text, NumberStyles.Any, tr, out decimal proteinValue2) ? proteinValue2 : (decimal?)null,
+                decimal.TryParse(txtSomatik.Text, NumberStyles.Any, tr, out decimal somatikValue2) ? somatikValue2 : (decimal?)null,
+                decimal.TryParse(txtBakteri.Text, NumberStyles.Any, tr, out decimal bakteriValue2) ? bakteriValue2 : (decimal?)null,
+                decimal.TryParse(txtpH.Text, NumberStyles.Any, tr, out decimal phValue2) ? phValue2 : (decimal?)null,
+                decimal.TryParse(txtYogunluk.Text, NumberStyles.Any, tr, out decimal yogunlukValue2) ? yogunlukValue2 : (decimal?)null);
 
-            kayit.Yag = decimal.TryParse(txtYag.Text, NumberStyles.Any, tr, out decimal yagValue) ? yagValue : (decimal?)null;
-            kayit.Protein = decimal.TryParse(txtProtein.Text, NumberStyles.Any, tr, out decimal proteinValue) ? proteinValue : (decimal?)null;
+            kayit.Yag = yagValue; // Already parsed above
+            kayit.Protein = proteinValue; // Already parsed above
             kayit.Laktoz = decimal.TryParse(txtLaktoz.Text, NumberStyles.Any, tr, out decimal laktozValue) ? laktozValue : (decimal?)null;
             kayit.TKM = decimal.TryParse(txtTKM.Text, NumberStyles.Any, tr, out decimal tkmValue) ? tkmValue : (decimal?)null;
             kayit.YKM = decimal.TryParse(txtYKM.Text, NumberStyles.Any, tr, out decimal ykmValue) ? ykmValue : (decimal?)null;
-            kayit.pH = decimal.TryParse(txtpH.Text, NumberStyles.Any, tr, out decimal phValue) ? phValue : (decimal?)null;
+            kayit.pH = phValue; // Already parsed above
             kayit.Iletkenlik = decimal.TryParse(txtIletkenlik.Text, NumberStyles.Any, tr, out decimal iletkenlikValue) ? iletkenlikValue : (decimal?)null;
             kayit.Sicaklik = decimal.TryParse(txtSicaklik.Text, NumberStyles.Any, tr, out decimal sicaklikValue) ? sicaklikValue : (decimal?)null;
-            kayit.Yogunluk = decimal.TryParse(txtYogunluk.Text, NumberStyles.Any, tr, out decimal yogunlukValue) ? yogunlukValue : (decimal?)null;
-            kayit.DonmaN = decimal.TryParse(txtDonma.Text, NumberStyles.Any, tr, out decimal donmaValue) ? donmaValue : (decimal?)null;
-            kayit.Bakteri = decimal.TryParse(txtBakteri.Text, NumberStyles.Any, tr, out decimal bakteriValue) ? bakteriValue : (decimal?)null;
-            kayit.Somatik = decimal.TryParse(txtSomatik.Text, NumberStyles.Any, tr, out decimal somatikValue) ? somatikValue : (decimal?)null;
+            kayit.Yogunluk = yogunlukValue; // Already parsed above
+            kayit.DonmaN = donmaValue; // Already parsed above
+            kayit.Bakteri = bakteriValue; // Already parsed above
+            kayit.Somatik = somatikValue; // Already parsed above
 
             kayit.Antibiyotik = (cmbAntibiyotik.SelectedItem as ComboBoxItem)?.Content.ToString();
             kayit.AracTemizlik = (cmbAracTemizlik.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -304,7 +329,7 @@ namespace By_ProV2
             txtMusteriKod.Clear();
             txtMusteriAdi.Clear();
             txtMiktar.Clear();
-            txtFiyat.Clear();
+            txtNetMiktar.Clear();
             txtYag.Clear();
             txtProtein.Clear();
             txtLaktoz.Clear();
@@ -412,6 +437,201 @@ namespace By_ProV2
             this.Close();
         }
 
+        private decimal CalculateNetMiktar(decimal brütMiktar, decimal? donmaNoktasi, decimal? yag, decimal? protein, decimal? somatik, decimal? bakteri, decimal? pH, decimal? yogunluk)
+        {
+            // Calculate based on Turkish dairy standards
+            // Standard freezing point for pure milk: -0.525°C
+            // Acceptable limit: -0.515°C (0.010°C tolerance)
+            decimal netMiktar = brütMiktar;
+
+            // Calculate total deductions based on quality parameters
+            decimal totalKesinti = CalculateKesinti(brütMiktar, donmaNoktasi, yag, protein, somatik, bakteri, pH, yogunluk);
+
+//          var roundedKesinti = Math.Round(totalKesinti, 0, MidpointRounding.AwayFromZero);
+            // Apply all deductions to brüt miktar
+            netMiktar -= totalKesinti;
+
+            // Ensure net quantity is not negative
+            return netMiktar < 0 ? 0 : netMiktar;
+        }
+
+        private decimal CalculateKesinti(decimal brütMiktar, decimal? donmaNoktasi, decimal? yag, decimal? protein, decimal? somatik, decimal? bakteri, decimal? pH, decimal? yogunluk)
+        {
+            decimal totalKesinti = 0;
+
+            if (donmaNoktasi.HasValue)
+            {
+                decimal referansDeger = _latestParameters?.DonmaNoktasiReferansDegeri ?? -0.520m;
+                decimal kesintiBaslangicLimiti = _latestParameters?.DonmaNoktasiKesintiAltLimit ?? -0.515m;
+                
+                // Calculate deviation from reference point (only if measured is worse than reference)
+                if (donmaNoktasi > kesintiBaslangicLimiti)
+                {
+                    // Use configurable parameters for calculation: percentage deduction per deviation unit
+                    // Default to 5% per 0.010°C deviation if not specified in parameters
+                    //decimal dusuklukAraligi = 0.010m; // 0.010°C interval
+                    //decimal dusuklukOrani = 0.05m; // 5% deduction per interval
+
+                    //decimal donmaSapmasi = donmaNoktasi.Value - kesintiBaslangicLimiti;
+                    //decimal aralikSayisi = donmaSapmasi / dusuklukAraligi;
+                    //decimal toplamYuzdeDusukluk = aralikSayisi * dusuklukOrani;
+                    decimal donmaNoktasiFarki = (donmaNoktasi.Value * -1) + referansDeger;
+                    decimal toplamYuzdeDusukluk = donmaNoktasiFarki / referansDeger * 100;
+                    // Apply percentage-based deduction to gross amount
+                    decimal dilusyonMiktari = Math.Round(brütMiktar * toplamYuzdeDusukluk  / 100);
+                    if (dilusyonMiktari > 0) // Only apply if there's a positive deduction
+                    {
+                        totalKesinti += dilusyonMiktari;
+                    }
+                }
+            }
+
+            // 2. Fat content adjustment (standard: min 3.6% for cow milk in Turkey)
+            if (yag.HasValue)
+            {
+                if (yag < 3.2m) // Severe low fat
+                {
+                    // Apply deduction for very low fat content (e.g., 0.5% of brüt miktar)
+                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
+                }
+                else if (yag < 3.6m) // Slightly low fat
+                {
+                    // Apply smaller deduction for slightly low fat content
+                    totalKesinti += brütMiktar * 0.002m; // 0.2% deduction
+                }
+            }
+
+            // 3. Protein content adjustment (standard: min 3.2% for cow milk in Turkey)
+            if (protein.HasValue)
+            {
+                if (protein < 2.8m) // Severe low protein
+                {
+                    // Apply deduction for very low protein content
+                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
+                }
+                else if (protein < 3.2m) // Slightly low protein
+                {
+                    // Apply smaller deduction for slightly low protein content
+                    totalKesinti += brütMiktar * 0.002m; // 0.2% deduction
+                }
+            }
+
+            // 4. Somatic cell count deduction (standard: max 400,000 cells/ml in Turkey)
+            if (somatik.HasValue)
+            {
+                if (somatik >= 800000m) // Very high somatic count
+                {
+                    totalKesinti += brütMiktar * 0.02m; // 2% deduction
+                }
+                else if (somatik >= 400000m) // High somatic count
+                {
+                    totalKesinti += brütMiktar * 0.01m; // 1% deduction
+                }
+            }
+
+            // 5. Bacterial count deduction (standard: max 100,000 CFU/ml in Turkey)
+            if (bakteri.HasValue)
+            {
+                if (bakteri >= 1000000m) // Very high bacterial count
+                {
+                    totalKesinti += brütMiktar * 0.03m; // 3% deduction
+                }
+                else if (bakteri >= 300000m) // High bacterial count
+                {
+                    totalKesinti += brütMiktar * 0.015m; // 1.5% deduction
+                }
+                else if (bakteri >= 100000m) // At limit
+                {
+                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
+                }
+            }
+
+            // 6. pH value adjustment (normal: 6.5-6.7)
+            if (pH.HasValue)
+            {
+                if (pH < 6.4m || pH > 6.8m) // Outside normal range
+                {
+                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
+                }
+            }
+
+            // 7. Density adjustment (normal: 1.028-1.034 g/cm³)
+            if (yogunluk.HasValue)
+            {
+                if (yogunluk < 1.028m || yogunluk > 1.034m) // Outside normal range
+                {
+                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
+                }
+            }
+
+            return totalKesinti;
+        }
+
+        private void txtMiktar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Auto-calculate NetMiktar when key parameters change
+            // This will update the display in real-time
+            CalculateAndDisplayNetMiktar();
+        }
+
+        private void txtDonma_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Auto-calculate NetMiktar when key parameters change
+            CalculateAndDisplayNetMiktar();
+        }
+
+        private void txtYag_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Auto-calculate NetMiktar when key parameters change
+            CalculateAndDisplayNetMiktar();
+        }
+
+        private void txtProtein_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Auto-calculate NetMiktar when key parameters change
+            CalculateAndDisplayNetMiktar();
+        }
+
+        private void txtBakteri_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Auto-calculate NetMiktar when key parameters change
+            CalculateAndDisplayNetMiktar();
+        }
+
+        private void txtSomatik_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Auto-calculate NetMiktar when key parameters change
+            CalculateAndDisplayNetMiktar();
+        }
+
+        private void CalculateAndDisplayNetMiktar()
+        {
+            if (IsLoaded) // Only if the form is loaded
+            {
+                var tr = new CultureInfo("tr-TR");
+                
+                // Parse the current values from the form
+                decimal miktar = decimal.TryParse(txtMiktar.Text, NumberStyles.Any, tr, out decimal parsedMiktar) ? parsedMiktar : 0;
+                decimal? donmaN = decimal.TryParse(txtDonma.Text, NumberStyles.Any, tr, out decimal parsedDonmaN) ? parsedDonmaN : (decimal?)null;
+                decimal? yag = decimal.TryParse(txtYag.Text, NumberStyles.Any, tr, out decimal parsedYag) ? parsedYag : (decimal?)null;
+                decimal? protein = decimal.TryParse(txtProtein.Text, NumberStyles.Any, tr, out decimal parsedProtein) ? parsedProtein : (decimal?)null;
+                decimal? somatik = decimal.TryParse(txtSomatik.Text, NumberStyles.Any, tr, out decimal parsedSomatik) ? parsedSomatik : (decimal?)null;
+                decimal? bakteri = decimal.TryParse(txtBakteri.Text, NumberStyles.Any, tr, out decimal parsedBakteri) ? parsedBakteri : (decimal?)null;
+                decimal? ph = decimal.TryParse(txtpH.Text, NumberStyles.Any, tr, out decimal parsedPh) ? parsedPh : (decimal?)null;
+                decimal? yogunluk = decimal.TryParse(txtYogunluk.Text, NumberStyles.Any, tr, out decimal parsedYogunluk) ? parsedYogunluk : (decimal?)null;
+
+                // Calculate net miktar based on parameters
+                decimal netMiktar = CalculateNetMiktar(miktar, donmaN, yag, protein, somatik, bakteri, ph, yogunluk);
+                
+                // Calculate total kesinti for display
+                decimal totalKesinti = CalculateKesinti(miktar, donmaN, yag, protein, somatik, bakteri, ph, yogunluk);
+                
+                // Update the displays
+                txtNetMiktar.Text = netMiktar.ToString("F2"); // Format to 2 decimal places
+                txtKesinti.Text = totalKesinti.ToString("F2"); // Show calculated deduction
+            }
+        }
+
         private void btnYeni_Click(object sender, RoutedEventArgs e)
         {
             // Confirm if user wants to clear the current form
@@ -434,7 +654,7 @@ namespace By_ProV2
             
             // Reset analysis fields
             txtMiktar.Clear();
-            txtFiyat.Clear();
+            txtNetMiktar.Clear(); // Will be auto-calculated when needed
             txtYag.Clear();
             txtProtein.Clear();
             txtLaktoz.Clear();
@@ -444,7 +664,7 @@ namespace By_ProV2
             txtIletkenlik.Clear();
             txtSicaklik.Clear();
             txtYogunluk.Clear();
-            txtKesinti.Clear();
+            txtKesinti.Clear(); // Will be auto-calculated when needed
             txtDonma.Clear();
             txtBakteri.Clear();
             txtSomatik.Clear();
