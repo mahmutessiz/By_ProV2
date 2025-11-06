@@ -1,0 +1,178 @@
+<Window x:Class="By_ProV2.CariListesiMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cari Listesi - Ana Ekran" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Başlık -->
+        <TextBlock Grid.Row="0" Text="Cari Listesi" 
+                   FontSize="24" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <!-- Arama ve Filtre Paneli -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,15">
+            <GroupBox Header="Arama ve Filtreleme" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- İlk Satır: Temel Aramalar -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Margin="0,0,10,10">
+                            <TextBlock Text="Cari Kodu:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtCariKodu" Margin="0,0,0,0" 
+                                     ToolTip="Cari koduna göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" Margin="0,0,10,10">
+                            <TextBlock Text="Cari Adı:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtCariAdi" Margin="0,0,0,0" 
+                                     ToolTip="Cari adına göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2" Margin="0,0,10,10">
+                            <TextBlock Text="Vergi No:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtVergiNo" Margin="0,0,0,0" 
+                                     ToolTip="Vergi numarasına göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="3" Margin="0,0,10,10">
+                            <TextBlock Text="Telefon:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtTelefon" Margin="0,0,0,0" 
+                                     ToolTip="Telefon numarasına göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="4" Margin="0,0,0,10" VerticalAlignment="Bottom">
+                            <Button x:Name="btnAra" Content="🔍 Ara" 
+                                    Margin="5,0,0,0" Padding="20,8" 
+                                    Click="BtnAra_Click" 
+                                    Background="#4CAF50" Foreground="White"
+                                    FontWeight="Bold"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- İkinci Satır: Ekstra Filtreler -->
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="Vergi Dairesi:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtVergiDairesi" 
+                                     ToolTip="Vergi dairesine göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                            <TextBlock Text="Yetkili Kişi:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtYetkili" 
+                                     ToolTip="Yetkili kişiye göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                            <TextBlock Text="Adres:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtAdres" 
+                                     ToolTip="Adrese göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                            <TextBlock Text="Plaka 1:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtPlaka1" 
+                                     ToolTip="Araç plakasına göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="4" VerticalAlignment="Bottom">
+                            <Button x:Name="btnTemizle" Content="🧹 Temizle" 
+                                    Margin="0,5,0,0" Padding="20,5" 
+                                    Click="BtnTemizle_Click"
+                                    Background="#FF9800" Foreground="White"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- Ana Liste -->
+        <DataGrid x:Name="dataGridCariler" 
+                  Grid.Row="2"
+                  Margin="0,5,0,10"
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  SelectionMode="Single"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  AlternatingRowBackground="#F5F5F5">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Cari Kodu" Binding="{Binding CariKod}" 
+                                   Width="120" SortMemberPath="CariKod"/>
+                <DataGridTextColumn Header="Cari Adı" Binding="{Binding CariAdi}" 
+                                   Width="*" SortMemberPath="CariAdi"/>
+                <DataGridTextColumn Header="Vergi Dairesi" Binding="{Binding VergiDairesi}" 
+                                   Width="150"/>
+                <DataGridTextColumn Header="Vergi No" Binding="{Binding VergiNo}" 
+                                   Width="120"/>
+                <DataGridTextColumn Header="Telefon" Binding="{Binding Telefon}" 
+                                   Width="120"/>
+                <DataGridTextColumn Header="Yetkili" Binding="{Binding Yetkili}" 
+                                   Width="150"/>
+                <DataGridTextColumn Header="Adres" Binding="{Binding Adres}" 
+                                   Width="200"/>
+                <DataGridTextColumn Header="Plaka 1" Binding="{Binding Plaka1}" 
+                                   Width="100"/>
+            </DataGrid.Columns>
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Detayları Göster" Click="MenuItemDetaylariGoster_Click"/>
+                    <MenuItem Header="Kopyala" Click="MenuItemKopyala_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+
+        <!-- Alt Bilgi -->
+        <Border Grid.Row="3" Background="#E3F2FD" BorderBrush="#BBDEFB" 
+                BorderThickness="1" CornerRadius="4" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" x:Name="lblToplamKayit" 
+                          Text="Toplam: 0 Kayıt" 
+                          VerticalAlignment="Center" FontWeight="SemiBold"/>
+                
+                <TextBlock Grid.Column="2" Text="🔍 Çift tıklayarak detayları açabilirsiniz" 
+                          HorizontalAlignment="Right" FontStyle="Italic" 
+                          Foreground="#757575"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

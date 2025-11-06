@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using By_ProV2.Helpers;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Windows;
@@ -28,7 +28,7 @@ namespace By_ProV2
         {
             try
             {
-                string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connStr = ConfigurationHelper.GetConnectionString("db");
                 tumCariler = new List<CariModel>();
 
                 using (SqlConnection conn = new SqlConnection(connStr))

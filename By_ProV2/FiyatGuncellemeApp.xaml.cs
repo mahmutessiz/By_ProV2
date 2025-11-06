@@ -15,7 +15,7 @@ using By_ProV2.Models;
 using Microsoft.Win32;
 using System.IO;
 using Microsoft.Data.SqlClient;
-using System.Configuration;
+using By_ProV2.Helpers;
 
 
 
@@ -30,7 +30,7 @@ namespace By_ProV2
         public FiyatGuncellemeApp()
         {
             InitializeComponent();
-            connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            connStr = ConfigurationHelper.GetConnectionString("db");
         }
 
         private List<FiyatGuncelleModel> ExcelOku(string path)
@@ -78,7 +78,7 @@ namespace By_ProV2
         private List<FiyatGuncelleModel> AktifFiyatlariGetir()
         {
             var liste = new List<FiyatGuncelleModel>();
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             using (var conn = new SqlConnection(connStr))
             {

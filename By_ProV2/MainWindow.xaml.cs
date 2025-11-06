@@ -1,11 +1,11 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using By_ProV2.Reports;
+using By_ProV2.Helpers;
 
 namespace By_ProV2
 {
@@ -88,7 +88,7 @@ namespace By_ProV2
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["db"].ConnectionString))
+                using (SqlConnection connection = new SqlConnection(ConfigurationHelper.GetConnectionString("db")))
                 {
                     connection.Open();
                     return true;
@@ -231,14 +231,8 @@ namespace By_ProV2
 
         private void BtnCariListesi_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Cari Listesi ekranı buraya gelecek.",
-                FontSize = 28,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            });
+            CariListesiMainWindow pencere = new CariListesiMainWindow();
+            pencere.ShowDialog(); // modal olarak aç
         }
 
         private void BtnCariHareket_Click(object sender, RoutedEventArgs e)
@@ -597,6 +591,16 @@ namespace By_ProV2
                 // Logout the current user before shutting down
                 App.AuthService?.Logout();
                 Application.Current.Shutdown();
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Properly dispose of the timer to prevent memory leaks
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Tick -= Timer_Tick;  // Unsubscribe from the event
             }
         }
     }

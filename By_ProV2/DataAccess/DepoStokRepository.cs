@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Models;
+using By_ProV2.Helpers;
 
 namespace By_ProV2.DataAccess
 {
@@ -10,8 +11,7 @@ namespace By_ProV2.DataAccess
 
         public DepoStokRepository()
         {
-            _connectionString = System.Configuration.ConfigurationManager
-                .ConnectionStrings["db"].ConnectionString;
+            _connectionString = ConfigurationHelper.GetConnectionString("db");
         }
 
         public void KaydetStokHareketi(SutKaydi kayit, SqlConnection conn, SqlTransaction tran)

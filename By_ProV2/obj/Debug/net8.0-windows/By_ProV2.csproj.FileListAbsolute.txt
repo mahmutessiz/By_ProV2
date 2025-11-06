@@ -333,3 +333,13 @@ C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\AuditTrailWi
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\AuditTrailWindow.g.cs
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\ParametrelerWindow.baml
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\ParametrelerWindow.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\appsettings.json
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.Configuration.Json.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\CariListesiMainWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\CariListesiMainWindow.g.cs

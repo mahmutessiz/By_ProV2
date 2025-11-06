@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Models;
 using By_ProV2.DataAccess;
 using By_ProV2.Services;
+using By_ProV2.Helpers;
 
 
 namespace By_ProV2.DataAccess
@@ -16,7 +16,7 @@ namespace By_ProV2.DataAccess
 
         public SutRepository()
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            _connectionString = ConfigurationHelper.GetConnectionString("db");
         }
 
         private int? GetCariIdByKod(string kod)
@@ -27,7 +27,7 @@ namespace By_ProV2.DataAccess
             string query = "SELECT CariId FROM Cari WHERE CariKod = @Kod";
             SqlParameter[] parameters = { new SqlParameter("@Kod", kod) };
 
-            object result = DatabaseHelper.ExecuteScalar(query, parameters, _connectionString);
+            object result = DatabaseHelper.ExecuteScalar(query, parameters);
             return result != null && result != DBNull.Value ? Convert.ToInt32(result) : (int?)null;
         }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
+using By_ProV2.Helpers;
 
 namespace By_ProV2.Models
 {
@@ -75,7 +75,7 @@ namespace By_ProV2.Models
             ToplamBrutKar = 0;
             Rapor.Clear();
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {

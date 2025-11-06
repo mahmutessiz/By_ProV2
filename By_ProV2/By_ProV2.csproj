@@ -17,6 +17,8 @@
     <PackageReference Include="HarfBuzzSharp" Version="8.3.1.2" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Win32" Version="8.3.1.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Microsoft.SqlServer.Types" Version="160.1000.6" />
     <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
     <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
@@ -32,6 +34,9 @@
     <Content Include="Resources\Logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 
@@ -42,6 +47,9 @@
     </Compile>
     <Compile Update="CariKayitWindow.xaml.cs">
       <DependentUpon>CariKayitWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="CariListesiMainWindow.xaml.cs">
+      <DependentUpon>CariListesiMainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Update="CariListesiWindow.xaml.cs">
       <DependentUpon>CariListesiWindow.xaml</DependentUpon>

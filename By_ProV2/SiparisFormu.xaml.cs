@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
 using System.Windows;
@@ -59,7 +58,7 @@ namespace By_ProV2
         {
             int nextNumber = 1;
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {

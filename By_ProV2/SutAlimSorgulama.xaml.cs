@@ -1,11 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using By_ProV2.Models;
 using Microsoft.Data.SqlClient;
+using By_ProV2.Helpers;
 
 namespace By_ProV2
 {
@@ -24,7 +24,7 @@ namespace By_ProV2
         public SutAlimSorgulama()
         {
             InitializeComponent();
-            _connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            _connectionString = ConfigurationHelper.GetConnectionString("db");
             _sutBelgeleri = new ObservableCollection<SutAlimSorgulamaBelge>();
             dgBelgeler.ItemsSource = _sutBelgeleri;
             Loaded += SutAlimSorgulama_Loaded;

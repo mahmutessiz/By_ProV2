@@ -1,6 +1,6 @@
 using System;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
+using By_ProV2.Helpers;
 
 namespace By_ProV2.Helpers
 {
@@ -8,7 +8,7 @@ namespace By_ProV2.Helpers
     {
         public static void InitializeDatabase()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connectionString = ConfigurationHelper.GetConnectionString("db");
 
             using (var connection = new SqlConnection(connectionString))
             {

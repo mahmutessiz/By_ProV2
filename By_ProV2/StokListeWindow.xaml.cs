@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using By_ProV2.Helpers;
 
 namespace By_ProV2
 {
@@ -25,7 +25,7 @@ namespace By_ProV2
 
         private void VerileriYukle()
         {
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
             tumStoklar = new List<StokModel>();
 
             string query = @"

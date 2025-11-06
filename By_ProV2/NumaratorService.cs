@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
+using By_ProV2.Helpers;
 
 public static class NumaratorService
 {
@@ -15,7 +15,7 @@ public static class NumaratorService
     {
         int nextNumber = 1;
 
-        string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+        string connStr = ConfigurationHelper.GetConnectionString("db");
 
         using (SqlConnection conn = new SqlConnection(connStr))
         {

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using By_ProV2.Helpers;
 
-namespace By_ProV2.DataAccess
+namespace By_ProV2.Helpers
 {
     public static class DatabaseHelper
     {
-        public static int ExecuteNonQuery(string query, SqlParameter[] parameters, string connectionString)
+        private static string ConnectionString => ConfigurationHelper.GetConnectionString("db");
+
+        public static int ExecuteNonQuery(string query, SqlParameter[] parameters)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 if (parameters != null)
@@ -19,9 +22,9 @@ namespace By_ProV2.DataAccess
             }
         }
 
-        public static object ExecuteScalar(string query, SqlParameter[] parameters, string connectionString)
+        public static object ExecuteScalar(string query, SqlParameter[] parameters)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 if (parameters != null)
@@ -32,9 +35,9 @@ namespace By_ProV2.DataAccess
             }
         }
 
-        public static DataTable ExecuteReader(string query, SqlParameter[] parameters, string connectionString)
+        public static DataTable ExecuteReader(string query, SqlParameter[] parameters)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 if (parameters != null)

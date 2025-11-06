@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "db": "Server=YOUR_SERVER_NAME\\YOUR_INSTANCE_NAME;Database=BERYEM;Trusted_Connection=True;TrustServerCertificate=true;"
+  }
+}

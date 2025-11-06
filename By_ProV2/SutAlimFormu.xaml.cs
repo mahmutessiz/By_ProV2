@@ -106,8 +106,8 @@ namespace By_ProV2
                 : rbDepodanSevk.IsChecked == true ? "Depodan Sevk" 
                 : "Direkt Sevk";
 
-            // For "Depodan Sevk", tedarikçi is not required 
-            // For "Depoya Alım", tedarikçi is required
+            // For "Depodan Sevk", tedarikçi is not required but müşteri is required
+            // For "Depoya Alım", tedarikçi is required but müşteri is not required
             // For "Direkt Sevk", both tedarikçi and müşteri are required
             if (islemTuru == "Depoya Alım" || islemTuru == "Direkt Sevk")
             {
@@ -118,8 +118,8 @@ namespace By_ProV2
                 }
             }
 
-            // For "Direkt Sevk", müşteri is also required
-            if (islemTuru == "Direkt Sevk")
+            // For "Depodan Sevk" and "Direkt Sevk", müşteri is required
+            if (islemTuru == "Depodan Sevk" || islemTuru == "Direkt Sevk")
             {
                 if (string.IsNullOrWhiteSpace(txtMusteriKod.Text))
                 {

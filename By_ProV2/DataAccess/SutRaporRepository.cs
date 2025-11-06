@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Models;
+using By_ProV2.Helpers;
 
 namespace By_ProV2.DataAccess
 {
@@ -11,8 +12,7 @@ namespace By_ProV2.DataAccess
 
         public SutRaporRepository()
         {
-            _connectionString = System.Configuration.ConfigurationManager
-                .ConnectionStrings["db"].ConnectionString;
+            _connectionString = ConfigurationHelper.GetConnectionString("db");
         }
 
         /// <summary>

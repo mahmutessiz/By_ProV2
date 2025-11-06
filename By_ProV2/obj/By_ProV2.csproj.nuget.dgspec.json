@@ -79,6 +79,14 @@
               "target": "Package",
               "version": "[6.1.2, )"
             },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.SqlServer.Types": {
               "target": "Package",
               "version": "[160.1000.6, )"

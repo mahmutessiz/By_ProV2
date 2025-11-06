@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WİNDOWS7_0_OR_GREATER
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\App.xaml
-24537184049
-6785113563
-622109778765
-2551656328223
-AuditTrailWindow.xaml;BelgeSorgulama.xaml;CariKayitWindow.xaml;CariListesiWindow.xaml;EskiSiparisFormu.xaml;FirstTimeSetupWindow.xaml;FiyatGuncellemeApp.xaml;IskontoGirWindow.xaml;LoginWindow.xaml;MainWindow.xaml;ParametrelerWindow.xaml;RaporSayfasi.xaml;Reports\GunlukSutAlimPreview.xaml;SiparisFormu.xaml;StokKayitWindow.xaml;StokListeWindow.xaml;Styles\Style.xaml;SutAlimFormu.xaml;SutAlimSorgulama.xaml;SutDepoSevkFormu.xaml;SutDirekSevkFormu.xaml;SutRaporlari.xaml;TedarikciEkleWindow.xaml;UserManagementWindow.xaml;
+25-2005048722
+7-2096428980
+641899659790
+262-879755096
+AuditTrailWindow.xaml;BelgeSorgulama.xaml;CariKayitWindow.xaml;CariListesiMainWindow.xaml;CariListesiWindow.xaml;EskiSiparisFormu.xaml;FirstTimeSetupWindow.xaml;FiyatGuncellemeApp.xaml;IskontoGirWindow.xaml;LoginWindow.xaml;MainWindow.xaml;ParametrelerWindow.xaml;RaporSayfasi.xaml;Reports\GunlukSutAlimPreview.xaml;SiparisFormu.xaml;StokKayitWindow.xaml;StokListeWindow.xaml;Styles\Style.xaml;SutAlimFormu.xaml;SutAlimSorgulama.xaml;SutDepoSevkFormu.xaml;SutDirekSevkFormu.xaml;SutRaporlari.xaml;TedarikciEkleWindow.xaml;UserManagementWindow.xaml;
 
 False
 

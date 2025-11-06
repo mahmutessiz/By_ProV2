@@ -1,5 +1,5 @@
 using System;
-using System.Configuration;
+using By_ProV2.Helpers;
 using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows;
@@ -87,7 +87,7 @@ namespace By_ProV2
 
         private async Task<bool> BelgeVarMiAsync(string belgeKodu)
         {
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {

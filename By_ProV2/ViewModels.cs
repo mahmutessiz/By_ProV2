@@ -6,8 +6,8 @@ using System.Linq;
 using System;
 using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
-using System.Configuration;
 using System.Windows;
+using By_ProV2.Helpers;
 
 
 namespace By_ProV2.ViewModels
@@ -781,7 +781,7 @@ namespace By_ProV2.ViewModels
                 }
             }
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {
@@ -954,7 +954,7 @@ Aciklama1, Aciklama2, Aciklama3, Aciklama4, Aciklama5, Aciklama6, AlisToplamTuta
         }
         public async Task SiparisiYukleAsync(string belgeKodu)
         {
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
@@ -1199,7 +1199,7 @@ Aciklama1, Aciklama2, Aciklama3, Aciklama4, Aciklama5, Aciklama6, AlisToplamTuta
 
         public async Task<bool> SiparisiGuncelleAsync(int siparisID)
         {
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {
@@ -1400,7 +1400,7 @@ VALUES
         }
         public async Task<bool> SiparisiSilAsync(int siparisID)
         {
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {

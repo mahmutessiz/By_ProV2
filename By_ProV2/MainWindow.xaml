@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Beryem Tarım Ürünleri Gıda Nakliye Ticaret Ltd. Şti."
         Height="1000" Width="1618"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing">
 
     <DockPanel LastChildFill="True">
             <!-- Menü Bar en üstte -->

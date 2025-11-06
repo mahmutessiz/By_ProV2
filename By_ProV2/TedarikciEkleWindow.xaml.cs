@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
 using System.Windows;
@@ -35,7 +34,7 @@ namespace By_ProV2
 
             try
             {
-                string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connStr = ConfigurationHelper.GetConnectionString("db");
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     conn.Open();

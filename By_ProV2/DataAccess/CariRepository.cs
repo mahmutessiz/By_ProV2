@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Models;
+using By_ProV2.Helpers;
 
 namespace By_ProV2.DataAccess
 {
@@ -10,8 +11,7 @@ namespace By_ProV2.DataAccess
 
         public CariRepository()
         {
-            _connectionString = System.Configuration.ConfigurationManager
-                .ConnectionStrings["db"].ConnectionString;
+            _connectionString = ConfigurationHelper.GetConnectionString("db");
         }
 
         public int GetOrCreateCari(string kod, string ad, string tipi, SqlConnection conn, SqlTransaction tran)

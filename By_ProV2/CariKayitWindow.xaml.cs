@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Configuration;
+using By_ProV2.Helpers;
 using System.Windows.Input;
 
 namespace By_ProV2
@@ -51,7 +51,7 @@ namespace By_ProV2
             
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connectionString = ConfigurationHelper.GetConnectionString("db");
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -166,7 +166,7 @@ namespace By_ProV2
         {
             int newID = 1;
 
-            string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connectionString = ConfigurationHelper.GetConnectionString("db");
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -290,7 +290,7 @@ namespace By_ProV2
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connectionString = ConfigurationHelper.GetConnectionString("db");
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -416,7 +416,7 @@ namespace By_ProV2
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connectionString = ConfigurationHelper.GetConnectionString("db");
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -496,7 +496,7 @@ namespace By_ProV2
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connectionString = ConfigurationHelper.GetConnectionString("db");
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {

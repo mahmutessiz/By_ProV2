@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
 using System.Windows;
@@ -34,7 +33,7 @@ namespace By_ProV2
                 return;
             }
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {
@@ -289,7 +288,7 @@ VALUES
                 return;
             }
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {
@@ -488,7 +487,7 @@ VALUES
             if (cevap != MessageBoxResult.Yes)
                 return;
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {
@@ -561,7 +560,7 @@ VALUES
             string stokKodu = txtStokKodu.Text.Trim();
             if (string.IsNullOrEmpty(stokKodu)) return;
 
-            string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+            string connStr = ConfigurationHelper.GetConnectionString("db");
 
             try
             {
@@ -750,7 +749,7 @@ VALUES
 
             try
             {
-                string connStr = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
+                string connStr = ConfigurationHelper.GetConnectionString("db");
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     conn.Open();
