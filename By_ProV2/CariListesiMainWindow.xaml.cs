@@ -176,7 +176,33 @@ namespace By_ProV2
 
         private void DataGridCariler_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            MenuItemDetaylariGoster_Click(sender, null);
+            if (dataGridCariler.SelectedItem is CariModel secilenCari)
+            {
+                CariKayitWindow cariDuzenlemeForm = new CariKayitWindow();
+                cariDuzenlemeForm.LoadCariData(secilenCari);
+                cariDuzenlemeForm.ShowDialog();
+                
+                // Liste güncellensin diye yeniden yükle
+                YukleCariler();
+            }
+        }
+
+        private void DataGridCariler_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.MouseDoubleClick += DataGridRow_MouseDoubleClick;
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (dataGridCariler.SelectedItem is CariModel secilenCari)
+            {
+                CariKayitWindow cariDuzenlemeForm = new CariKayitWindow();
+                cariDuzenlemeForm.LoadCariData(secilenCari);
+                cariDuzenlemeForm.ShowDialog();
+                
+                // Liste güncellensin diye yeniden yükle
+                YukleCariler();
+            }
         }
 
         private void MenuItemDetaylariGoster_Click(object sender, RoutedEventArgs e)

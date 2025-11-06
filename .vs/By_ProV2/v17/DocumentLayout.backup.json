@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\carikayitwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\carikayitwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\carilistesimainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\carilistesimainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\carilistesiwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\carilistesiwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -25,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\carikayitwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\carikayitwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\belgesorgulama.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -62,11 +66,23 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "CariListesiMainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariListesiMainWindow.xaml",
+              "RelativeDocumentMoniker": "By_ProV2\\CariListesiMainWindow.xaml",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariListesiMainWindow.xaml",
+              "RelativeToolTip": "By_ProV2\\CariListesiMainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-06T10:28:43.461Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "CariListesiWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariListesiWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\CariListesiWindow.xaml",
@@ -78,7 +94,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\appsettings.json",
               "RelativeDocumentMoniker": "By_ProV2\\appsettings.json",
@@ -91,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "SutAlimFormu.xaml.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml.cs",
               "RelativeDocumentMoniker": "By_ProV2\\SutAlimFormu.xaml.cs",
@@ -103,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "EskiSiparisFormu.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\EskiSiparisFormu.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\EskiSiparisFormu.xaml",
@@ -115,18 +131,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "CariKayitWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariKayitWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\CariKayitWindow.xaml",
               "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariKayitWindow.xaml",
               "RelativeToolTip": "By_ProV2\\CariKayitWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-04T10:33:05.252Z"
+              "WhenOpened": "2025-11-04T10:33:05.252Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "SutAlimFormu.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutAlimFormu.xaml",
@@ -137,7 +154,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "StokKayitWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\StokKayitWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\StokKayitWindow.xaml",
@@ -148,7 +165,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "IskontoGirWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\IskontoGirWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\IskontoGirWindow.xaml",
@@ -159,18 +176,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\MainWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\MainWindow.xaml",
               "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\MainWindow.xaml",
               "RelativeToolTip": "By_ProV2\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-04T10:18:01.868Z"
+              "WhenOpened": "2025-11-04T10:18:01.868Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "SutAlimSorgulama.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutAlimSorgulama.xaml",
@@ -181,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "App.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\App.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\App.xaml",
@@ -193,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "BelgeSorgulama.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\BelgeSorgulama.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\BelgeSorgulama.xaml",
@@ -204,7 +222,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "By_ProV2\\MainWindow.xaml.cs",

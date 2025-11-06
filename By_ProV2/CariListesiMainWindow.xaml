@@ -24,6 +24,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
                     <!-- İlk Satır: Temel Aramalar -->
@@ -61,11 +62,7 @@
                         </StackPanel>
                         
                         <StackPanel Grid.Column="4" Margin="0,0,0,10" VerticalAlignment="Bottom">
-                            <Button x:Name="btnAra" Content="🔍 Ara" 
-                                    Margin="5,0,0,0" Padding="20,8" 
-                                    Click="BtnAra_Click" 
-                                    Background="#4CAF50" Foreground="White"
-                                    FontWeight="Bold"/>
+                            <Border Background="Transparent" />
                         </StackPanel>
                     </Grid>
                     
@@ -104,10 +101,29 @@
                         </StackPanel>
                         
                         <StackPanel Grid.Column="4" VerticalAlignment="Bottom">
-                            <Button x:Name="btnTemizle" Content="🧹 Temizle" 
-                                    Margin="0,5,0,0" Padding="20,5" 
-                                    Click="BtnTemizle_Click"
-                                    Background="#FF9800" Foreground="White"/>
+                            <Border Background="Transparent" />
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Üçüncü Satır: Butonlar -->
+                    <Grid Grid.Row="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnTemizle" Content="🧹 Temizle" 
+                                        Margin="0,0,5,0" Padding="15,8" 
+                                        Click="BtnTemizle_Click"
+                                        Background="#FF9800" Foreground="White"
+                                        FontWeight="SemiBold"/>
+                                <Button x:Name="btnAra" Content="🔍 Ara" 
+                                        Margin="0,0,0,0" Padding="15,8" 
+                                        Click="BtnAra_Click" 
+                                        Background="#4CAF50" Foreground="White"
+                                        FontWeight="SemiBold"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -125,7 +141,9 @@
                   SelectionMode="Single"
                   GridLinesVisibility="Horizontal"
                   HeadersVisibility="Column"
-                  AlternatingRowBackground="#F5F5F5">
+                  AlternatingRowBackground="#F5F5F5"
+                  MouseDoubleClick="DataGridCariler_MouseDoubleClick"
+                  LoadingRow="DataGridCariler_LoadingRow">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Cari Kodu" Binding="{Binding CariKod}" 

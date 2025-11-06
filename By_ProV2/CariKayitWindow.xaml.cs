@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using By_ProV2.Helpers;
 using System.Windows.Input;
+using By_ProV2.Models;
 
 namespace By_ProV2
 {
@@ -537,5 +538,40 @@ namespace By_ProV2
             }
         }
 
+        // Public method to load cari data from outside the class
+        public void LoadCariData(CariModel cari)
+        {
+            if (cari == null) return;
+
+            // Load all the cari information to the form fields
+            txtCariKod.Text = cari.CariKod;
+            txtCariAdi.Text = cari.CariAdi;
+            txtAdres.Text = cari.Adres;
+            txtTelefon.Text = cari.Telefon;
+            txtYetkili.Text = cari.Yetkili;
+            txtBagliCariKod.Text = cari.BagliCariKod;
+            txtVergiDaire.Text = cari.VergiDairesi;
+            txtVergiNo.Text = cari.VergiNo;
+
+            txtIsk1.Text = cari.Isk1.ToString("0.##", new CultureInfo("tr-TR"));
+            txtIsk2.Text = cari.Isk2.ToString("0.##", new CultureInfo("tr-TR"));
+            txtIsk3.Text = cari.Isk3.ToString("0.##", new CultureInfo("tr-TR"));
+            txtIsk4.Text = cari.Isk4.ToString("0.##", new CultureInfo("tr-TR"));
+            txtKKIsk1.Text = cari.KKIsk1.ToString("0.##", new CultureInfo("tr-TR"));
+            txtKKIsk2.Text = cari.KKIsk2.ToString("0.##", new CultureInfo("tr-TR"));
+            txtKKIsk3.Text = cari.KKIsk3.ToString("0.##", new CultureInfo("tr-TR"));
+            txtKKIsk4.Text = cari.KKIsk4.ToString("0.##", new CultureInfo("tr-TR"));
+            txtNakliyeIsk1.Text = cari.NakliyeIskonto.ToString("0.##", new CultureInfo("tr-TR"));
+
+            txtPlaka1.Text = cari.Plaka1;
+            txtPlaka2.Text = cari.Plaka2;
+            txtPlaka3.Text = cari.Plaka3;
+            txtSofor.Text = cari.SoforAdSoyad;
+
+            dtKayitTarihi.SelectedDate = cari.KayitTarihi;
+
+            // Lock the cari code so it won't be edited
+            txtCariKod.IsReadOnly = true;
+        }
     }
 }
