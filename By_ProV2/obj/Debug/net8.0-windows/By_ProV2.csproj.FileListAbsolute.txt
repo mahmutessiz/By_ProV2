@@ -323,3 +323,13 @@ C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\By_ProV2.pdb
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\By_ProV2.genruntimeconfig.cache
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\ref\By_ProV2.dll
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\By_ProV2.sourcelink.json
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\FirstTimeSetupWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\LoginWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\UserManagementWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\FirstTimeSetupWindow.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\LoginWindow.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\UserManagementWindow.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\AuditTrailWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\AuditTrailWindow.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\ParametrelerWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\ParametrelerWindow.g.cs

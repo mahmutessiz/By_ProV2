@@ -102,10 +102,30 @@ namespace By_ProV2
 
         private void AddNewRecordToList()
         {
-            if (string.IsNullOrWhiteSpace(txtTedarikciKod.Text))
+            string islemTuru = rbDepoAlim.IsChecked == true ? "Depoya Alım" 
+                : rbDepodanSevk.IsChecked == true ? "Depodan Sevk" 
+                : "Direkt Sevk";
+
+            // For "Depodan Sevk", tedarikçi is not required 
+            // For "Depoya Alım", tedarikçi is required
+            // For "Direkt Sevk", both tedarikçi and müşteri are required
+            if (islemTuru == "Depoya Alım" || islemTuru == "Direkt Sevk")
             {
-                MessageBox.Show("Tedarikçi seçilmedi!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                if (string.IsNullOrWhiteSpace(txtTedarikciKod.Text))
+                {
+                    MessageBox.Show("Tedarikçi seçilmedi!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
+            // For "Direkt Sevk", müşteri is also required
+            if (islemTuru == "Direkt Sevk")
+            {
+                if (string.IsNullOrWhiteSpace(txtMusteriKod.Text))
+                {
+                    MessageBox.Show("Müşteri seçilmedi!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
             }
 
             var kayit = new SutKaydi();

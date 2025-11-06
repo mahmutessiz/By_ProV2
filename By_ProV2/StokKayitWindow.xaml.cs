@@ -20,7 +20,9 @@ namespace By_ProV2
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             dpIslemTarihi.SelectedDate = DateTime.Now;
-            txtOlusturan.Text = Environment.UserName;
+            // Use the current authenticated user's username instead of the Windows environment username
+            var currentUser = App.AuthService?.CurrentUser;
+            txtOlusturan.Text = currentUser?.Username ?? Environment.UserName;
             TedarikciComboDoldur();
         }
 
@@ -59,9 +61,9 @@ namespace By_ProV2
                         // 1. STOKSABITKART
                         SqlCommand cmdStok = new SqlCommand(@"
 INSERT INTO STOKSABITKART 
-(STOKKODU, STOKADI, BIRIM, AGIRLIK, PROTEIN, ENERJI, NEM, BARKOD, YEMOZELLIGI, ACIKLAMA, MENSEI, AKTIF, OLUSTURMATARIHI)
+(STOKKODU, STOKADI, BIRIM, AGIRLIK, PROTEIN, ENERJI, NEM, BARKOD, YEMOZELLIGI, ACIKLAMA, MENSEI, AKTIF, OLUSTURMATARIHI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
 VALUES 
-(@STOKKODU, @STOKADI, @BIRIM, @AGIRLIK, @PROTEIN, @ENERJI, @NEM, @BARKOD, @YEMOZELLIGI, @ACIKLAMA, @MENSEI, @AKTIF, @OLUSTURMATARIHI);
+(@STOKKODU, @STOKADI, @BIRIM, @AGIRLIK, @PROTEIN, @ENERJI, @NEM, @BARKOD, @YEMOZELLIGI, @ACIKLAMA, @MENSEI, @AKTIF, @OLUSTURMATARIHI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt);
 SELECT SCOPE_IDENTITY();", conn, trans);
 
                         cmdStok.Parameters.AddWithValue("@STOKKODU", txtStokKodu.Text);
@@ -77,6 +79,21 @@ SELECT SCOPE_IDENTITY();", conn, trans);
                         cmdStok.Parameters.AddWithValue("@MENSEI", GetComboBoxValue(cmbMensei)); // Yerli/İthal
                         cmdStok.Parameters.AddWithValue("@AKTIF", 1);
                         cmdStok.Parameters.AddWithValue("@OLUSTURMATARIHI", dpIslemTarihi.SelectedDate ?? DateTime.Now);
+                        
+                        // Add user tracking parameters
+                        var currentUserForStok = App.AuthService?.CurrentUser;
+                        if (currentUserForStok != null)
+                        {
+                            cmdStok.Parameters.AddWithValue("@CreatedBy", currentUserForStok.Id);
+                            cmdStok.Parameters.AddWithValue("@ModifiedBy", currentUserForStok.Id);
+                        }
+                        else
+                        {
+                            cmdStok.Parameters.AddWithValue("@CreatedBy", DBNull.Value);
+                            cmdStok.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                        }
+                        cmdStok.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+                        cmdStok.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                         // Otomatik oluşturulan STOKID'yi al
                         int stokId = Convert.ToInt32(cmdStok.ExecuteScalar());
@@ -84,9 +101,9 @@ SELECT SCOPE_IDENTITY();", conn, trans);
                         // 2. STOKSABITFIYAT
                         SqlCommand cmdFiyat = new SqlCommand(@"
 INSERT INTO STOKSABITFIYAT 
-(STOKID, LISTEADI, LISTETARIHI, ALISFIYAT1, ALISFIYAT2, ALISFIYAT3, ALISFIYAT4, ALISFIYAT5, KDVORANI, PARABIRIMI, AKTIF, KAYITTARIHI, OLUSTURANKULLANICI)
+(STOKID, LISTEADI, LISTETARIHI, ALISFIYAT1, ALISFIYAT2, ALISFIYAT3, ALISFIYAT4, ALISFIYAT5, KDVORANI, PARABIRIMI, AKTIF, KAYITTARIHI, OLUSTURANKULLANICI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
 VALUES 
-(@STOKID, @LISTEADI, @LISTETARIHI, @ALISFIYAT1,@ALISFIYAT2, @ALISFIYAT3, @ALISFIYAT4, @ALISFIYAT5,  @KDVORANI, @PARABIRIMI, @AKTIF, @KAYITTARIHI, @OLUSTURANKULLANICI)", conn, trans);
+(@STOKID, @LISTEADI, @LISTETARIHI, @ALISFIYAT1,@ALISFIYAT2, @ALISFIYAT3, @ALISFIYAT4, @ALISFIYAT5,  @KDVORANI, @PARABIRIMI, @AKTIF, @KAYITTARIHI, @OLUSTURANKULLANICI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt)", conn, trans);
 
                         cmdFiyat.Parameters.AddWithValue("@STOKID", stokId);
                         cmdFiyat.Parameters.AddWithValue("@LISTEADI", "Standart");
@@ -101,20 +118,50 @@ VALUES
                         cmdFiyat.Parameters.AddWithValue("@AKTIF", 1);
                         cmdFiyat.Parameters.AddWithValue("@KAYITTARIHI", DateTime.Now);
                         cmdFiyat.Parameters.AddWithValue("@OLUSTURANKULLANICI", txtOlusturan.Text);
+                        
+                        // Add user tracking parameters
+                        var currentUserForFiyat = App.AuthService?.CurrentUser;
+                        if (currentUserForFiyat != null)
+                        {
+                            cmdFiyat.Parameters.AddWithValue("@CreatedBy", currentUserForFiyat.Id);
+                            cmdFiyat.Parameters.AddWithValue("@ModifiedBy", currentUserForFiyat.Id);
+                        }
+                        else
+                        {
+                            cmdFiyat.Parameters.AddWithValue("@CreatedBy", DBNull.Value);
+                            cmdFiyat.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                        }
+                        cmdFiyat.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+                        cmdFiyat.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                         cmdFiyat.ExecuteNonQuery();
 
                         // 3. STOKSABITBELGE
                         SqlCommand cmdBelge = new SqlCommand(@"
 INSERT INTO STOKSABITBELGE 
-(STOKID, BELGETIPI, DOSYAYOLU, EKLEMETARIHI)
+(STOKID, BELGETIPI, DOSYAYOLU, EKLEMETARIHI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
 VALUES 
-(@STOKID, @BELGETIPI, @DOSYAYOLU, @EKLEMETARIHI)", conn, trans);
+(@STOKID, @BELGETIPI, @DOSYAYOLU, @EKLEMETARIHI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt)", conn, trans);
 
                         cmdBelge.Parameters.AddWithValue("@STOKID", stokId);
                         cmdBelge.Parameters.AddWithValue("@BELGETIPI", "Tanıtım");
                         cmdBelge.Parameters.AddWithValue("@DOSYAYOLU", string.IsNullOrEmpty(txtDosyaYolu.Text) ? (object)DBNull.Value : txtDosyaYolu.Text);
                         cmdBelge.Parameters.AddWithValue("@EKLEMETARIHI", DateTime.Now);
+                        
+                        // Add user tracking parameters
+                        var currentUserForBelge = App.AuthService?.CurrentUser;
+                        if (currentUserForBelge != null)
+                        {
+                            cmdBelge.Parameters.AddWithValue("@CreatedBy", currentUserForBelge.Id);
+                            cmdBelge.Parameters.AddWithValue("@ModifiedBy", currentUserForBelge.Id);
+                        }
+                        else
+                        {
+                            cmdBelge.Parameters.AddWithValue("@CreatedBy", DBNull.Value);
+                            cmdBelge.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                        }
+                        cmdBelge.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+                        cmdBelge.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                         cmdBelge.ExecuteNonQuery();
 
@@ -122,9 +169,9 @@ VALUES
                         // 4. STOKSABITHAREKET (İlk giriş hareketi)
                         SqlCommand cmdHareket = new SqlCommand(@"
 INSERT INTO STOKSABITHAREKET 
-(STOKID, HAREKETTURU, MIKTAR, BIRIM, DEPOID, ISLEMTARIHI)
+(STOKID, HAREKETTURU, MIKTAR, BIRIM, DEPOID, ISLEMTARIHI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
 VALUES 
-(@STOKID, @HAREKETTURU, @MIKTAR, @BIRIM, @DEPOID, @ISLEMTARIHI)", conn, trans);
+(@STOKID, @HAREKETTURU, @MIKTAR, @BIRIM, @DEPOID, @ISLEMTARIHI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt)", conn, trans);
 
                         cmdHareket.Parameters.AddWithValue("@STOKID", stokId);
                         cmdHareket.Parameters.AddWithValue("@HAREKETTURU", "Giriş");
@@ -132,6 +179,21 @@ VALUES
                         cmdHareket.Parameters.AddWithValue("@BIRIM", GetComboBoxValue(cmbBirim));
                         cmdHareket.Parameters.AddWithValue("@DEPOID", cmbDepo.SelectedValue ?? DBNull.Value);
                         cmdHareket.Parameters.AddWithValue("@ISLEMTARIHI", DateTime.Now);
+                        
+                        // Add user tracking parameters
+                        var currentUserForHareket = App.AuthService?.CurrentUser;
+                        if (currentUserForHareket != null)
+                        {
+                            cmdHareket.Parameters.AddWithValue("@CreatedBy", currentUserForHareket.Id);
+                            cmdHareket.Parameters.AddWithValue("@ModifiedBy", currentUserForHareket.Id);
+                        }
+                        else
+                        {
+                            cmdHareket.Parameters.AddWithValue("@CreatedBy", DBNull.Value);
+                            cmdHareket.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                        }
+                        cmdHareket.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+                        cmdHareket.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                         cmdHareket.ExecuteNonQuery();
 
@@ -200,7 +262,9 @@ VALUES
             txtDosyaYolu.Text = string.Empty;
             txtMuhasebeKodu.Clear();
             txtKDV.Clear();
-            txtOlusturan.Text = Environment.UserName;
+            // Use the current authenticated user's username instead of the Windows environment username
+            var currentUser = App.AuthService?.CurrentUser;
+            txtOlusturan.Text = currentUser?.Username ?? Environment.UserName;
             dpIslemTarihi.SelectedDate = DateTime.Now;
             dpListeTarihi.SelectedDate = DateTime.Now;
         }
@@ -264,7 +328,9 @@ UPDATE STOKSABITKART SET
     ACIKLAMA = @ACIKLAMA,
     MENSEI = @MENSEI,
     AKTIF = @AKTIF,
-    OLUSTURMATARIHI = @OLUSTURMATARIHI
+    OLUSTURMATARIHI = @OLUSTURMATARIHI,
+    ModifiedBy = @ModifiedBy,
+    ModifiedAt = @ModifiedAt
 WHERE STOKID = @STOKID", conn, trans);
 
                         cmdKart.Parameters.AddWithValue("@STOKADI", txtStokAdi.Text);
@@ -280,6 +346,18 @@ WHERE STOKID = @STOKID", conn, trans);
                         cmdKart.Parameters.AddWithValue("@AKTIF", 1);
                         cmdKart.Parameters.AddWithValue("@OLUSTURMATARIHI", dpIslemTarihi.SelectedDate ?? DateTime.Now);
                         cmdKart.Parameters.AddWithValue("@STOKID", stokId);
+                        
+                        // Add user tracking parameters for update
+                        var currentUserForKart = App.AuthService?.CurrentUser;
+                        if (currentUserForKart != null)
+                        {
+                            cmdKart.Parameters.AddWithValue("@ModifiedBy", currentUserForKart.Id);
+                        }
+                        else
+                        {
+                            cmdKart.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                        }
+                        cmdKart.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                         cmdKart.ExecuteNonQuery();
 
@@ -303,7 +381,9 @@ UPDATE STOKSABITFIYAT SET
     PARABIRIMI = @PARABIRIMI,
     AKTIF = @AKTIF,
     KAYITTARIHI = @KAYITTARIHI,
-    OLUSTURANKULLANICI = @OLUSTURANKULLANICI
+    OLUSTURANKULLANICI = @OLUSTURANKULLANICI,
+    ModifiedBy = @ModifiedBy,
+    ModifiedAt = @ModifiedAt
 WHERE STOKID = @STOKID AND LISTEADI = 'Standart'", conn, trans);
 
                             cmdFiyatGuncelle.Parameters.AddWithValue("@LISTETARIHI", dpListeTarihi.SelectedDate ?? DateTime.Now);
@@ -318,6 +398,18 @@ WHERE STOKID = @STOKID AND LISTEADI = 'Standart'", conn, trans);
                             cmdFiyatGuncelle.Parameters.AddWithValue("@KAYITTARIHI", DateTime.Now);
                             cmdFiyatGuncelle.Parameters.AddWithValue("@OLUSTURANKULLANICI", txtOlusturan.Text);
                             cmdFiyatGuncelle.Parameters.AddWithValue("@STOKID", stokId);
+                            
+                            // Add user tracking parameters for update
+                            var currentUserForFiyat = App.AuthService?.CurrentUser;
+                            if (currentUserForFiyat != null)
+                            {
+                                cmdFiyatGuncelle.Parameters.AddWithValue("@ModifiedBy", currentUserForFiyat.Id);
+                            }
+                            else
+                            {
+                                cmdFiyatGuncelle.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                            }
+                            cmdFiyatGuncelle.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                             cmdFiyatGuncelle.ExecuteNonQuery();
                         }

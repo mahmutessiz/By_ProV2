@@ -1,8 +1,7 @@
 ﻿<Application x:Class="By_ProV2.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:By_ProV2"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:By_ProV2">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

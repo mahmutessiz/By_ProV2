@@ -48,5 +48,11 @@ namespace By_ProV2.Models
 
         // Hangi depoda işlendiği bilgisi (isteğe bağlı)
         public string DepoKodu { get; set; }
+
+        // User tracking fields
+        public int? CreatedBy { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime ModifiedAt { get; set; } = DateTime.Now;
     }
 }

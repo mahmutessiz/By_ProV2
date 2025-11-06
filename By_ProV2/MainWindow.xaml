@@ -53,6 +53,9 @@
             <!-- Genel Rapor -->
                 <MenuItem Header="Raporlar" Click="BtnRapor_Click" />
 
+                <!-- İşlem Geçmişi -->
+                <MenuItem Header="İşlem Geçmişi" Click="BtnAuditTrail_Click" />
+
                 <!-- Çıkış -->
                 <MenuItem Header="Çıkış" Click="BtnCikis_Click" />
             </Menu>
@@ -64,6 +67,12 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Ellipse x:Name="ConnectionIndicator" Width="14" Height="14" Fill="LightGreen" Margin="8,0,8,0" />
                 <TextBlock x:Name="DurumText" FontWeight="Bold" VerticalAlignment="Center" />
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" 
+                           Margin="10,0" 
+                           Background="#FFA9A9A9" 
+                           Width="1" 
+                           Height="16"/>
+                <TextBlock x:Name="UserStatusText" FontWeight="Bold" VerticalAlignment="Center" />
             </StackPanel>
         </StatusBar>
 

@@ -79,11 +79,11 @@ namespace By_ProV2
                 INSERT INTO CASABIT
                 (ID, CARIKOD, CARIADI, ADRES, TELEFON, YETKILIKISI, BAGLICARIKOD,
                  VERGIDAIRESI, VERGINO, ISK1, ISK2, ISK3, ISK4, KKISK1, KKISK2, KKISK3, KKISK4, NAKISK,
-                 PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI)
+                 PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
                 VALUES
                 (@ID, @CARIKOD, @CARIADI, @ADRES, @TELEFON, @YETKILIKISI, @BAGLICARIKOD,
                  @VERGIDAIRESI, @VERGINO, @ISK1, @ISK2, @ISK3, @ISK4, @KKISK1, @KKISK2, @KKISK3, @KKISK4, @NAKISK,
-                 @PLAKA1, @PLAKA2, @PLAKA3, @SOFORADSOYAD, @KAYITTARIHI)";
+                 @PLAKA1, @PLAKA2, @PLAKA3, @SOFORADSOYAD, @KAYITTARIHI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt)";
 
                     SqlCommand cmd = new SqlCommand(sql, conn);
 
@@ -127,6 +127,21 @@ namespace By_ProV2
                     cmd.Parameters.AddWithValue("@PLAKA3", txtPlaka3.Text);
                     cmd.Parameters.AddWithValue("@SOFORADSOYAD", txtSofor.Text);
                     cmd.Parameters.AddWithValue("@KAYITTARIHI", dtKayitTarihi.SelectedDate ?? DateTime.Now);
+                    
+                    // Add user tracking parameters for insert
+                    var currentUserForInsert = App.AuthService?.CurrentUser;
+                    if (currentUserForInsert != null)
+                    {
+                        cmd.Parameters.AddWithValue("@CreatedBy", currentUserForInsert.Id);
+                        cmd.Parameters.AddWithValue("@ModifiedBy", currentUserForInsert.Id);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@CreatedBy", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                    }
+                    cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                     int sonuc = cmd.ExecuteNonQuery();
 
@@ -303,7 +318,9 @@ namespace By_ProV2
                 PLAKA2 = @PLAKA2,
                 PLAKA3 = @PLAKA3,
                 SOFORADSOYAD = @SOFORADSOYAD,
-                KAYITTARIHI = @KAYITTARIHI
+                KAYITTARIHI = @KAYITTARIHI,
+                ModifiedBy = @ModifiedBy,
+                ModifiedAt = @ModifiedAt
             WHERE CARIKOD = @CARIKOD";
 
                     SqlCommand cmd = new SqlCommand(sql, conn);
@@ -336,6 +353,18 @@ namespace By_ProV2
                     cmd.Parameters.AddWithValue("@PLAKA3", txtPlaka3.Text.Trim());
                     cmd.Parameters.AddWithValue("@SOFORADSOYAD", txtSofor.Text.Trim());
                     cmd.Parameters.AddWithValue("@KAYITTARIHI", dtKayitTarihi.SelectedDate ?? DateTime.Now);
+                    
+                    // Add user tracking parameters for update
+                    var currentUserForUpdate = App.AuthService?.CurrentUser;
+                    if (currentUserForUpdate != null)
+                    {
+                        cmd.Parameters.AddWithValue("@ModifiedBy", currentUserForUpdate.Id);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@ModifiedBy", DBNull.Value);
+                    }
+                    cmd.Parameters.AddWithValue("@ModifiedAt", DateTime.Now);
 
                     int affectedRows = cmd.ExecuteNonQuery();
 

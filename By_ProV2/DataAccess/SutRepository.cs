@@ -5,6 +5,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Models;
 using By_ProV2.DataAccess;
+using By_ProV2.Services;
 
 
 namespace By_ProV2.DataAccess
@@ -35,6 +36,19 @@ namespace By_ProV2.DataAccess
             if (kayit == null)
                 throw new ArgumentNullException(nameof(kayit));
 
+            // Set user tracking fields
+            var currentUser = App.AuthService?.CurrentUser;
+            if (currentUser != null)
+            {
+                kayit.CreatedBy = currentUser.Id;
+                kayit.ModifiedBy = currentUser.Id;
+            }
+            
+            // Set timestamps for new records
+            DateTime now = DateTime.Now;
+            kayit.CreatedAt = now;
+            kayit.ModifiedAt = now;
+
             var cariRepo = new CariRepository();
             var stokRepo = new DepoStokRepository();
 
@@ -56,10 +70,10 @@ namespace By_ProV2.DataAccess
                         string insertQuery = @"
                     INSERT INTO SutKayit (BelgeNo, Tarih, IslemTuru, TedarikciId, MusteriId, Miktar, Yag, Protein, Laktoz, Fiyat,
                      TKM, YKM, pH, Iletkenlik, Sicaklik, Yogunluk, Kesinti, Antibiyotik, Arac, Plaka,
-                     DonmaN, Bakteri, Somatik, Durumu, Aciklama)
+                     DonmaN, Bakteri, Somatik, Durumu, Aciklama, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
                     VALUES (@BelgeNo, @Tarih, @IslemTuru, @TedarikciId, @MusteriId, @Miktar, @Yag, @Protein, @Laktoz, @Fiyat,
                      @TKM, @YKM, @pH, @Iletkenlik, @Sicaklik, @Yogunluk, @Kesinti, @Antibiyotik, @Arac, @Plaka,
-                     @DonmaN, @Bakteri, @Somatik, @Durumu, @Aciklama);
+                     @DonmaN, @Bakteri, @Somatik, @Durumu, @Aciklama, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt);
                     SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
                         using (var cmd = new SqlCommand(insertQuery, conn, tran))
@@ -90,6 +104,10 @@ namespace By_ProV2.DataAccess
                             cmd.Parameters.AddWithValue("@Somatik", kayit.Somatik ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Durumu", kayit.Durumu ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Aciklama", kayit.Aciklama ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CreatedBy", kayit.CreatedBy ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", kayit.ModifiedBy ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@CreatedAt", kayit.CreatedAt);
+                            cmd.Parameters.AddWithValue("@ModifiedAt", kayit.ModifiedAt);
 
                             kayit.SutKayitId = Convert.ToInt32(cmd.ExecuteScalar());
                         }
@@ -113,6 +131,14 @@ namespace By_ProV2.DataAccess
         {
             if (kayit == null)
                 throw new ArgumentNullException(nameof(kayit));
+
+            // Set user tracking fields
+            var currentUser = App.AuthService?.CurrentUser;
+            if (currentUser != null)
+            {
+                kayit.ModifiedBy = currentUser.Id;
+            }
+            kayit.ModifiedAt = DateTime.Now;
 
             var cariRepo = new CariRepository();
             var stokRepo = new DepoStokRepository();
@@ -158,7 +184,9 @@ namespace By_ProV2.DataAccess
                         Bakteri = @Bakteri,
                         Somatik = @Somatik,
                         Durumu = @Durumu,
-                        Aciklama = @Aciklama
+                        Aciklama = @Aciklama,
+                        ModifiedBy = @ModifiedBy,
+                        ModifiedAt = @ModifiedAt
                     WHERE SutKayitId = @SutKayitId";
 
                         using (var cmd = new SqlCommand(updateQuery, conn, tran))
@@ -190,6 +218,8 @@ namespace By_ProV2.DataAccess
                             cmd.Parameters.AddWithValue("@Somatik", kayit.Somatik ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Durumu", kayit.Durumu ?? (object)DBNull.Value);
                             cmd.Parameters.AddWithValue("@Aciklama", kayit.Aciklama ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ModifiedBy", kayit.ModifiedBy ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ModifiedAt", kayit.ModifiedAt);
 
                             cmd.ExecuteNonQuery();
                         }
@@ -216,7 +246,36 @@ namespace By_ProV2.DataAccess
             {
                 string sql = @"
                     SELECT 
-                        sk.*,
+                        sk.SutKayitId,
+                        sk.BelgeNo,
+                        sk.Tarih,
+                        sk.IslemTuru,
+                        sk.TedarikciId,
+                        sk.MusteriId,
+                        sk.Miktar,
+                        sk.Yag,
+                        sk.Protein,
+                        sk.Laktoz,
+                        sk.Fiyat,
+                        sk.TKM,
+                        sk.YKM,
+                        sk.pH,
+                        sk.Iletkenlik,
+                        sk.Sicaklik,
+                        sk.Yogunluk,
+                        sk.Kesinti,
+                        sk.Antibiyotik,
+                        sk.Arac,
+                        sk.Plaka,
+                        sk.DonmaN,
+                        sk.Bakteri,
+                        sk.Somatik,
+                        sk.Durumu,
+                        sk.Aciklama,
+                        sk.CreatedBy,
+                        sk.ModifiedBy,
+                        sk.CreatedAt,
+                        sk.ModifiedAt,
                         c1.CariKod AS TedarikciKod,
                         c1.CariAdi AS TedarikciAdi,
                         c2.CariKod AS MusteriKod,
@@ -268,7 +327,11 @@ namespace By_ProV2.DataAccess
                                     Bakteri = reader.IsDBNull(reader.GetOrdinal("Bakteri")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Bakteri")),
                                     Somatik = reader.IsDBNull(reader.GetOrdinal("Somatik")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Somatik")),
                                     Durumu = reader["Durumu"] as string,
-                                    Aciklama = reader["Aciklama"] as string
+                                    Aciklama = reader["Aciklama"] as string,
+                                    CreatedBy = reader.IsDBNull(reader.GetOrdinal("CreatedBy")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("CreatedBy")),
+                                    ModifiedBy = reader.IsDBNull(reader.GetOrdinal("ModifiedBy")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("ModifiedBy")),
+                                    CreatedAt = reader.IsDBNull(reader.GetOrdinal("CreatedAt")) ? DateTime.Now : reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                                    ModifiedAt = reader.IsDBNull(reader.GetOrdinal("ModifiedAt")) ? DateTime.Now : reader.GetDateTime(reader.GetOrdinal("ModifiedAt"))
                                 };
                                 kayitlar.Add(kayit);
                             }

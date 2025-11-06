@@ -1,0 +1,64 @@
+<Window x:Class="By_ProV2.ParametrelerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Parametreler" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Oil Cutoff Parameter -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Yağ Kesinti Parametresi:" Width="150" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtYagKesinti" Width="150" Height="25" VerticalAlignment="Center"/>
+            <Label Content="Örn. 3.60" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- Protein Parameter -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Protein Parametresi:" Width="150" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtProtein" Width="150" Height="25" VerticalAlignment="Center"/>
+            <Label Content="Örn. 3.20" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- Price Per Dizem -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="Dizem Başına TL:" Width="150" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtDizemBasiTl" Width="150" Height="25" VerticalAlignment="Center"/>
+            <Label Content="Örn. 0.28" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,20">
+            <Button x:Name="btnKaydet" Content="Kaydet" Width="100" Height="30" Margin="0,0,10,0" Click="btnKaydet_Click" Background="#4CAF50" Foreground="White"/>
+            <Button x:Name="btnVazgec" Content="Vazgeç" Width="100" Height="30" Click="btnVazgec_Click" Background="#f44336" Foreground="White"/>
+        </StackPanel>
+
+        <!-- History List Label -->
+        <Label Grid.Row="4" Content="Parametre Geçmişi:" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- History List -->
+        <DataGrid Grid.Row="5" x:Name="dgParametreler" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" Margin="0,0,0,10" 
+                  SelectionChanged="dgParametreler_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Yağ Kesinti" Binding="{Binding YagKesintiParametresi}" Width="*"/>
+                <DataGridTextColumn Header="Protein" Binding="{Binding ProteinParametresi}" Width="*"/>
+                <DataGridTextColumn Header="Dizem Başına TL" Binding="{Binding DizemBasiTl}" Width="*"/>
+                <DataGridTextColumn Header="Tarih" Binding="{Binding CreatedAt, StringFormat='dd.MM.yyyy HH:mm'}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Info Text -->
+        <TextBlock Grid.Row="6" Text="Yeni parametre eklendiğinde mevcut olanlar güncellenir." 
+                   FontStyle="Italic" Foreground="Gray" HorizontalAlignment="Center"/>
+    </Grid>
+</Window>

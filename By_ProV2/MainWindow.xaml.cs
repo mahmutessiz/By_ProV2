@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -16,14 +17,24 @@ namespace By_ProV2
 
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            UpdateConnectionStatus();
+                UpdateConnectionStatus();
+                UpdateUserStatus();
 
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+                timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromSeconds(1);
+                timer.Tick += Timer_Tick;
+                timer.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"MainWindow başlatılırken hata oluştu: {ex.Message}\n\n{ex.InnerException?.Message}", 
+                                "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -39,6 +50,9 @@ namespace By_ProV2
                 tickCounter = 0;
                 UpdateConnectionStatus();
             }
+            
+            // Always update user status
+            UpdateUserStatus();
         }
 
         private void UpdateConnectionStatus()
@@ -57,13 +71,24 @@ namespace By_ProV2
             }
         }
 
+        private void UpdateUserStatus()
+        {
+            if (App.AuthService?.CurrentUser != null)
+            {
+                var currentUser = App.AuthService.CurrentUser;
+                UserStatusText.Text = $"Kullanıcı: {currentUser.FullName ?? currentUser.Username} ({currentUser.Role})";
+            }
+            else
+            {
+                UserStatusText.Text = "Kullanıcı: Giriş yapılmadı";
+            }
+        }
+
         private bool TestDatabaseConnection()
         {
-            string connectionString = @"Server=LAPTOPTT5SK4J7\TEW_SQLEXPRESS;Database=BERYEM;Trusted_Connection=True;TrustServerCertificate=true;";
-
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["db"].ConnectionString))
                 {
                     connection.Open();
                     return true;
@@ -116,26 +141,22 @@ namespace By_ProV2
 
         private void BtnParametreler_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Parametreler sayfası buraya gelecek.",
-                FontSize = 28,
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
+            ParametrelerWindow pencere = new ParametrelerWindow();
+            pencere.ShowDialog(); // modal olarak aç
         }
 
         private void BtnKullanicilar_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
+            if (App.AuthService?.CurrentUser?.Role != "Admin")
             {
-                Text = "Kullanıcılar sayfası buraya gelecek.",
-                FontSize = 28,
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
+                MessageBox.Show("Bu işlemi yapmaya yetkiniz yok!", 
+                                "Yetki Hatası", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Open the User Management Window as a modal dialog
+            var userManagementWindow = new UserManagementWindow();
+            userManagementWindow.ShowDialog();
         }
 
         private void BtnCari_Click(object sender, RoutedEventArgs e)
@@ -554,11 +575,27 @@ namespace By_ProV2
             });
         }
 
+        private void BtnAuditTrail_Click(object sender, RoutedEventArgs e)
+        {
+            // Only allow admin users to see audit trail
+            if (App.AuthService?.CurrentUser?.Role != "Admin")
+            {
+                MessageBox.Show("Bu işlemi yapmaya yetkiniz yok!", 
+                                "Yetki Hatası", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var auditTrailWindow = new AuditTrailWindow();
+            auditTrailWindow.ShowDialog();
+        }
+
         private void BtnCikis_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("Uygulamadan çıkmak istediğinizden emin misiniz?", "Çıkış", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
+                // Logout the current user before shutting down
+                App.AuthService?.Logout();
                 Application.Current.Shutdown();
             }
         }
