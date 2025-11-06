@@ -1,0 +1,196 @@
+<Window x:Class="By_ProV2.StokListesiMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Stok Listesi - Ana Ekran" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Başlık -->
+        <TextBlock Grid.Row="0" Text="Stok Listesi" 
+                   FontSize="24" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <!-- Arama ve Filtre Paneli -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,15">
+            <GroupBox Header="Arama ve Filtreleme" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- İlk Satır: Temel Aramalar -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Margin="0,0,10,10">
+                            <TextBlock Text="Stok Kodu:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtStokKodu" Margin="0,0,0,0" 
+                                     ToolTip="Stok koduna göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" Margin="0,0,10,10">
+                            <TextBlock Text="Stok Adı:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtStokAdi" Margin="0,0,0,0" 
+                                     ToolTip="Stok adına göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2" Margin="0,0,10,10">
+                            <TextBlock Text="Barkod:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtBarkod" Margin="0,0,0,0" 
+                                     ToolTip="Barkod numarasına göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="3" Margin="0,0,10,10">
+                            <TextBlock Text="Birim:" Margin="0,0,0,3" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtBirim" Margin="0,0,0,0" 
+                                     ToolTip="Birim bilgisine göre arama yapın"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="4" Margin="0,0,0,10" VerticalAlignment="Bottom">
+                            <Border Background="Transparent" />
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- İkinci Satır: Ekstra Filtreler -->
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="Ağırlık:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtAgirlik" 
+                                     ToolTip="Ağırlık bilgisine göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                            <TextBlock Text="Protein:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtProtein" 
+                                     ToolTip="Protein oranına göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                            <TextBlock Text="Açıklama:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtAciklama" 
+                                     ToolTip="Açıklamaya göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                            <TextBlock Text="Menşei:" Margin="0,0,0,3"/>
+                            <TextBox x:Name="txtMensei" 
+                                     ToolTip="Menşei bilgisine göre filtreleme"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="4" VerticalAlignment="Bottom">
+                            <Border Background="Transparent" />
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Üçüncü Satır: Butonlar -->
+                    <Grid Grid.Row="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnTemizle" Content="🧹 Temizle" 
+                                        Margin="0,0,5,0" Padding="15,8" 
+                                        Click="BtnTemizle_Click"
+                                        Background="#FF9800" Foreground="White"
+                                        FontWeight="SemiBold"/>
+                                <Button x:Name="btnAra" Content="🔍 Ara" 
+                                        Margin="0,0,0,0" Padding="15,8" 
+                                        Click="BtnAra_Click" 
+                                        Background="#4CAF50" Foreground="White"
+                                        FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- Ana Liste -->
+        <DataGrid x:Name="dataGridStoklar" 
+                  Grid.Row="2"
+                  Margin="0,5,0,10"
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  SelectionMode="Single"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  AlternatingRowBackground="#F5F5F5"
+                  MouseDoubleClick="DataGridStoklar_MouseDoubleClick"
+                  LoadingRow="DataGridStoklar_LoadingRow">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Stok Kodu" Binding="{Binding StokKodu}" 
+                                   Width="120" SortMemberPath="StokKodu"/>
+                <DataGridTextColumn Header="Stok Adı" Binding="{Binding StokAdi}" 
+                                   Width="*" SortMemberPath="StokAdi"/>
+                <DataGridTextColumn Header="Birim" Binding="{Binding Birim}" 
+                                   Width="80"/>
+                <DataGridTextColumn Header="Ağırlık" Binding="{Binding Agirlik}" 
+                                   Width="80"/>
+                <DataGridTextColumn Header="Barkod" Binding="{Binding Barkod}" 
+                                   Width="120"/>
+                <DataGridTextColumn Header="Protein %" Binding="{Binding Protein}" 
+                                   Width="100"/>
+                <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" 
+                                   Width="150"/>
+                <DataGridTextColumn Header="Menşei" Binding="{Binding Mensei}" 
+                                   Width="100"/>
+            </DataGrid.Columns>
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Detayları Göster" Click="MenuItemDetaylariGoster_Click"/>
+                    <MenuItem Header="Kopyala" Click="MenuItemKopyala_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+
+        <!-- Alt Bilgi -->
+        <Border Grid.Row="3" Background="#E3F2FD" BorderBrush="#BBDEFB" 
+                BorderThickness="1" CornerRadius="4" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" x:Name="lblToplamKayit" 
+                          Text="Toplam: 0 Kayıt" 
+                          VerticalAlignment="Center" FontWeight="SemiBold"/>
+                
+                <TextBlock Grid.Column="2" Text="🔍 Çift tıklayarak detayları açabilirsiniz" 
+                          HorizontalAlignment="Right" FontStyle="Italic" 
+                          Foreground="#757575"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

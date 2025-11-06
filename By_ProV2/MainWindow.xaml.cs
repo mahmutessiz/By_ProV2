@@ -285,6 +285,16 @@ namespace By_ProV2
             };
             btnStokKayit.Click += BtnStokKayit_Click;
 
+            var btnStokListesi = new Button
+            {
+                Content = "📋 Stok Listesi",
+                FontSize = 24,
+                Width = btnWidth,
+                Height = btnHeight,
+                Margin = btnMargin
+            };
+            btnStokListesi.Click += BtnStokListesi_Click;
+
             var btnStokHareket = new Button
             {
                 Width = btnWidth,
@@ -306,6 +316,7 @@ namespace By_ProV2
             btnStokRapor.Click += BtnStokRapor_Click;
 
             panel.Children.Add(btnStokKayit);
+            panel.Children.Add(btnStokListesi);
             panel.Children.Add(btnStokHareket);
             panel.Children.Add(btnStokRapor);
 
@@ -314,6 +325,11 @@ namespace By_ProV2
         private void BtnStokKayit_Click(object sender, RoutedEventArgs e)
         {
             StokKayitWindow pencere = new StokKayitWindow();
+            pencere.ShowDialog(); // modal olarak aç
+        }
+        private void BtnStokListesi_Click(object sender, RoutedEventArgs e)
+        {
+            StokListesiMainWindow pencere = new StokListesiMainWindow();
             pencere.ShowDialog(); // modal olarak aç
         }
         private void BtnStokHareket_Click(object sender, RoutedEventArgs e)

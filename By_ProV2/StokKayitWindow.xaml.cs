@@ -11,6 +11,29 @@ namespace By_ProV2
 {
     public partial class StokKayitWindow : Window
     {
+        // Public properties to access controls from outside the class
+        public TextBox TxtStokKodu => txtStokKodu;
+        public TextBox TxtStokAdi => txtStokAdi;
+        public ComboBox CmbBirim => cmbBirim;
+        public TextBox TxtAgirlik => txtAgirlik;
+        public TextBox TxtProtein => txtProtein;
+        public TextBox TxtEnerji => txtEnerji;
+        public TextBox TxtNemOrani => txtNemOrani;
+        public TextBox TxtBarkod => txtBarkod;
+        public ComboBox CmbYemOzelligi => cmbYemOzelligi;
+        public TextBox TxtAciklama => txtAciklama;
+        public ComboBox CmbMensei => cmbMensei;
+        public TextBox TxtAlisFiyat => txtAlisFiyat;
+        public TextBox TxtAlisFiyat2 => txtAlisFiyat2;
+        public TextBox TxtAlisFiyat3 => txtAlisFiyat3;
+        public TextBox TxtAlisFiyat4 => txtAlisFiyat4;
+        public TextBox TxtAlisFiyat5 => txtAlisFiyat5;
+        public TextBox TxtKDV => txtKDV;
+        public DatePicker DpListeTarihi => dpListeTarihi;
+        public DatePicker DpIslemTarihi => dpIslemTarihi;
+        public ComboBox CmbDepo => cmbDepo;
+        public TextBox TxtDosyaYolu => txtDosyaYolu;
+
         public StokKayitWindow()
         {
             InitializeComponent();
@@ -663,7 +686,7 @@ VALUES
 
 
 
-        private void SetComboBoxValue(ComboBox comboBox, string value)
+        public void SetComboBoxValue(ComboBox comboBox, string value)
         {
             foreach (var item in comboBox.Items)
             {
@@ -728,6 +751,49 @@ VALUES
                 
             }
         }
+        // Public method to load stok data from outside the class
+        public void LoadStokData(StokModel stok)
+        {
+            if (stok == null) return;
+
+            // Load all the stok information to the form fields
+            txtStokKodu.Text = stok.StokKodu;
+            txtStokAdi.Text = stok.StokAdi;
+            SetComboBoxValue(cmbBirim, stok.Birim);
+            txtAgirlik.Text = stok.Agirlik.ToString("0.##");
+            txtProtein.Text = stok.Protein.ToString("0.##");
+            txtEnerji.Text = stok.Enerji.ToString("0.##");
+            txtNemOrani.Text = stok.Nem.ToString("0.##");
+            txtBarkod.Text = stok.Barkod;
+            SetComboBoxValue(cmbYemOzelligi, stok.YemOzelligi);
+            txtAciklama.Text = stok.Aciklama;
+            SetComboBoxValue(cmbMensei, stok.Mensei);
+
+            // Fiyat verileri
+            txtAlisFiyat.Text = stok.AlisFiyat?.ToString("0.##");
+            txtAlisFiyat2.Text = stok.AlisFiyat2?.ToString("0.##");
+            txtAlisFiyat3.Text = stok.AlisFiyat3?.ToString("0.##");
+            txtAlisFiyat4.Text = stok.AlisFiyat4?.ToString("0.##");
+            txtAlisFiyat5.Text = stok.AlisFiyat5?.ToString("0.##");
+            txtKDV.Text = stok.KdvOrani?.ToString("0.##");
+
+            if (stok.ListeTarihi.HasValue)
+                dpListeTarihi.SelectedDate = stok.ListeTarihi.Value;
+
+            // Depo bilgileri
+            if (stok.IslemTarihi.HasValue)
+                dpIslemTarihi.SelectedDate = stok.IslemTarihi.Value;
+
+            if (stok.DepoId.HasValue)
+                cmbDepo.SelectedValue = stok.DepoId.Value;
+
+            // Dosya yolu
+            txtDosyaYolu.Text = stok.DosyaYolu;
+
+            // Lock the stok code so it won't be edited
+            txtStokKodu.IsReadOnly = true;
+        }
+
         private void btnTedarikciEkle_Click(object sender, RoutedEventArgs e)
         {
             TedarikciEkleWindow ekleWindow = new TedarikciEkleWindow();

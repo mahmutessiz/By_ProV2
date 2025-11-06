@@ -343,3 +343,5 @@ C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Ex
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\CariListesiMainWindow.baml
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\CariListesiMainWindow.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\StokListesiMainWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\StokListesiMainWindow.g.cs

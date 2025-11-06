@@ -30,6 +30,7 @@
                 <!-- Stok -->
                 <MenuItem Header="Stok">
                     <MenuItem Header="Stok Kayıt" Click="BtnStokKayit_Click" />
+                    <MenuItem Header="Stok Listesi" Click="BtnStokListesi_Click" />
                     <MenuItem Header="Stok Hareket" Click="BtnStokHareket_Click" />
                     <MenuItem Header="Raporlar" Click="BtnStokRapor_Click" />
                 </MenuItem>
