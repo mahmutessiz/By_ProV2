@@ -14,9 +14,6 @@ using By_ProV2.Services;
 
 namespace By_ProV2
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         public static AuthenticationService AuthService { get; private set; }

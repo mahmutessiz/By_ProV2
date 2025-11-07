@@ -8,11 +8,127 @@
         Title="Beryem Tarım Ürünleri Gıda Nakliye Ticaret Ltd. Şti."
         Height="1000" Width="1618"
         WindowStartupLocation="CenterScreen"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        Icon="/Resources/Logo.png"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        >
 
-    <DockPanel LastChildFill="True">
-            <!-- Menü Bar en üstte -->
-            <Menu DockPanel.Dock="Top" Background="#EEE" Height="25" FontWeight="Bold">
+    <Grid Background="#2C3E50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Custom Title Bar -->
+        <Border Grid.Row="0" Background="#2C3E50" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" Height="40">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- App Title -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                    <Image Source="/Resources/Logo.png" Height="24" Width="24" Margin="0,0,10,0" />
+                    <TextBlock Text="Beryem Tarım Ürünleri Gıda Nakliye Ticaret Ltd. Şti." 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center"
+                               FontSize="14"/>
+                </StackPanel>
+
+                <!-- Window Control Buttons -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="MinimizeButton" 
+                            Content="─" 
+                            Width="40" 
+                            Height="40" 
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="16"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Padding="0"
+                            Cursor="Hand"
+                            Click="MinimizeButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#34495E"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="MaximizeButton" 
+                            Content="🗖" 
+                            Width="40" 
+                            Height="40" 
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="14"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Padding="0"
+                            Cursor="Hand"
+                            Click="MaximizeButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#34495E"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="CloseButton" 
+                            Content="✕" 
+                            Width="40" 
+                            Height="40" 
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="16"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Padding="0"
+                            Cursor="Hand"
+                            Click="CloseButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E74C3C"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+
+            <!-- Menü Bar -->
+            <Menu Grid.Row="0" Background="#EEE" Height="25" FontWeight="Bold">
                 <!-- Dosya -->
                 <MenuItem Header="Dosya">
                     <MenuItem Header="Parametreler" Click="BtnParametreler_Click" />
@@ -62,56 +178,55 @@
                 <MenuItem Header="Çıkış" Click="BtnCikis_Click" />
             </Menu>
 
-            <!-- ... (StatusBar ve Grid içerikleri burada kalacak) -->
+            <!-- Ana içerik ve Menü Grid'i -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Sol Menü -->
+                <StackPanel Grid.Column="0" Background="#2C3E50">
+                    <TextBlock Foreground="White" FontSize="24" FontWeight="Bold"
+                               Margin="20" HorizontalAlignment="Left" FontFamily="Klavika Bd" VerticalAlignment="Center">
+                        <Run Language="tr-tr" Text="ANA MENU"/>
+                    </TextBlock>
+
+                    <Button Content="📁 Dosya" Style="{StaticResource MenuButtonStyle}" Click="BtnDosya_Click" Height="60"/>
+                    <Button Content="👥 Cari" Style="{StaticResource MenuButtonStyle}" Click="BtnCari_Click" Height="60"/>
+                    <Button Content="📦 Stok" Style="{StaticResource MenuButtonStyle}" Click="BtnStok_Click" Height="60"/>
+                    <Button Content="🥛 Süt" Style="{StaticResource MenuButtonStyle}" Click="BtnSut_Click" Height="60"/>
+                    <Button Content="🌾 Yem" Style="{StaticResource MenuButtonStyle}" Click="BtnYem_Click" Height="60"/>
+                    <Button Content="📊 Raporlar" Style="{StaticResource MenuButtonStyle}" Click="BtnRapor_Click" Height="60"/>
+                    <Button Content="🚪 Çıkış" Style="{StaticResource MenuButtonStyle}" Click="BtnCikis_Click" Height="60"/>
+                </StackPanel>
+
+                <!-- İçerik Alanı -->
+                <Grid Grid.Column="1" Background="White" x:Name="ContentArea">
+                    <TextBlock 
+                        FontSize="95" 
+                        FontWeight="Bold" 
+                        Foreground="#34495E"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" Opacity="0.45" Visibility="Visible" FontFamily="Klavika Bd">
+                        <Run Text="Beryem "/><LineBreak/><Run Text="    ERP"/>
+                    </TextBlock>
+                </Grid>
+            </Grid>
 
             <!-- StatusBar en altta -->
-        <StatusBar DockPanel.Dock="Bottom" Background="#EEE" Height="30">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Ellipse x:Name="ConnectionIndicator" Width="14" Height="14" Fill="LightGreen" Margin="8,0,8,0" />
-                <TextBlock x:Name="DurumText" FontWeight="Bold" VerticalAlignment="Center" />
-                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" 
-                           Margin="10,0" 
-                           Background="#FFA9A9A9" 
-                           Width="1" 
-                           Height="16"/>
-                <TextBlock x:Name="UserStatusText" FontWeight="Bold" VerticalAlignment="Center" />
-            </StackPanel>
-        </StatusBar>
-
-        <!-- Ana içerik ve Menü Grid'i -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="4*" />
-            </Grid.ColumnDefinitions>
-
-            <!-- Sol Menü -->
-            <StackPanel Grid.Column="0" Background="#2C3E50">
-                <TextBlock Foreground="White" FontSize="24" FontWeight="Bold"
-                           Margin="20" HorizontalAlignment="Left" FontFamily="Klavika Bd" VerticalAlignment="Center">
-                    <Run Language="tr-tr" Text="ANA MENU"/>
-                </TextBlock>
-
-                <Button Content="📁 Dosya" Style="{StaticResource MenuButtonStyle}" Click="BtnDosya_Click" Height="60"/>
-                <Button Content="👥 Cari" Style="{StaticResource MenuButtonStyle}" Click="BtnCari_Click" Height="60"/>
-                <Button Content="📦 Stok" Style="{StaticResource MenuButtonStyle}" Click="BtnStok_Click" Height="60"/>
-                <Button Content="🥛 Süt" Style="{StaticResource MenuButtonStyle}" Click="BtnSut_Click" Height="60"/>
-                <Button Content="🌾 Yem" Style="{StaticResource MenuButtonStyle}" Click="BtnYem_Click" Height="60"/>
-                <Button Content="📊 Raporlar" Style="{StaticResource MenuButtonStyle}" Click="BtnRapor_Click" Height="60"/>
-                <Button Content="🚪 Çıkış" Style="{StaticResource MenuButtonStyle}" Click="BtnCikis_Click" Height="60"/>
-            </StackPanel>
-
-            <!-- İçerik Alanı -->
-            <Grid Grid.Column="1" Background="White" x:Name="ContentArea">
-                <TextBlock 
-                    FontSize="95" 
-                    FontWeight="Bold" 
-                    Foreground="#34495E"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" Opacity="0.45" Visibility="Visible" FontFamily="Klavika Bd">
-                    <Run Text="Beryem "/><LineBreak/><Run Text="    ERP"/>
-                </TextBlock>
-            </Grid>
+            <StatusBar Grid.Row="2" Background="#EEE" Height="30">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse x:Name="ConnectionIndicator" Width="14" Height="14" Fill="LightGreen" Margin="8,0,8,0" />
+                    <TextBlock x:Name="DurumText" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" 
+                               Margin="10,0" 
+                               Background="#FFA9A9A9" 
+                               Width="1" 
+                               Height="16"/>
+                    <TextBlock x:Name="UserStatusText" FontWeight="Bold" VerticalAlignment="Center" />
+                </StackPanel>
+            </StatusBar>
         </Grid>
-    </DockPanel>
+    </Grid>
 </Window>

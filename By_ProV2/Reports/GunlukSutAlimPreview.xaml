@@ -16,13 +16,13 @@
             <Label Content="Tarih:" VerticalAlignment="Center"/>
             <DatePicker x:Name="dpTarih" Width="150" Margin="5,0,15,0"/>
             <Button Content="Raporu Getir" Width="120" Click="btnGetir_Click" Margin="0,0,10,0"/>
-            <Button Content="PDF Oluştur" Width="120" Margin="0,0,10,0"/>
+            <Button Content="PDF Oluştur" Width="120" Margin="0,0,10,0" Click="btnPDF_Click"/>
             <Button Content="Yazdır" Width="120" Click="btnYazdir_Click"/>
         </StackPanel>
 
         <!-- Rapor Önizleme -->
         <FlowDocumentScrollViewer x:Name="docViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" IsToolBarVisible="True">
-            <FlowDocument PagePadding="20" ColumnWidth="800">
+            <FlowDocument PagePadding="20" ColumnWidth="1200">
                 <!-- Başlık, tarih ve tablo buraya kod ile eklenecek -->
             </FlowDocument>
         </FlowDocumentScrollViewer>

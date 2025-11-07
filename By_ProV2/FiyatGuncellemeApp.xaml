@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:By_ProV2"
         mc:Ignorable="d"
         Title="FiyatGuncellemeApp" Height="900" Width="900"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Resources/Logo.png">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

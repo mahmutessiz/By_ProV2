@@ -179,7 +179,7 @@ namespace By_ProV2
 
             var logoRow = headerTable.AddRow();
 
-            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Logo.png");
+            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Logo1.png");
             if (File.Exists(logoPath))
             {
                 var logo = logoRow.Cells[0].AddImage(logoPath);

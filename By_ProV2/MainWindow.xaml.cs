@@ -14,12 +14,17 @@ namespace By_ProV2
         private DispatcherTimer timer;
         private bool indicatorVisible = true;
         private int tickCounter = 0;
+        private bool isMaximized = false;
+        private Rect restoreBounds;
 
         public MainWindow()
         {
             try
             {
                 InitializeComponent();
+
+                // Store original window bounds for restore functionality
+                restoreBounds = new Rect(this.Left, this.Top, this.Width, this.Height);
 
                 UpdateConnectionStatus();
                 UpdateUserStatus();
@@ -618,6 +623,64 @@ namespace By_ProV2
                 timer.Stop();
                 timer.Tick -= Timer_Tick;  // Unsubscribe from the event
             }
+        }
+
+        // Custom titlebar functionality
+        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                // Double-click on title bar maximizes/restores the window
+                ToggleMaximize();
+            }
+            else
+            {
+                // Drag to move the window
+                try
+                {
+                    this.DragMove();
+                }
+                catch
+                {
+                    // Ignore if window is maximized or dragging fails
+                }
+            }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleMaximize();
+        }
+
+        private void ToggleMaximize()
+        {
+            if (isMaximized)
+            {
+                // Restore window to normal state
+                this.WindowState = WindowState.Normal;
+                this.Left = restoreBounds.Left;
+                this.Top = restoreBounds.Top;
+                this.Width = restoreBounds.Width;
+                this.Height = restoreBounds.Height;
+                isMaximized = false;
+            }
+            else
+            {
+                // Save current window bounds before maximizing
+                restoreBounds = new Rect(this.Left, this.Top, this.Width, this.Height);
+                this.WindowState = WindowState.Maximized;
+                isMaximized = true;
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

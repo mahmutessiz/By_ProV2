@@ -7,6 +7,10 @@ using By_ProV2.Models;
 using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Controls;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using System.Diagnostics;
+using System.IO;
 
 namespace By_ProV2.Reports
 {
@@ -117,20 +121,20 @@ namespace By_ProV2.Reports
         {
             Table table = new Table { CellSpacing = 0, Margin = new Thickness(0, 0, 0, 10) };
 
-            // Kolonları oluştur ve genişliklerini ayarla
-            TableColumn col1 = new TableColumn { Width = new GridLength(400) }; // Tedarikçi
+            // Kolonları oluştur ve genişliklerini ayarla - daha dengeli ve toplamda 1100px'ten fazla olmamalı A4 yatay için
+            TableColumn col1 = new TableColumn { Width = new GridLength(200) }; // Tedarikçi
             TableColumn col2 = new TableColumn { Width = new GridLength(80) };  // Miktar
             TableColumn col3 = new TableColumn { Width = new GridLength(60) };  // Yağ
             TableColumn col4 = new TableColumn { Width = new GridLength(60) };  // Protein
             TableColumn col5 = new TableColumn { Width = new GridLength(60) };  // TKM
             TableColumn col6 = new TableColumn { Width = new GridLength(60) };  // Laktoz
-            TableColumn col7 = new TableColumn { Width = new GridLength(60) };  // pH
-            TableColumn col8 = new TableColumn { Width = new GridLength(60) };  // İletkenlik
-            TableColumn col9 = new TableColumn { Width = new GridLength(60) };  // Donma Noktası
-            TableColumn col10 = new TableColumn { Width = new GridLength(60) }; // Kesinti
-            TableColumn col11 = new TableColumn { Width = new GridLength(60) }; // Antibiyotik
-            TableColumn col12 = new TableColumn { Width = new GridLength(75) };  // Durum
-            TableColumn col13 = new TableColumn { Width = new GridLength(200) }; // Açıklama
+            TableColumn col7 = new TableColumn { Width = new GridLength(50) };  // pH
+            TableColumn col8 = new TableColumn { Width = new GridLength(70) };  // İletkenlik
+            TableColumn col9 = new TableColumn { Width = new GridLength(80) };  // Donma Noktası
+            TableColumn col10 = new TableColumn { Width = new GridLength(70) }; // Kesinti
+            TableColumn col11 = new TableColumn { Width = new GridLength(70) }; // Antibiyotik
+            TableColumn col12 = new TableColumn { Width = new GridLength(70) };  // Durum
+            TableColumn col13 = new TableColumn { Width = new GridLength(150) }; // Açıklama - daha küçük ama hala yeterli
 
             table.Columns.Add(col1);
             table.Columns.Add(col2);
@@ -150,14 +154,16 @@ namespace By_ProV2.Reports
             TableRowGroup headerGroup = new TableRowGroup();
             TableRow headerRow = new TableRow();
             string[] headers = { "Tedarikçi", "Miktar (lt)", "Yağ (%)", "Protein (%)", "TKM (%)", "Laktoz (%)", "pH ", "İletkenlik (mS)", "Donma Noktası (°C)", "Kesinti (lt)", "Antibiyotik", "Durum", "Açıklama" };
+            TextAlignment[] headerAlignments = { TextAlignment.Left, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Center, TextAlignment.Center, TextAlignment.Left };
 
-            foreach (var h in headers)
+            for (int i = 0; i < headers.Length; i++)
             {
-                headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(h))))
+                headerRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(headers[i]))))
                 {
                     BorderBrush = Brushes.Gray,
                     BorderThickness = new Thickness(0, 0, 0, 1),
-                    Padding = new Thickness(5)
+                    Padding = new Thickness(5),
+                    TextAlignment = headerAlignments[i]
                 });
             }
             headerGroup.Rows.Add(headerRow);
@@ -168,19 +174,23 @@ namespace By_ProV2.Reports
             foreach (var k in kayitlar)
             {
                 TableRow row = new TableRow();
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.TedarikciAdi ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Miktar.ToString("N2")))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Yag?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Protein?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.TKM?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Laktoz?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.pH?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Iletkenlik?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.DonmaN?.ToString("N2") ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Kesinti.ToString("N2")))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Antibiyotik ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Durumu ?? "-"))) { Padding = new Thickness(5) });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Aciklama ?? "-"))) { Padding = new Thickness(5) });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.TedarikciAdi ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Miktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Yag?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Protein?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.TKM?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Laktoz?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.pH?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Iletkenlik?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.DonmaN?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Kesinti.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Antibiyotik ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.Durumu ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
+                // Açıklama sütununa uzun metinler için wrapping ekle
+                var aciklamaParagraph = new Paragraph(new Run(k.Aciklama ?? "-"));
+                var aciklamaCell = new TableCell(aciklamaParagraph) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left };
+                // FlowDocument tablosunda wrapping genellikle otomatik olarak işler, alternatif olarak max genişlik ayarlanabilir
+                row.Cells.Add(aciklamaCell);
                 dataGroup.Rows.Add(row);
             }
 
@@ -196,16 +206,18 @@ namespace By_ProV2.Reports
             decimal toplamKesinti = kayitlar.Sum(x => x.Kesinti);
 
             TableRow toplamRow = new TableRow();
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("Toplam / Ortalama")))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(toplamMiktar.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortYag.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortProtein.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortTKM.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortLaktoz.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortpH.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortIletkenlik.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortDonma.ToString("N2"))))) { Padding = new Thickness(5) });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(toplamKesinti.ToString("N2"))))) { Padding = new Thickness(5) });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run("Toplam / Ortalama")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(toplamMiktar.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortYag.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortProtein.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortTKM.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortLaktoz.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortpH.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortIletkenlik.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortDonma.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(toplamKesinti.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Run(""))) { Padding = new Thickness(5) });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Run(""))) { Padding = new Thickness(5) });
 
             dataGroup.Rows.Add(toplamRow);
             table.RowGroups.Add(dataGroup);
@@ -259,11 +271,11 @@ namespace By_ProV2.Reports
                     double pageWidth = 297 * inch;  // 297mm
                     double pageHeight = 210 * inch; // 210mm
 
-                    // FlowDocument'e uygula
+                    // FlowDocument'e uygula - A4 yatay için uygun sütun genişliği
                     document.PageWidth = pageWidth;
                     document.PageHeight = pageHeight;
-                    document.PagePadding = new Thickness(50);
-                    document.ColumnWidth = pageWidth; // tek sütun
+                    document.PagePadding = new Thickness(30); // Daha küçük kenar boşlukları
+                    document.ColumnWidth = pageWidth - 60; // Kenar boşluklarını hesaba katarak sütun genişliğini ayarla
                     document.ColumnGap = 0;
 
                     // 🔸 Yeni paginator oluştur ve yazdır
@@ -276,6 +288,308 @@ namespace By_ProV2.Reports
                 MessageBox.Show($"Yazdırma sırasında hata oluştu:\n{ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void btnPDF_Click(object sender, RoutedEventArgs e)
+        {
+            if (dpTarih.SelectedDate == null)
+            {
+                MessageBox.Show("Lütfen bir tarih seçin ve raporu getirin.", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            DateTime secilenTarih = dpTarih.SelectedDate.Value;
+            var sutKayitlar = _sutRepo.GetGunlukSutKayit(secilenTarih);
+
+            if (!sutKayitlar.Any())
+            {
+                MessageBox.Show("Seçilen tarih için veri bulunamadı.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = $"GunlukSutAlimRaporu_{secilenTarih:yyyyMMdd}.pdf",
+                DefaultExt = ".pdf",
+                Filter = "PDF documents (.pdf)|*.pdf"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                try
+                {
+                    string dosyaYolu = dlg.FileName;
+                    PdfDocument document = new PdfDocument();
+                    document.Info.Title = "Günlük Süt Alım Raporu";
+                    document.Info.Author = "By_ProV2";
+                    document.Info.Subject = $"Günlük Süt Alım Raporu - {secilenTarih:dd.MM.yyyy}";
+
+                    // Sayfa boyutu (A4 yatay)
+                    PdfPage page = document.AddPage();
+                    page.Orientation = PdfSharp.PageOrientation.Landscape;
+                    XGraphics gfx = XGraphics.FromPdfPage(page);
+
+                                XFont baslikFont = new XFont("Arial", 14, XFontStyleEx.Bold);
+                                XFont altBaslikFont = new XFont("Arial", 12, XFontStyleEx.Bold);
+                                XFont normalFont = new XFont("Arial", 8);
+                                XFont kalinFont = new XFont("Arial", 8, XFontStyleEx.Bold);
+                    double yPos = 30; // Points olarak
+
+                    // Başlık
+                    string baslik = $"GÜNLÜK SÜT ALIM RAPORU - {secilenTarih:dd.MM.yyyy}";
+                    gfx.DrawString(baslik, baslikFont, XBrushes.Black, new XRect(0, yPos, page.Width, 20), XStringFormats.Center);
+                    yPos += 25;
+
+                    // 🥛 Depoya Alınan Sütler
+                    var depoAlimlar = sutKayitlar.Where(x => x.IslemTuru == "Depoya Alım").ToList();
+                    if (depoAlimlar.Any())
+                    {
+                        gfx.DrawString("Depoya Alınan Sütler", altBaslikFont, XBrushes.DarkSlateGray, new XRect(0, yPos, page.Width, 20), XStringFormats.Center);
+                        yPos += 20;
+                
+                        yPos = CreatePdfTableWithPageBreakSupport(gfx, page, document, depoAlimlar, yPos, normalFont, kalinFont);
+                    }
+
+                    // 🔹 Ayraç çizgisi
+                    if (depoAlimlar.Any())
+                    {
+                        if (yPos + 15 > page.Height - 40)
+                        {
+                            page = document.AddPage();
+                            page.Orientation = PdfSharp.PageOrientation.Landscape;
+                            gfx = XGraphics.FromPdfPage(page);
+                            yPos = 30;
+                        }
+                
+                        gfx.DrawLine(XPens.Gray, 20, yPos, page.Width - 20, yPos);
+                        yPos += 15;
+                    }
+
+                    // 🚛 Direkt Sevk Yapılan Sütler
+                    var direktSevk = sutKayitlar.Where(x => x.IslemTuru == "Direkt Sevk").ToList();
+                    if (direktSevk.Any())
+                    {
+                        if (yPos + 20 > page.Height - 40)
+                        {
+                            page = document.AddPage();
+                            page.Orientation = PdfSharp.PageOrientation.Landscape;
+                            gfx = XGraphics.FromPdfPage(page);
+                            yPos = 30;
+                        }
+                
+                        gfx.DrawString("Direkt Sevk Yapılan Sütler", altBaslikFont, XBrushes.DarkSlateGray, new XRect(0, yPos, page.Width, 20), XStringFormats.Center);
+                        yPos += 20;
+                
+                        yPos = CreatePdfTableWithPageBreakSupport(gfx, page, document, direktSevk, yPos, normalFont, kalinFont);
+                    }
+
+                    // Genel toplam
+                    if (sutKayitlar.Any())
+                    {
+                        if (yPos + 25 > page.Height - 40)
+                        {
+                            page = document.AddPage();
+                            page.Orientation = PdfSharp.PageOrientation.Landscape;
+                            gfx = XGraphics.FromPdfPage(page);
+                            yPos = 30;
+                        }
+                
+                        yPos += 15;
+                        var tumMiktar = sutKayitlar.Sum(x => x.Miktar);
+                        var genelYag = WeightedAverage(sutKayitlar.Select(x => x.Yag), sutKayitlar.Select(x => x.Miktar));
+                        var genelProtein = WeightedAverage(sutKayitlar.Select(x => x.Protein), sutKayitlar.Select(x => x.Miktar));
+                        var genelTKM = WeightedAverage(sutKayitlar.Select(x => x.TKM), sutKayitlar.Select(x => x.Miktar));
+                        var genelLaktoz = WeightedAverage(sutKayitlar.Select(x => x.Laktoz), sutKayitlar.Select(x => x.Miktar));
+                        var genelpH = WeightedAverage(sutKayitlar.Select(x => x.pH), sutKayitlar.Select(x => x.Miktar));
+                        var genelIletkenlik = WeightedAverage(sutKayitlar.Select(x => x.Iletkenlik), sutKayitlar.Select(x => x.Miktar));
+                        var genelDonma = WeightedAverage(sutKayitlar.Select(x => x.DonmaN), sutKayitlar.Select(x => x.Miktar));
+                        var tumKesinti = sutKayitlar.Sum(x => x.Kesinti);
+
+                        string genelToplam = $"GENEL TOPLAM — Miktar: {tumMiktar:N2} lt | Yağ: {genelYag:N2}% | Protein: {genelProtein:N2}% | TKM: {genelTKM:N2}% | Laktoz: {genelLaktoz:N2}% | pH: {genelpH:N2} | İletkenlik: {genelIletkenlik:N2}mS | Donma Noktası: {genelDonma:N2}°C | Kesinti: {tumKesinti:N2}lt";
+                
+                        XSize textSize = gfx.MeasureString(genelToplam, kalinFont);
+                        if (textSize.Width > (page.Width - 40))
+                        {
+                            gfx.DrawString(genelToplam, kalinFont, XBrushes.Black, new XRect(20, yPos, page.Width - 40, 40), XStringFormats.TopLeft);
+                            yPos += 40;
+                        }
+                        else
+                        {
+                            gfx.DrawString(genelToplam, kalinFont, XBrushes.Black, new XRect(0, yPos, page.Width, 20), XStringFormats.Center);
+                            yPos += 25;
+                        }
+                    }
+
+                    document.Save(dosyaYolu);
+                    Process.Start("explorer.exe", dosyaYolu);
+                    MessageBox.Show("PDF başarıyla oluşturuldu!", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"PDF oluşturma sırasında hata oluştu:\n{ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        // PDF Tablosu oluşturma metodu - uygun sütun genişliklerinde ve sayfa sonu desteği
+        private double CreatePdfTableWithPageBreakSupport(XGraphics gfx, PdfPage page, PdfDocument document, List<SutKaydi> kayitlar, double yPos, XFont normalFont, XFont kalinFont)
+{
+    // Column widths in points (A4 landscape is ~842 points wide)
+    double[] colWidths = {
+        100,  // Tedarikçi
+        52,   // Miktar (lt)
+        40,   // Yağ (%)
+        40,   // Protein (%)
+        40,   // TKM (%)
+        40,   // Laktoz (%)
+        35,   // pH 
+        52,   // İletkenlik (mS)
+        52,   // Donma N (°C)
+        45,   // Kesinti (lt)
+        45,   // Antibiyotik
+        45,   // Durum
+        75    // Açıklama
+    };
+
+    double startX = 40; // Sol kenar boşluğu (points)
+    double rowHeight = 16;
+
+    string[] headers = { "Tedarikçi", "Miktar", "Yağ", "Prot", "TKM", "Laktoz", "pH", "İletkenlik", "Donma", "Kesinti", "Anti", "Durum", "Açıklama" };
+
+    // Taşma kontrolü
+    if (yPos + rowHeight > page.Height - 40)
+    {
+        page = document.AddPage();
+        page.Orientation = PdfSharp.PageOrientation.Landscape;
+        gfx = XGraphics.FromPdfPage(page);
+        yPos = 30;
+    }
+
+    // Sütun başlıklarını çiz
+    double currentX = startX;
+    for (int i = 0; i < headers.Length; i++)
+    {
+        gfx.DrawRectangle(XPens.Black, XBrushes.LightGray, new XRect(currentX, yPos, colWidths[i], rowHeight));
+        gfx.DrawString(headers[i], kalinFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.Center);
+        currentX += colWidths[i];
+    }
+
+    yPos += rowHeight;
+
+    // Veri satırlarını çiz
+    foreach (var k in kayitlar)
+    {
+        // Taşma kontrolü
+        if (yPos + rowHeight > page.Height - 40)
+        {
+            page = document.AddPage();
+            page.Orientation = PdfSharp.PageOrientation.Landscape;
+            gfx = XGraphics.FromPdfPage(page);
+            yPos = 30;
+            
+            // Yeni sayfada başlık satırını tekrar çiz
+            currentX = startX;
+            for (int i = 0; i < headers.Length; i++)
+            {
+                gfx.DrawRectangle(XPens.Black, XBrushes.LightGray, new XRect(currentX, yPos, colWidths[i], rowHeight));
+                gfx.DrawString(headers[i], kalinFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.Center);
+                currentX += colWidths[i];
+            }
+            yPos += rowHeight;
+        }
+
+        var rowData = new[] {
+            k.TedarikciAdi ?? "-",
+            k.Miktar.ToString("N2"),
+            k.Yag?.ToString("N2") ?? "-",
+            k.Protein?.ToString("N2") ?? "-",
+            k.TKM?.ToString("N2") ?? "-",
+            k.Laktoz?.ToString("N2") ?? "-",
+            k.pH?.ToString("N2") ?? "-",
+            k.Iletkenlik?.ToString("N2") ?? "-",
+            k.DonmaN?.ToString("N2") ?? "-",
+            k.Kesinti.ToString("N2"),
+            k.Antibiyotik ?? "-",
+            k.Durumu ?? "-",
+            k.Aciklama ?? "-"
+        };
+
+        currentX = startX;
+        for (int i = 0; i < rowData.Length; i++)
+        {
+            string cellText = rowData[i];
+            if (i == 12 && cellText.Length > 20) // Açıklama sütunu
+            {
+                cellText = cellText.Substring(0, 17) + "...";
+            }
+
+            gfx.DrawRectangle(XPens.Black, new XRect(currentX, yPos, colWidths[i], rowHeight));
+            
+            XStringFormat format = i == 0 || i == 12 ? XStringFormats.CenterLeft : XStringFormats.Center;
+            gfx.DrawString(cellText, normalFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), format);
+            currentX += colWidths[i];
+        }
+        yPos += rowHeight;
+    }
+
+    // Alt toplam satırı
+    if (kayitlar.Any())
+    {
+        if (yPos + rowHeight > page.Height - 40)
+        {
+            page = document.AddPage();
+            page.Orientation = PdfSharp.PageOrientation.Landscape;
+            gfx = XGraphics.FromPdfPage(page);
+            yPos = 30;
+            
+            // Yeni sayfada başlık satırını tekrar çiz
+            currentX = startX;
+            for (int i = 0; i < headers.Length; i++)
+            {
+                gfx.DrawRectangle(XPens.Black, XBrushes.LightGray, new XRect(currentX, yPos, colWidths[i], rowHeight));
+                gfx.DrawString(headers[i], kalinFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), XStringFormats.Center);
+                currentX += colWidths[i];
+            }
+            yPos += rowHeight;
+        }
+        
+        decimal toplamMiktar = kayitlar.Sum(x => x.Miktar);
+        decimal ortYag = WeightedAverage(kayitlar.Select(x => x.Yag), kayitlar.Select(x => x.Miktar));
+        decimal ortProtein = WeightedAverage(kayitlar.Select(x => x.Protein), kayitlar.Select(x => x.Miktar));
+        decimal ortTKM = WeightedAverage(kayitlar.Select(x => x.TKM), kayitlar.Select(x => x.Miktar));
+        decimal ortLaktoz = WeightedAverage(kayitlar.Select(x => x.Laktoz), kayitlar.Select(x => x.Miktar));
+        decimal ortpH = WeightedAverage(kayitlar.Select(x => x.pH), kayitlar.Select(x => x.Miktar));
+        decimal ortIletkenlik = WeightedAverage(kayitlar.Select(x => x.Iletkenlik), kayitlar.Select(x => x.Miktar));
+        decimal ortDonma = WeightedAverage(kayitlar.Select(x => x.DonmaN), kayitlar.Select(x => x.Miktar));
+        decimal toplamKesinti = kayitlar.Sum(x => x.Kesinti);
+
+        var toplamData = new[] {
+            "Toplam / Ortalama",
+            toplamMiktar.ToString("N2"),
+            ortYag.ToString("N2"),
+            ortProtein.ToString("N2"),
+            ortTKM.ToString("N2"),
+            ortLaktoz.ToString("N2"),
+            ortpH.ToString("N2"),
+            ortIletkenlik.ToString("N2"),
+            ortDonma.ToString("N2"),
+            toplamKesinti.ToString("N2"),
+            "", "", ""
+        };
+
+        currentX = startX;
+        for (int i = 0; i < toplamData.Length; i++)
+        {
+            gfx.DrawRectangle(XPens.Black, XBrushes.LightYellow, new XRect(currentX, yPos, colWidths[i], rowHeight));
+            
+            XStringFormat format = i == 0 ? XStringFormats.CenterLeft : XStringFormats.Center;
+            gfx.DrawString(toplamData[i], kalinFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), format);
+            currentX += colWidths[i];
+        }
+        yPos += rowHeight + 10;
+    }
+    
+    return yPos;
+}
 
     }
 }

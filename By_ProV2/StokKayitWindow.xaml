@@ -5,7 +5,8 @@
         Title="Stok Kayıt" Height="800" Width="1000"
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Resources/Logo.png">
 
     <DockPanel LastChildFill="True">
 

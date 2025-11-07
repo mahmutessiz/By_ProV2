@@ -6,7 +6,8 @@
         Height="1000" Width="1200"
         WindowStartupLocation="CenterScreen"
         Background="#F9F9F9"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Icon="/Resources/Logo.png">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>

@@ -34,6 +34,9 @@
     <Content Include="Resources\Logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+	  <Content Include="Resources\Logo1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -111,6 +114,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Remove="SqlServerTypes\Loader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Logo1.png" />
   </ItemGroup>
 
 </Project>

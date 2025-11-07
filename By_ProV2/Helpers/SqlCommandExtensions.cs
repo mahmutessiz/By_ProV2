@@ -124,7 +124,7 @@ namespace By_ProV2.Helpers
             headingStyle.ParagraphFormat.Alignment = ParagraphAlignment.Center;
 
             // Logo ve Firma Bilgileri
-            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Logo.png");
+            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Logo1.png");
             var headerTable = section.AddTable();
             headerTable.Borders.Visible = false;
             headerTable.AddColumn(Unit.FromCentimeter(8));
@@ -399,7 +399,7 @@ namespace By_ProV2.Helpers
 
             // Logo
             // Üstte logo ve firma bilgileri için tablo
-            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Logo.png");
+            var logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Logo1.png");
 
             var headerTable = section.AddTable();
             headerTable.Borders.Visible = false;

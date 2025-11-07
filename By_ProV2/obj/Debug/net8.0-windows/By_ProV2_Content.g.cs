@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/logo.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/logo1.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("appsettings.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sqlservertypes/readme.htm")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sqlservertypes/x64/msvcr120.dll")]
