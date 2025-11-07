@@ -710,6 +710,27 @@ namespace By_ProV2.Helpers
                     checkCmd.ExecuteNonQuery();
                 }
 
+                // Create SutEnvanteri Table for daily milk inventory tracking
+                string createSutEnvanteriTable = @"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SutEnvanteri' and xtype='U')
+                CREATE TABLE SutEnvanteri (
+                    Id INT PRIMARY KEY IDENTITY(1,1),
+                    Tarih DATETIME NOT NULL,
+                    DevirSut DECIMAL(18, 2) DEFAULT 0,
+                    GunlukAlinanSut DECIMAL(18, 2) DEFAULT 0,
+                    GunlukSatilanSut DECIMAL(18, 2) DEFAULT 0,
+                    KalanSut DECIMAL(18, 2) DEFAULT 0,
+                    Aciklama NVARCHAR(MAX),
+                    CreatedBy INT NULL,
+                    CreatedAt DATETIME DEFAULT GETDATE(),
+                    ModifiedBy INT NULL,
+                    ModifiedAt DATETIME DEFAULT GETDATE()
+                )";
+                using (var command = new SqlCommand(createSutEnvanteriTable, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
             }
         }
     }

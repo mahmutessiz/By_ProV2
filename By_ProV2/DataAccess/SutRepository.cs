@@ -412,5 +412,111 @@ namespace By_ProV2.DataAccess
                 throw;
             }
         }
+
+        public SutKaydi GetSutKaydiById(int sutKayitId)
+        {
+            try
+            {
+                string sql = @"
+                    SELECT 
+                        sk.SutKayitId,
+                        sk.BelgeNo,
+                        sk.Tarih,
+                        sk.IslemTuru,
+                        sk.TedarikciId,
+                        sk.MusteriId,
+                        sk.Miktar,
+                        sk.Yag,
+                        sk.Protein,
+                        sk.Laktoz,
+                        sk.NetMiktar,
+                        sk.TKM,
+                        sk.YKM,
+                        sk.pH,
+                        sk.Iletkenlik,
+                        sk.Sicaklik,
+                        sk.Yogunluk,
+                        sk.Kesinti,
+                        sk.Antibiyotik,
+                        sk.Arac,
+                        sk.Plaka,
+                        sk.DonmaN,
+                        sk.Bakteri,
+                        sk.Somatik,
+                        sk.Durumu,
+                        sk.Aciklama,
+                        sk.CreatedBy,
+                        sk.ModifiedBy,
+                        sk.CreatedAt,
+                        sk.ModifiedAt,
+                        c1.CariKod AS TedarikciKod,
+                        c1.CariAdi AS TedarikciAdi,
+                        c2.CariKod AS MusteriKod,
+                        c2.CariAdi AS MusteriAdi
+                    FROM SutKayit sk
+                    LEFT JOIN Cari c1 ON sk.TedarikciId = c1.CariId
+                    LEFT JOIN Cari c2 ON sk.MusteriId = c2.CariId
+                    WHERE sk.SutKayitId = @SutKayitId";
+
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    using (var cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@SutKayitId", sutKayitId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                var kayit = new SutKaydi
+                                {
+                                    SutKayitId = reader.IsDBNull("SutKayitId") ? 0 : Convert.ToInt32(reader["SutKayitId"]),
+                                    BelgeNo = reader.IsDBNull("BelgeNo") ? null : reader["BelgeNo"] as string,
+                                    Tarih = reader.IsDBNull("Tarih") ? DateTime.Now : Convert.ToDateTime(reader["Tarih"]),
+                                    IslemTuru = reader.IsDBNull("IslemTuru") ? null : reader["IslemTuru"] as string,
+                                    TedarikciId = reader.IsDBNull("TedarikciId") ? 0 : Convert.ToInt32(reader["TedarikciId"]),
+                                    MusteriId = reader.IsDBNull("MusteriId") ? 0 : Convert.ToInt32(reader["MusteriId"]),
+                                    TedarikciKod = reader.IsDBNull("TedarikciKod") ? null : reader["TedarikciKod"] as string,
+                                    TedarikciAdi = reader.IsDBNull("TedarikciAdi") ? null : reader["TedarikciAdi"] as string,
+                                    MusteriKod = reader.IsDBNull("MusteriKod") ? null : reader["MusteriKod"] as string,
+                                    MusteriAdi = reader.IsDBNull("MusteriAdi") ? null : reader["MusteriAdi"] as string,
+                                    Miktar = reader.IsDBNull("Miktar") ? 0 : Convert.ToDecimal(reader["Miktar"]),
+                                    NetMiktar = reader.IsDBNull("NetMiktar") ? 0 : Convert.ToDecimal(reader["NetMiktar"]),
+                                    Yag = reader.IsDBNull("Yag") ? (decimal?)null : Convert.ToDecimal(reader["Yag"]),
+                                    Protein = reader.IsDBNull("Protein") ? (decimal?)null : Convert.ToDecimal(reader["Protein"]),
+                                    Laktoz = reader.IsDBNull("Laktoz") ? (decimal?)null : Convert.ToDecimal(reader["Laktoz"]),
+                                    TKM = reader.IsDBNull("TKM") ? (decimal?)null : Convert.ToDecimal(reader["TKM"]),
+                                    YKM = reader.IsDBNull("YKM") ? (decimal?)null : Convert.ToDecimal(reader["YKM"]),
+                                    pH = reader.IsDBNull("pH") ? (decimal?)null : Convert.ToDecimal(reader["pH"]),
+                                    Iletkenlik = reader.IsDBNull("Iletkenlik") ? (decimal?)null : Convert.ToDecimal(reader["Iletkenlik"]),
+                                    Sicaklik = reader.IsDBNull("Sicaklik") ? (decimal?)null : Convert.ToDecimal(reader["Sicaklik"]),
+                                    Yogunluk = reader.IsDBNull("Yogunluk") ? (decimal?)null : Convert.ToDecimal(reader["Yogunluk"]),
+                                    Kesinti = reader.IsDBNull("Kesinti") ? 0 : Convert.ToDecimal(reader["Kesinti"]),
+                                    Antibiyotik = reader.IsDBNull("Antibiyotik") ? null : reader["Antibiyotik"] as string,
+                                    AracTemizlik = reader.IsDBNull("Arac") ? null : reader["Arac"] as string,
+                                    Plaka = reader.IsDBNull("Plaka") ? null : reader["Plaka"] as string,
+                                    DonmaN = reader.IsDBNull("DonmaN") ? (decimal?)null : Convert.ToDecimal(reader["DonmaN"]),
+                                    Bakteri = reader.IsDBNull("Bakteri") ? (decimal?)null : Convert.ToDecimal(reader["Bakteri"]),
+                                    Somatik = reader.IsDBNull("Somatik") ? (decimal?)null : Convert.ToDecimal(reader["Somatik"]),
+                                    Durumu = reader.IsDBNull("Durumu") ? null : reader["Durumu"] as string,
+                                    Aciklama = reader.IsDBNull("Aciklama") ? null : reader["Aciklama"] as string,
+                                    CreatedBy = reader.IsDBNull("CreatedBy") ? (int?)null : Convert.ToInt32(reader["CreatedBy"]),
+                                    ModifiedBy = reader.IsDBNull("ModifiedBy") ? (int?)null : Convert.ToInt32(reader["ModifiedBy"]),
+                                    CreatedAt = reader.IsDBNull("CreatedAt") ? DateTime.MinValue : Convert.ToDateTime(reader["CreatedAt"]),
+                                    ModifiedAt = reader.IsDBNull("ModifiedAt") ? DateTime.MinValue : Convert.ToDateTime(reader["ModifiedAt"])
+                                };
+                                return kayit;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception as needed
+                throw;
+            }
+            return null;
+        }
     }
 }

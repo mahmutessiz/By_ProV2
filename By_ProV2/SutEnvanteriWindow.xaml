@@ -1,0 +1,104 @@
+<Window x:Class="By_ProV2.SutEnvanteriWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Süt Envanteri Takibi" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Input Panel -->
+        <GroupBox Header="Günlük Süt Envanteri" Grid.Row="0" Margin="0,0,0,10">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Tarih:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="dpTarih" Grid.Row="0" Grid.Column="1" Width="150" HorizontalAlignment="Left" SelectedDateChanged="dpTarih_SelectedDateChanged"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Devir Süt (lt):" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                <TextBox x:Name="txtDevirSut" Grid.Row="1" Grid.Column="1" Width="150" HorizontalAlignment="Left" Margin="0,5,0,0" PreviewTextInput="NumericOnly_PreviewTextInput" TextChanged="txtDevirSut_TextChanged"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Günlük Alınan Süt (lt):" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                <TextBox x:Name="txtGunlukAlinanSut" Grid.Row="2" Grid.Column="1" Width="150" HorizontalAlignment="Left" Margin="0,5,0,0" PreviewTextInput="NumericOnly_PreviewTextInput" TextChanged="txtGunlukAlinanSut_TextChanged"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Günlük Satılan Süt (lt):" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                <TextBox x:Name="txtGunlukSatilanSut" Grid.Row="3" Grid.Column="1" Width="150" HorizontalAlignment="Left" Margin="0,5,0,0" PreviewTextInput="NumericOnly_PreviewTextInput" TextChanged="txtGunlukSatilanSut_TextChanged"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Kalan Süt (lt):" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                <TextBox x:Name="txtKalanSut" Grid.Row="4" Grid.Column="1" Width="150" HorizontalAlignment="Left" Margin="0,5,0,0" IsReadOnly="True" Background="#F0F0F0"/>
+
+                <StackPanel Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Orientation="Vertical" VerticalAlignment="Center" Margin="0,5,0,0">
+                    <Button x:Name="btnKaydet" Content="Kaydet" Width="100" Height="30" Margin="0,0,0,5" Click="btnKaydet_Click"/>
+                    <Button x:Name="btnGuncelle" Content="Güncelle" Width="100" Height="30" Margin="0,0,0,5" Click="btnGuncelle_Click"/>
+                    <Button x:Name="btnSil" Content="Sil" Width="100" Height="30" Margin="0,0,0,5" Click="btnSil_Click"/>
+                    <Button x:Name="btnYeni" Content="Yeni" Width="100" Height="30" Click="btnYeni_Click"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- Summary Panel -->
+        <GroupBox Header="Günlük Özet" Grid.Row="1" Margin="0,0,0,10">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Toplam Alınan:" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock x:Name="lblToplamAlinan" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Foreground="DarkBlue" FontWeight="Bold"/>
+
+                <Label Grid.Row="0" Grid.Column="2" Content="Toplam Satılan:" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock x:Name="lblToplamSatilan" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" Foreground="DarkRed" FontWeight="Bold"/>
+
+                <StackPanel Grid.Row="0" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Son Kalan:" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="lblSonKalan" VerticalAlignment="Center" Foreground="DarkGreen" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- Data Grid -->
+        <DataGrid x:Name="dgEnvanter" Grid.Row="2" Margin="0,0,0,10" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  SelectionChanged="dgEnvanter_SelectionChanged"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Devir Süt" Binding="{Binding DevirSut, StringFormat=N2}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Alınan Süt" Binding="{Binding GunlukAlinanSut, StringFormat=N2}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Satılan Süt" Binding="{Binding GunlukSatilanSut, StringFormat=N2}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Kalan Süt" Binding="{Binding KalanSut, StringFormat=N2}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Bottom Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnYukle" Content="Verileri Yükle" Width="120" Height="30" Margin="0,0,10,0" Click="btnYukle_Click"/>
+            <Button x:Name="btnKapat" Content="Kapat" Width="100" Height="30" Click="btnKapat_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

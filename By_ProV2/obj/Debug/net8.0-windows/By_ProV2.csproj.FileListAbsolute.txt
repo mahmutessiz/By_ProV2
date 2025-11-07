@@ -348,3 +348,5 @@ C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\StokListesiM
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\bin\Debug\net8.0-windows\Resources\Logo1.png
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\Reports\GunlukSutSatisPreview.baml
 C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\Reports\GunlukSutSatisPreview.g.cs
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\SutEnvanteriWindow.baml
+C:\Users\MUSTAFA\Desktop\By_ProV2\By_ProV2\obj\Debug\net8.0-windows\SutEnvanteriWindow.g.cs

@@ -9,6 +9,7 @@ using System.Globalization;
 using By_ProV2.DataAccess;
 using By_ProV2.Models;
 using By_ProV2.Helpers;
+using By_ProV2.Services;
 
 namespace By_ProV2
 {
@@ -17,6 +18,7 @@ namespace By_ProV2
         public ObservableCollection<SutKaydi> TedarikciListesi { get; set; }
         private readonly SutRepository _repo = new SutRepository();
         private readonly ParameterRepository _paramRepo = new ParameterRepository();
+        private readonly SutEnvanteriService _envanterService = new SutEnvanteriService();
         private Parameter _latestParameters;
         private SutKaydi currentEditRecord = null; // For single-record edit mode
         private bool isDocumentViewMode = false; // For multi-record document view/edit mode
@@ -179,7 +181,32 @@ namespace By_ProV2
                     // Then, update the remaining records (if any exist)
                     foreach (var kayit in TedarikciListesi)
                     {
-                        _repo.GuncelleSutKaydi(kayit);
+                        // Get the existing record to check if values have changed
+                        var existingRecord = _repo.GetSutKaydiById(kayit.SutKayitId);
+                        if (existingRecord != null)
+                        {
+                            _repo.GuncelleSutKaydi(kayit);
+                            
+                            // Update inventory if transaction details have changed
+                            _envanterService.UpdateInventoryForTransactionChange(
+                                existingRecord.Tarih.Date, 
+                                existingRecord.IslemTuru, 
+                                kayit.IslemTuru, 
+                                existingRecord.Miktar, 
+                                kayit.Miktar);
+                        }
+                        else
+                        {
+                            _repo.GuncelleSutKaydi(kayit);
+                            // Update inventory for the new record
+                            _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.Miktar);
+                        }
+                    }
+                    
+                    // Handle deleted records - revert inventory for deleted transactions
+                    foreach (var deletedRecord in _deletedRecords)
+                    {
+                        _envanterService.RevertTransaction(deletedRecord.Tarih.Date, deletedRecord.IslemTuru, deletedRecord.Miktar);
                     }
                     
                     // Clear the deleted records collection after successful save
@@ -192,8 +219,27 @@ namespace By_ProV2
                     var result = MessageBox.Show("Güncellemek istiyor musunuz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.No) return;
 
+                    // Get the existing record to check if values have changed
+                    var existingRecord = _repo.GetSutKaydiById(currentEditRecord.SutKayitId);
                     UpdateKayitFromFields(currentEditRecord);
                     _repo.GuncelleSutKaydi(currentEditRecord);
+                    
+                    // Update inventory if transaction details have changed
+                    if (existingRecord != null)
+                    {
+                        _envanterService.UpdateInventoryForTransactionChange(
+                            existingRecord.Tarih.Date, 
+                            existingRecord.IslemTuru, 
+                            currentEditRecord.IslemTuru, 
+                            existingRecord.Miktar, 
+                            currentEditRecord.Miktar);
+                    }
+                    else
+                    {
+                        // Update inventory for the new record
+                        _envanterService.UpdateInventoryForTransaction(currentEditRecord.Tarih.Date, currentEditRecord.IslemTuru, currentEditRecord.Miktar);
+                    }
+                    
                     MessageBox.Show("Süt kaydı başarıyla güncellendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
@@ -212,6 +258,9 @@ namespace By_ProV2
                         kayit.IslemTuru = islemTuru;
                         kayit.BelgeNo = txtBelgeNo.Text;
                         _repo.KaydetSutKaydi(kayit);
+                        
+                        // Update inventory for the new transaction
+                        _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.Miktar);
                     }
                     MessageBox.Show("Tüm süt kayıtları başarıyla kaydedildi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                     TedarikciListesi.Clear();

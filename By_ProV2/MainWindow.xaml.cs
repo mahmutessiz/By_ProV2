@@ -542,6 +542,33 @@ namespace By_ProV2
             btnSutSorgulama.Click += BtnSutAlimSorgulama_Click; // This will open the new search window
 
             panel.Children.Add(btnSutAlim);
+            
+            // Add the new inventory button right after the milk intake form
+            var btnSutEnvanteri = new Button
+            {
+                FontSize = 24,
+                Width = btnWidth,
+                Height = btnHeight,
+                Margin = btnMargin
+            };
+            
+            // Create a TextBlock with wrapping enabled for Süt Envanteri
+            var sutEnvanteriText = new TextBlock
+            {
+                Text = "📦 Süt Envanteri",
+                TextWrapping = TextWrapping.Wrap,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Padding = new Thickness(5)
+            };
+            btnSutEnvanteri.Content = sutEnvanteriText;
+            btnSutEnvanteri.Click += (s, ev) =>
+            {
+                SutEnvanteriWindow envanterPencere = new SutEnvanteriWindow();
+                envanterPencere.ShowDialog();
+            };
+            
+            panel.Children.Add(btnSutEnvanteri); // Add the inventory button
             panel.Children.Add(btnSutDepoSevk);
             panel.Children.Add(btnSutDirekSevk);
             panel.Children.Add(btnSutRapor);
