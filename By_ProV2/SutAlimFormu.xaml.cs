@@ -440,14 +440,11 @@ namespace By_ProV2
         private decimal CalculateNetMiktar(decimal brütMiktar, decimal? donmaNoktasi, decimal? yag, decimal? protein, decimal? somatik, decimal? bakteri, decimal? pH, decimal? yogunluk)
         {
             // Calculate based on Turkish dairy standards
-            // Standard freezing point for pure milk: -0.525°C
-            // Acceptable limit: -0.515°C (0.010°C tolerance)
             decimal netMiktar = brütMiktar;
 
             // Calculate total deductions based on quality parameters
             decimal totalKesinti = CalculateKesinti(brütMiktar, donmaNoktasi, yag, protein, somatik, bakteri, pH, yogunluk);
 
-//          var roundedKesinti = Math.Round(totalKesinti, 0, MidpointRounding.AwayFromZero);
             // Apply all deductions to brüt miktar
             netMiktar -= totalKesinti;
 
@@ -468,13 +465,7 @@ namespace By_ProV2
                 if (donmaNoktasi > kesintiBaslangicLimiti)
                 {
                     // Use configurable parameters for calculation: percentage deduction per deviation unit
-                    // Default to 5% per 0.010°C deviation if not specified in parameters
-                    //decimal dusuklukAraligi = 0.010m; // 0.010°C interval
-                    //decimal dusuklukOrani = 0.05m; // 5% deduction per interval
-
-                    //decimal donmaSapmasi = donmaNoktasi.Value - kesintiBaslangicLimiti;
-                    //decimal aralikSayisi = donmaSapmasi / dusuklukAraligi;
-                    //decimal toplamYuzdeDusukluk = aralikSayisi * dusuklukOrani;
+                   
                     decimal donmaNoktasiFarki = (donmaNoktasi.Value * -1) + referansDeger;
                     decimal toplamYuzdeDusukluk = donmaNoktasiFarki / referansDeger * 100;
                     // Apply percentage-based deduction to gross amount
