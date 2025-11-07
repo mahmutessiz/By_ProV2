@@ -135,12 +135,10 @@
                          IsReadOnly="True" Background="#F0F0F0"/>
 
                 <TextBlock Text="Yağ (%):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtYag" Grid.Row="3" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
-                         TextChanged="txtYag_TextChanged"/>
+                <TextBox x:Name="txtYag" Grid.Row="3" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
 
                 <TextBlock Text="Protein (%):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtProtein" Grid.Row="4" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
-                         TextChanged="txtProtein_TextChanged"/>
+                <TextBox x:Name="txtProtein" Grid.Row="4" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
 
                 <TextBlock Text="Laktoz (%):" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBox x:Name="txtLaktoz" Grid.Row="5" Grid.Column="1" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
@@ -268,12 +266,10 @@
                          TextChanged="txtDonma_TextChanged"/>
                 
                 <TextBlock Text="T.Bakteri (ml/kob):" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtBakteri" Grid.Row="1" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
-                         TextChanged="txtBakteri_TextChanged"/>
+                <TextBox x:Name="txtBakteri" Grid.Row="1" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
 
                 <TextBlock Text="Somatik Hücre:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtSomatik" Grid.Row="2" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0" 
-                         TextChanged="txtSomatik_TextChanged"/>
+                <TextBox x:Name="txtSomatik" Grid.Row="2" Grid.Column="7" Width="120" Height="25" HorizontalAlignment="Left" Margin="5,5,0,0"/>
 
                 <!-- Açıklama -->
                 <TextBlock Text="Açıklama:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Top"/>

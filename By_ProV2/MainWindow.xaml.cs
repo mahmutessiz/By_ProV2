@@ -511,7 +511,7 @@ namespace By_ProV2
              // Create a TextBlock with wrapping enabled
              var gunlukSutAlimText = new TextBlock
              {
-                Text = "📊 Günlük Süt Alım Formu",
+                Text = "📊 Raporlar",
                 TextWrapping = TextWrapping.Wrap,
                 TextAlignment = TextAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -552,8 +552,82 @@ namespace By_ProV2
 
         private void BtnSutRapor_Click(object sender, RoutedEventArgs e)
         {
-            GunlukSutAlimPreview pencere = new GunlukSutAlimPreview();
-            pencere.ShowDialog();
+            ContentArea.Children.Clear();
+
+            var panel = new WrapPanel
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(20)
+            };
+
+            double btnWidth = 220;
+            double btnHeight = 150;
+            Thickness btnMargin = new Thickness(20);
+
+            var btnSutAlimRapor = new Button
+            {
+                FontSize = 24,
+                Width = btnWidth,
+                Height = btnHeight,
+                Margin = btnMargin
+            };
+
+            // Create a TextBlock with wrapping enabled for Süt Alım Raporu
+            var sutAlimRaporText = new TextBlock
+            {
+                Text = "🥛 Günlük Süt Alım Raporu",
+                TextWrapping = TextWrapping.Wrap,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Padding = new Thickness(5)
+            };
+            btnSutAlimRapor.Content = sutAlimRaporText;
+            btnSutAlimRapor.Click += (s, ev) =>
+            {
+                GunlukSutAlimPreview alimPencere = new GunlukSutAlimPreview();
+                alimPencere.ShowDialog();
+            };
+
+            var btnSutSatisRapor = new Button
+            {
+                FontSize = 24,
+                Width = btnWidth,
+                Height = btnHeight,
+                Margin = btnMargin
+            };
+
+            // Create a TextBlock with wrapping enabled for Süt Satış Raporu
+            var sutSatisRaporText = new TextBlock
+            {
+                Text = "🚚 Günlük Süt Satış Raporu",
+                TextWrapping = TextWrapping.Wrap,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Padding = new Thickness(5)
+            };
+            btnSutSatisRapor.Content = sutSatisRaporText;
+            btnSutSatisRapor.Click += (s, ev) =>
+            {
+                GunlukSutSatisPreview satisPencere = new GunlukSutSatisPreview();
+                satisPencere.ShowDialog();
+            };
+
+            var btnBackToSut = new Button
+            {
+                Content = "🔙 Geri",
+                FontSize = 24,
+                Width = btnWidth,
+                Height = btnHeight,
+                Margin = btnMargin
+            };
+            btnBackToSut.Click += (s, ev) => BtnSut_Click(sender, e); // Go back to the main süt page
+
+            panel.Children.Add(btnSutAlimRapor);
+            panel.Children.Add(btnSutSatisRapor);
+            panel.Children.Add(btnBackToSut);
+
+            ContentArea.Children.Add(panel);
         }
 
         private void BtnSutAlim_Click(object sender, RoutedEventArgs e)

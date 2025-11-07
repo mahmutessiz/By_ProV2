@@ -55,27 +55,83 @@ Uygulama aşağıdaki alanlardaki değişikliklerde otomatik olarak Net Miktarı
 ### Formül
 ```Net Miktar = Brüt Miktar - [((DonmaNoktası - (-0.515)) / 0.001) × 0.22% × Brüt Miktar] - Kesinti```
 
-### Teknik Uygulama
+### Teknik Uygulama - Eski Formül (Düzeltme Tarihi: 2025-11-07)
+
+**Eski Hesaplama Formülü (Yanlış):**
 ```csharp
-private decimal CalculateNetMiktar(decimal brütMiktar, decimal? donmaNoktasi, decimal? yag, decimal? protein, decimal kesintiMiktari)
+private decimal CalculateKesinti(decimal brütMiktar, decimal? donmaNoktasi, decimal? yag, decimal? protein, decimal? somatik, decimal? bakteri, decimal? pH, decimal? yogunluk)
 {
-    decimal netMiktar = brütMiktar;
+    decimal totalKesinti = 0;
 
-    // Donma noktası düzeltmesi (Türkiye'nin birincil kalite parametresi)
-    if (donmaNoktasi.HasValue && donmaNoktasi > -0.515m)
+    if (donmaNoktasi.HasValue)
     {
-        decimal donmaSapmasi = donmaNoktasi.Value - (-0.515m); 
-        decimal dilusyonOrani = (donmaSapmasi / 0.001m) * 0.22m; // 0.22% per 0.001°C
-        decimal dilusyonMiktari = (brütMiktar * dilusyonOrani) / 100m;
-        netMiktar -= dilusyonMiktari;
+        decimal referansDeger = _latestParameters?.DonmaNoktasiReferansDegeri ?? -0.520m;
+        decimal kesintiBaslangicLimiti = _latestParameters?.DonmaNoktasiKesintiAltLimit ?? -0.515m;
+        
+        // Yanlış hesaplama formülü:
+        if (donmaNoktasi > kesintiBaslangicLimiti)
+        {
+            // Yanlış: (donmaNoktasi.Value * -1) + referansDeger;
+            decimal donmaNoktasiFarki = (donmaNoktasi.Value * -1) + referansDeger; 
+            decimal toplamYuzdeDusukluk = donmaNoktasiFarki / referansDeger * 100;
+            decimal dilusyonMiktari = Math.Round(brütMiktar * toplamYuzdeDusukluk  / 100);
+            if (dilusyonMiktari > 0) // Sadece pozitif kesintiler uygulanır
+            {
+                totalKesinti += dilusyonMiktari;
+            }
+        }
     }
-
-    // El ile kesinti uygulaması
-    netMiktar -= kesintiMiktari;
-
-    // Negatif miktarı önle
-    return netMiktar < 0 ? 0 : netMiktar;
+    // ... diğer parametreler için hesaplamalar ...
+    return totalKesinti;
 }
+```
+
+**Yeni Düzeltme (2025-11-07) - Doğru Formül:**
+```csharp
+private decimal CalculateKesinti(decimal brütMiktar, decimal? donmaNoktasi, decimal? yag, decimal? protein, decimal? somatik, decimal? bakteri, decimal? pH, decimal? yogunluk)
+{
+    decimal totalKesinti = 0;
+
+    if (donmaNoktasi.HasValue)
+    {
+        decimal referansDeger = _latestParameters?.DonmaNoktasiReferansDegeri ?? -0.520m;
+        decimal kesintiBaslangicLimiti = _latestParameters?.DonmaNoktasiKesintiAltLimit ?? -0.515m;
+        
+        // Düzeltme: Sadece ölçüm değeri eşik değerinden büyükse kesinti uygulanır
+        if (donmaNoktasi > kesintiBaslangicLimiti)
+        {
+            // Doğru: Gerçek farkı hesapla (ölçülen - referans)
+            decimal donmaNoktasiFarki = donmaNoktasi.Value - referansDeger;
+            
+            // Sadece donma noktası referans değerden büyükse (seyreltme varsa) kesinti uygulanır
+            if (donmaNoktasiFarki > 0)
+            {
+                // Yüzde oran hesaplaması için mutlak değeri kullan
+                decimal yuzdeOrani = Math.Abs(donmaNoktasiFarki / referansDeger) * 100;
+                
+                // Yüzde orana göre kesinti miktarı hesapla
+                decimal dilusyonMiktari = Math.Round(brütMiktar * yuzdeOrani / 100);
+                
+                // Sadece pozitif kesintiler uygulanır
+                if (dilusyonMiktari > 0)
+                {
+                    totalKesinti += dilusyonMiktari;
+                }
+            }
+        }
+    }
+    // ... diğer parametreler için hesaplamalar ...
+    return totalKesinti;
+}
+```
+
+**Değişiklik Nedeni:**
+Eski formül `(donmaNoktasi.Value * -1) + referansDeger` matematiksel olarak yanlış olduğu için yanlış kesintiler oluşturuyordu. Yeni formül `donmaNoktasi.Value - referansDeger` gerçek sapmayı doğru şekilde hesaplar.
+
+**Faydaları:**
+- Dondurma noktası altındaki değerlerde (daha konsantre süt) artık hatalı kesintiler uygulanmaz
+- Dondurma noktası üstündeki değerlerde (seyreltilmiş süt) doğru oranda kesintiler uygulanır
+- Hesaplama Türkiye süt sanayii standartlarına daha uygun hale gelmiştir
 ```
 
 ## Yasa Kuralları ve Denetim

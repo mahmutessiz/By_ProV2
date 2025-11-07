@@ -461,99 +461,33 @@ namespace By_ProV2
                 decimal referansDeger = _latestParameters?.DonmaNoktasiReferansDegeri ?? -0.520m;
                 decimal kesintiBaslangicLimiti = _latestParameters?.DonmaNoktasiKesintiAltLimit ?? -0.515m;
                 
-                // Calculate deviation from reference point (only if measured is worse than reference)
+                // Apply deductions only if the measured freezing point is higher than the threshold (indicating possible dilution)
                 if (donmaNoktasi > kesintiBaslangicLimiti)
                 {
-                    // Use configurable parameters for calculation: percentage deduction per deviation unit
-                   
-                    decimal donmaNoktasiFarki = (donmaNoktasi.Value * -1) + referansDeger;
-                    decimal toplamYuzdeDusukluk = donmaNoktasiFarki / referansDeger * 100;
-                    // Apply percentage-based deduction to gross amount
-                    decimal dilusyonMiktari = Math.Round(brütMiktar * toplamYuzdeDusukluk  / 100);
-                    if (dilusyonMiktari > 0) // Only apply if there's a positive deduction
+                    // Calculate how much the measured freezing point deviates from the reference value
+                    // A positive difference indicates dilution (freezing point is higher than reference)
+                    decimal donmaNoktasiFarki = donmaNoktasi.Value - referansDeger;
+                    
+                    // Only apply deductions if there is actual dilution (measured value is higher than reference)
+                    if (donmaNoktasiFarki > 0)
                     {
-                        totalKesinti += dilusyonMiktari;
+                        // Calculate the percentage deviation based on the reference value
+                        decimal yuzdeOrani = Math.Abs(donmaNoktasiFarki / referansDeger) * 100;
+                        
+                        // Apply percentage-based deduction to gross amount
+                        decimal dilusyonMiktari = Math.Round(brütMiktar * yuzdeOrani / 100);
+                        
+                        // Only add positive deductions
+                        if (dilusyonMiktari > 0)
+                        {
+                            totalKesinti += dilusyonMiktari;
+                        }
                     }
                 }
             }
 
-            // 2. Fat content adjustment (standard: min 3.6% for cow milk in Turkey)
-            if (yag.HasValue)
-            {
-                if (yag < 3.2m) // Severe low fat
-                {
-                    // Apply deduction for very low fat content (e.g., 0.5% of brüt miktar)
-                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
-                }
-                else if (yag < 3.6m) // Slightly low fat
-                {
-                    // Apply smaller deduction for slightly low fat content
-                    totalKesinti += brütMiktar * 0.002m; // 0.2% deduction
-                }
-            }
-
-            // 3. Protein content adjustment (standard: min 3.2% for cow milk in Turkey)
-            if (protein.HasValue)
-            {
-                if (protein < 2.8m) // Severe low protein
-                {
-                    // Apply deduction for very low protein content
-                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
-                }
-                else if (protein < 3.2m) // Slightly low protein
-                {
-                    // Apply smaller deduction for slightly low protein content
-                    totalKesinti += brütMiktar * 0.002m; // 0.2% deduction
-                }
-            }
-
-            // 4. Somatic cell count deduction (standard: max 400,000 cells/ml in Turkey)
-            if (somatik.HasValue)
-            {
-                if (somatik >= 800000m) // Very high somatic count
-                {
-                    totalKesinti += brütMiktar * 0.02m; // 2% deduction
-                }
-                else if (somatik >= 400000m) // High somatic count
-                {
-                    totalKesinti += brütMiktar * 0.01m; // 1% deduction
-                }
-            }
-
-            // 5. Bacterial count deduction (standard: max 100,000 CFU/ml in Turkey)
-            if (bakteri.HasValue)
-            {
-                if (bakteri >= 1000000m) // Very high bacterial count
-                {
-                    totalKesinti += brütMiktar * 0.03m; // 3% deduction
-                }
-                else if (bakteri >= 300000m) // High bacterial count
-                {
-                    totalKesinti += brütMiktar * 0.015m; // 1.5% deduction
-                }
-                else if (bakteri >= 100000m) // At limit
-                {
-                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
-                }
-            }
-
-            // 6. pH value adjustment (normal: 6.5-6.7)
-            if (pH.HasValue)
-            {
-                if (pH < 6.4m || pH > 6.8m) // Outside normal range
-                {
-                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
-                }
-            }
-
-            // 7. Density adjustment (normal: 1.028-1.034 g/cm³)
-            if (yogunluk.HasValue)
-            {
-                if (yogunluk < 1.028m || yogunluk > 1.034m) // Outside normal range
-                {
-                    totalKesinti += brütMiktar * 0.005m; // 0.5% deduction
-                }
-            }
+            // Only freezing point is considered for deductions - other parameters do not affect net miktar
+            // This simplifies the calculation to only the essential parameter for dairy dilution detection
 
             return totalKesinti;
         }
@@ -566,30 +500,6 @@ namespace By_ProV2
         }
 
         private void txtDonma_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Auto-calculate NetMiktar when key parameters change
-            CalculateAndDisplayNetMiktar();
-        }
-
-        private void txtYag_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Auto-calculate NetMiktar when key parameters change
-            CalculateAndDisplayNetMiktar();
-        }
-
-        private void txtProtein_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Auto-calculate NetMiktar when key parameters change
-            CalculateAndDisplayNetMiktar();
-        }
-
-        private void txtBakteri_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Auto-calculate NetMiktar when key parameters change
-            CalculateAndDisplayNetMiktar();
-        }
-
-        private void txtSomatik_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Auto-calculate NetMiktar when key parameters change
             CalculateAndDisplayNetMiktar();
