@@ -671,7 +671,7 @@ namespace By_ProV2
         
         private void BtnSutDepoSevk_Click(object sender, RoutedEventArgs e)
         {
-            SutDepoSevkFormu pencere = new SutDepoSevkFormu();
+            AlisIcmalWindow pencere = new AlisIcmalWindow();
             pencere.ShowDialog();
         }
         private void BtnSutDirekSevk_Click(object sender, RoutedEventArgs e)
