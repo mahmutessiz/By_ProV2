@@ -29,18 +29,28 @@
         </Border>
 
         <!-- 🔢 Belge Numarası, İşlem Türü ve Güncel Envanter -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Center">
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
             <!-- Belge No -->
-            <StackPanel Margin="0,0,30,0">
-                <TextBlock Text="Belge No:" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="0" HorizontalAlignment="Left">
+                <TextBlock Text="Belge No" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="center"/>
                 <TextBox x:Name="txtBelgeNo" Width="150" Height="25" IsReadOnly="True" 
-                         HorizontalAlignment="Center" Margin="0,5,0,0" FontSize="12" 
-                         TextAlignment="Center" Background="#F0F0F0"/>
+                         Margin="0,5,0,0"
+                         Padding="0,4,0,0" 
+                         FontSize="12" 
+                         TextAlignment="Center"
+                         Background="#F0F0F0"
+                         />
             </StackPanel>
             
             <!-- İşlem Türü -->
-            <StackPanel Margin="30,0,30,0">
-                <TextBlock Text="İşlem Türü:" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                <TextBlock Text="İşlem Türü" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <RadioButton x:Name="rbDepoAlim" Content="Depoya Alım" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
                     <RadioButton x:Name="rbDirekSevk" Content="Direkt Sevk" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
@@ -49,14 +59,15 @@
             </StackPanel>
 
             <!-- Güncel Envanter -->
-            <StackPanel Margin="30,0,0,0">
-                <TextBlock Text="Güncel Envanter (Lt):" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                <TextBlock Text="Güncel Envanter (Lt)" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="center"/>
                 <TextBlock x:Name="lblCurrentDayInventory" Width="150" Height="25" 
-                           HorizontalAlignment="Center" Margin="0,5,0,0" FontSize="12" 
-                           TextAlignment="Center" Background="#F0F0F0" Padding="5,0,0,0"
-                           Text="0.00"/> <!-- Default value -->
+                           Margin="0,5,0,0" FontSize="12" Padding="0,4,0,0" 
+                           TextAlignment="Center" Background="#F0F0F0"
+                           Text="0.00"
+                           /> <!-- Default value -->
             </StackPanel>
-        </StackPanel>
+        </Grid>
 
         <!-- 🧾 Tedarikçi / Müşteri Seçimi -->
         <Grid Grid.Row="2" Margin="0,0,0,20">

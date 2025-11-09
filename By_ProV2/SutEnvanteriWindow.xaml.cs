@@ -35,6 +35,10 @@ namespace By_ProV2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Ensure day change logic runs to create/update today's record if needed
+            var service = new SutEnvanteriService();
+            service.HandleDayChange(DateTime.Today);
+
             YukleEnvanterleri(); // Load data
         }
 
