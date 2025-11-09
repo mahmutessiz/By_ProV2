@@ -32,7 +32,7 @@ namespace By_ProV2
                 string connStr = ConfigurationHelper.GetConnectionString("db");
                 string query = @"SELECT CARIKOD, CARIADI, ADRES, TELEFON, YETKILIKISI, BAGLICARIKOD, 
                                 VERGIDAIRESI, VERGINO, ISK1, ISK2, ISK3, ISK4, KKISK1, KKISK2, KKISK3, KKISK4, 
-                                NAKISK, PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI 
+                                NAKISK, PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI, SUTFIYATI, NAKFIYATI 
                                 FROM CASABIT ORDER BY CARIKOD";
 
                 using (SqlConnection conn = new SqlConnection(connStr))
@@ -67,7 +67,9 @@ namespace By_ProV2
                                 Plaka2 = reader["PLAKA2"]?.ToString(),
                                 Plaka3 = reader["PLAKA3"]?.ToString(),
                                 SoforAdSoyad = reader["SOFORADSOYAD"]?.ToString(),
-                                KayitTarihi = reader["KAYITTARIHI"] != DBNull.Value ? Convert.ToDateTime(reader["KAYITTARIHI"]) : DateTime.MinValue
+                                KayitTarihi = reader["KAYITTARIHI"] != DBNull.Value ? Convert.ToDateTime(reader["KAYITTARIHI"]) : DateTime.MinValue,
+                                SutFiyati = reader["SUTFIYATI"] != DBNull.Value ? Convert.ToDecimal(reader["SUTFIYATI"]) : 0,
+                                NakliyeFiyati = reader["NAKFIYATI"] != DBNull.Value ? Convert.ToDecimal(reader["NAKFIYATI"]) : 0
                             };
                             tumCariler.Add(cari);
                         }

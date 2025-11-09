@@ -85,13 +85,53 @@
                   CanUserAddRows="False"
                   SelectionChanged="dgEnvanter_SelectionChanged"
                   HeadersVisibility="Column"
-                  GridLinesVisibility="All">
+                  GridLinesVisibility="All"
+                  IsReadOnly="True"
+                  AlternatingRowBackground="#F7F7F7"> <!-- Added AlternatingRowBackground for readability -->
+            <DataGrid.Resources>
+                <!-- Style for centering column headers -->
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Devir Süt" Binding="{Binding DevirSut, StringFormat=N2}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Alınan Süt" Binding="{Binding GunlukAlinanSut, StringFormat=N2}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Satılan Süt" Binding="{Binding GunlukSatilanSut, StringFormat=N2}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Kalan Süt" Binding="{Binding KalanSut, StringFormat=N2}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" IsReadOnly="True" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Devir Süt (lt)" Binding="{Binding DevirSut, StringFormat=N2}" IsReadOnly="True" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Alınan Süt (lt)" Binding="{Binding GunlukAlinanSut, StringFormat=N2}" IsReadOnly="True" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Satılan Süt (lt)" Binding="{Binding GunlukSatilanSut, StringFormat=N2}" IsReadOnly="True" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Kalan Süt (lt)" Binding="{Binding KalanSut, StringFormat=N2}" IsReadOnly="True" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" IsReadOnly="True" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -34,7 +34,7 @@ namespace By_ProV2
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     conn.Open();
-                    string query = "SELECT CARIKOD, CARIADI, ADRES, TELEFON, YETKILIKISI, BAGLICARIKOD, VERGIDAIRESI, VERGINO, ISK1, ISK2, ISK3, ISK4, KKISK1, KKISK2, KKISK3, KKISK4, NAKISK, PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI FROM CASABIT"; // Tablo adını kendi yapına göre düzelt
+                    string query = "SELECT CARIKOD, CARIADI, ADRES, TELEFON, YETKILIKISI, BAGLICARIKOD, VERGIDAIRESI, VERGINO, ISK1, ISK2, ISK3, ISK4, KKISK1, KKISK2, KKISK3, KKISK4, NAKISK, PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI, SUTFIYATI, NAKFIYATI FROM CASABIT"; // Tablo adını kendi yapına göre düzelt
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -64,7 +64,9 @@ namespace By_ProV2
                                 Plaka2 = reader["PLAKA2"].ToString(),
                                 Plaka3 = reader["PLAKA3"].ToString(),
                                 SoforAdSoyad = reader["SOFORADSOYAD"].ToString(),
-                                KayitTarihi = Convert.ToDateTime(reader["KAYITTARIHI"])
+                                KayitTarihi = Convert.ToDateTime(reader["KAYITTARIHI"]),
+                                SutFiyati = reader["SUTFIYATI"] != DBNull.Value ? Convert.ToDecimal(reader["SUTFIYATI"]) : 0,
+                                NakliyeFiyati = reader["NAKFIYATI"] != DBNull.Value ? Convert.ToDecimal(reader["NAKFIYATI"]) : 0
                             });
 
                         }

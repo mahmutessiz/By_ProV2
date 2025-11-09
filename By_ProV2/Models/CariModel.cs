@@ -31,5 +31,7 @@ namespace By_ProV2.Models
         public string TeslimatAdres { get; set; }
         public string TeslimatTelefon { get; set; }
         public string TeslimatYetkili { get; set; }
+        public decimal SutFiyati { get; set; } = 0;
+        public decimal NakliyeFiyati { get; set; } = 0;
     }
 }

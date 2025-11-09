@@ -453,7 +453,24 @@ namespace By_ProV2.Helpers
                     ALTER TABLE CASABIT ADD CreatedAt DATETIME DEFAULT GETDATE();
                     ALTER TABLE CASABIT ADD ModifiedAt DATETIME DEFAULT GETDATE();
                 END";
+
+                // Check if Süt and Nakliye Fiyat columns exist in CASABIT table, and if not, add them
+                string checkSutNakliyeFiyatColumns = @"
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'SUTFIYATI')
+                BEGIN
+                    ALTER TABLE CASABIT ADD SUTFIYATI DECIMAL(18,2) DEFAULT 0;
+                END
+                IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'NAKFIYATI')
+                BEGIN
+                    ALTER TABLE CASABIT ADD NAKFIYATI DECIMAL(18,2) DEFAULT 0;
+                END";
                 using (var checkCmd = new SqlCommand(checkCasaBitUserTrackingColumns, connection))
+                {
+                    checkCmd.ExecuteNonQuery();
+                }
+                
+                // Execute command to add Süt and Nakliye Fiyat columns if they don't exist
+                using (var checkCmd = new SqlCommand(checkSutNakliyeFiyatColumns, connection))
                 {
                     checkCmd.ExecuteNonQuery();
                 }

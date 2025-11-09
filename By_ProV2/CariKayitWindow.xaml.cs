@@ -80,11 +80,11 @@ namespace By_ProV2
                 INSERT INTO CASABIT
                 (ID, CARIKOD, CARIADI, ADRES, TELEFON, YETKILIKISI, BAGLICARIKOD,
                  VERGIDAIRESI, VERGINO, ISK1, ISK2, ISK3, ISK4, KKISK1, KKISK2, KKISK3, KKISK4, NAKISK,
-                 PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
+                 PLAKA1, PLAKA2, PLAKA3, SOFORADSOYAD, KAYITTARIHI, SUTFIYATI, NAKFIYATI, CreatedBy, ModifiedBy, CreatedAt, ModifiedAt)
                 VALUES
                 (@ID, @CARIKOD, @CARIADI, @ADRES, @TELEFON, @YETKILIKISI, @BAGLICARIKOD,
                  @VERGIDAIRESI, @VERGINO, @ISK1, @ISK2, @ISK3, @ISK4, @KKISK1, @KKISK2, @KKISK3, @KKISK4, @NAKISK,
-                 @PLAKA1, @PLAKA2, @PLAKA3, @SOFORADSOYAD, @KAYITTARIHI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt)";
+                 @PLAKA1, @PLAKA2, @PLAKA3, @SOFORADSOYAD, @KAYITTARIHI, @SUTFIYATI, @NAKFIYATI, @CreatedBy, @ModifiedBy, @CreatedAt, @ModifiedAt)";
 
                     SqlCommand cmd = new SqlCommand(sql, conn);
 
@@ -112,6 +112,14 @@ namespace By_ProV2
                     SqlParameter pIsk7 = new SqlParameter("@KKISK3", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = isk7 };
                     SqlParameter pIsk8 = new SqlParameter("@KKISK4", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = isk8 };
                     SqlParameter pIsk9 = new SqlParameter("@NAKISK", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = isk9 };
+                    
+                    // Parse Süt and Nakliye Fiyatı values
+                    decimal sutFiyati = 0, nakliyeFiyati = 0;
+                    if (!TryParseDecimal(txtSutFiyati.Text, "Süt Fiyatı", txtSutFiyati, out sutFiyati)) return;
+                    if (!TryParseDecimal(txtNakliyeFiyati.Text, "Nakliye Fiyatı", txtNakliyeFiyati, out nakliyeFiyati)) return;
+                    
+                    SqlParameter pSutFiyati = new SqlParameter("@SUTFIYATI", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = sutFiyati };
+                    SqlParameter pNakliyeFiyati = new SqlParameter("@NAKFIYATI", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = nakliyeFiyati };
 
                     cmd.Parameters.Add(pIsk1);
                     cmd.Parameters.Add(pIsk2);
@@ -122,6 +130,8 @@ namespace By_ProV2
                     cmd.Parameters.Add(pIsk7);
                     cmd.Parameters.Add(pIsk8);
                     cmd.Parameters.Add(pIsk9);
+                    cmd.Parameters.Add(pSutFiyati);
+                    cmd.Parameters.Add(pNakliyeFiyati);
 
                     cmd.Parameters.AddWithValue("@PLAKA1", txtPlaka1.Text);
                     cmd.Parameters.AddWithValue("@PLAKA2", txtPlaka2.Text);
@@ -210,6 +220,8 @@ namespace By_ProV2
             txtPlaka2.Clear();
             txtPlaka3.Clear();
             txtSofor.Clear();
+            txtSutFiyati.Clear();
+            txtNakliyeFiyati.Clear();
             dtKayitTarihi.SelectedDate = DateTime.Now;
             txtCariKod.IsReadOnly = false;
 
@@ -225,7 +237,7 @@ namespace By_ProV2
             txtIsk1.Text = "";
             txtIsk2.Text = "";
             txtIsk3.Text = "";
-            txtKKIsk4.Text = "";
+            txtIsk4.Text = "";
             txtKKIsk1.Text = "";
             txtKKIsk2.Text = "";
             txtKKIsk3.Text = "";
@@ -239,6 +251,8 @@ namespace By_ProV2
             txtVergiNo.Text = "";
             txtBagliCariKod.Text = "";
             txtBagliCariAdiGoster.Text = "";
+            txtSutFiyati.Text = "";
+            txtNakliyeFiyati.Text = "";
             dtKayitTarihi.SelectedDate = null;
         }
 
@@ -320,6 +334,8 @@ namespace By_ProV2
                 PLAKA3 = @PLAKA3,
                 SOFORADSOYAD = @SOFORADSOYAD,
                 KAYITTARIHI = @KAYITTARIHI,
+                SUTFIYATI = @SUTFIYATI,
+                NAKFIYATI = @NAKFIYATI,
                 ModifiedBy = @ModifiedBy,
                 ModifiedAt = @ModifiedAt
             WHERE CARIKOD = @CARIKOD";
@@ -354,6 +370,14 @@ namespace By_ProV2
                     cmd.Parameters.AddWithValue("@PLAKA3", txtPlaka3.Text.Trim());
                     cmd.Parameters.AddWithValue("@SOFORADSOYAD", txtSofor.Text.Trim());
                     cmd.Parameters.AddWithValue("@KAYITTARIHI", dtKayitTarihi.SelectedDate ?? DateTime.Now);
+
+                    // Parse Süt and Nakliye Fiyatı values for update
+                    decimal sutFiyati = 0, nakliyeFiyati = 0;
+                    if (!TryParseDecimal(txtSutFiyati.Text, "Süt Fiyatı", txtSutFiyati, out sutFiyati)) return;
+                    if (!TryParseDecimal(txtNakliyeFiyati.Text, "Nakliye Fiyatı", txtNakliyeFiyati, out nakliyeFiyati)) return;
+
+                    cmd.Parameters.Add(new SqlParameter("@SUTFIYATI", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = sutFiyati });
+                    cmd.Parameters.Add(new SqlParameter("@NAKFIYATI", SqlDbType.Decimal) { Precision = 18, Scale = 2, Value = nakliyeFiyati });
                     
                     // Add user tracking parameters for update
                     var currentUserForUpdate = App.AuthService?.CurrentUser;
@@ -482,6 +506,10 @@ namespace By_ProV2
 
                 dtKayitTarihi.SelectedDate = secilen.KayitTarihi;
 
+                // Load new fields
+                txtSutFiyati.Text = secilen.SutFiyati.ToString("0.##", new CultureInfo("tr-TR"));
+                txtNakliyeFiyati.Text = secilen.NakliyeFiyati.ToString("0.##", new CultureInfo("tr-TR"));
+
                 // İstersen cari kodu düzenlenmesin diye kilitle
                 txtCariKod.IsReadOnly = true;
             }
@@ -569,6 +597,10 @@ namespace By_ProV2
             txtSofor.Text = cari.SoforAdSoyad;
 
             dtKayitTarihi.SelectedDate = cari.KayitTarihi;
+
+            // Load new fields
+            txtSutFiyati.Text = cari.SutFiyati.ToString("0.##", new CultureInfo("tr-TR"));
+            txtNakliyeFiyati.Text = cari.NakliyeFiyati.ToString("0.##", new CultureInfo("tr-TR"));
 
             // Lock the cari code so it won't be edited
             txtCariKod.IsReadOnly = true;

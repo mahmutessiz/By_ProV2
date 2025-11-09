@@ -482,7 +482,7 @@ namespace By_ProV2
 
             var btnSutDepoSevk = new Button
             {
-                Content = "🚚 Depodan Sevk",
+                Content = "📝 Alış İcmal",
                 FontSize = 24,
                 Width = btnWidth,
                 Height = btnHeight,
@@ -492,7 +492,7 @@ namespace By_ProV2
 
             var btnSutDirekSevk = new Button
             {
-                Content = "🔄 Direkt Sevk",
+                Content = "📈 Satış İcmal",
                 FontSize = 24,
                 Width = btnWidth,
                 Height = btnHeight,
