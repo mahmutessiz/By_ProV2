@@ -83,6 +83,23 @@ namespace By_ProV2
                 IslemTuru_Checked(null, null);
                 txtBelgeNo.Text = DocumentNumberGenerator.GenerateSutAlimDocumentNumber();
             }
+            UpdateCurrentDayInventoryDisplay(); // Update inventory display on load
+        }
+
+        private void UpdateCurrentDayInventoryDisplay()
+        {
+            // Ensure the day-change logic has run for today before trying to read the value
+            _envanterService.HandleDayChange(DateTime.Today); 
+            
+            var todayInventory = _envanterService.GetEnvanterByTarih(DateTime.Today);
+            if (todayInventory != null)
+            {
+                lblCurrentDayInventory.Text = todayInventory.KalanSut.ToString("N2");
+            }
+            else
+            {
+                lblCurrentDayInventory.Text = "0.00";
+            }
         }
 
         private void dgTedarikciler_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -160,116 +177,90 @@ namespace By_ProV2
         {
             try
             {
-                if (isDocumentViewMode)
+                // Mode 1: Single Record Edit
+                if (currentEditRecord != null && !isDocumentViewMode)
                 {
-                    // Check if there's anything to save (either remaining records or deletions)
-                    if ((TedarikciListesi == null || !TedarikciListesi.Any()) && !_deletedRecords.Any())
-                    {
-                        MessageBox.Show("Kaydedilecek süt kaydı bulunamadı!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
+                    if (MessageBox.Show("Değişiklikleri kaydetmek istiyor musunuz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
 
-                    var result = MessageBox.Show("Belgedeki tüm değişiklikleri kaydetmek istiyor musunuz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.No) return;
-
-                    // First, delete the records that were marked for deletion
-                    foreach (var deletedRecord in _deletedRecords)
-                    {
-                        _repo.SilSutKaydi(deletedRecord.SutKayitId);
-                    }
-
-                    // Then, update the remaining records (if any exist)
-                    foreach (var kayit in TedarikciListesi)
-                    {
-                        // Get the existing record to check if values have changed
-                        var existingRecord = _repo.GetSutKaydiById(kayit.SutKayitId);
-                        if (existingRecord != null)
-                        {
-                            _repo.GuncelleSutKaydi(kayit);
-                            
-                            // Update inventory if transaction details have changed
-                            _envanterService.UpdateInventoryForTransactionChange(
-                                existingRecord.Tarih.Date, 
-                                existingRecord.IslemTuru, 
-                                kayit.IslemTuru, 
-                                existingRecord.Miktar, 
-                                kayit.Miktar);
-                        }
-                        else
-                        {
-                            _repo.GuncelleSutKaydi(kayit);
-                            // Update inventory for the new record
-                            _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.Miktar);
-                        }
-                    }
-                    
-                    // Handle deleted records - revert inventory for deleted transactions
-                    foreach (var deletedRecord in _deletedRecords)
-                    {
-                        _envanterService.RevertTransaction(deletedRecord.Tarih.Date, deletedRecord.IslemTuru, deletedRecord.Miktar);
-                    }
-                    
-                    // Clear the deleted records collection after successful save
-                    _deletedRecords.Clear();
-                    
-                    MessageBox.Show("Belgedeki tüm kayıtlar başarıyla güncellendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else if (currentEditRecord != null)
-                {
-                    var result = MessageBox.Show("Güncellemek istiyor musunuz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.No) return;
-
-                    // Get the existing record to check if values have changed
-                    var existingRecord = _repo.GetSutKaydiById(currentEditRecord.SutKayitId);
+                    var originalRecord = _repo.GetSutKaydiById(currentEditRecord.SutKayitId);
                     UpdateKayitFromFields(currentEditRecord);
                     _repo.GuncelleSutKaydi(currentEditRecord);
-                    
-                    // Update inventory if transaction details have changed
-                    if (existingRecord != null)
+
+                    if (originalRecord != null)
                     {
                         _envanterService.UpdateInventoryForTransactionChange(
-                            existingRecord.Tarih.Date, 
-                            existingRecord.IslemTuru, 
-                            currentEditRecord.IslemTuru, 
-                            existingRecord.Miktar, 
+                            originalRecord.Tarih.Date,
+                            originalRecord.IslemTuru,
+                            currentEditRecord.IslemTuru,
+                            originalRecord.Miktar,
                             currentEditRecord.Miktar);
                     }
-                    else
-                    {
-                        // Update inventory for the new record
-                        _envanterService.UpdateInventoryForTransaction(currentEditRecord.Tarih.Date, currentEditRecord.IslemTuru, currentEditRecord.Miktar);
-                    }
-                    
                     MessageBox.Show("Süt kaydı başarıyla güncellendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                // Mode 2 & 3: Document-based operations (New or Edit)
                 else
                 {
-                    if (TedarikciListesi == null || !TedarikciListesi.Any())
+                    if (!TedarikciListesi.Any() && !_deletedRecords.Any())
                     {
-                        MessageBox.Show("Kaydedilecek süt kaydı bulunamadı!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Kaydedilecek bir değişiklik bulunamadı.", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
+                    if (MessageBox.Show("Belgedeki tüm değişiklikleri kaydetmek istiyor musunuz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
 
+                    // Step 1: Process Deletions
+                    foreach (var deletedRecord in _deletedRecords)
+                    {
+                        if (deletedRecord.SutKayitId > 0)
+                        {
+                            _repo.SilSutKaydi(deletedRecord.SutKayitId);
+                        }
+                    }
+
+                    // Step 2: Process Additions and Updates
                     DateTime tarih = dpTarih.SelectedDate ?? DateTime.Now;
                     string islemTuru = rbDepoAlim.IsChecked == true ? "Depoya Alım" : rbDepodanSevk.IsChecked == true ? "Depodan Sevk" : "Direkt Sevk";
+
                     foreach (var kayit in TedarikciListesi)
                     {
                         kayit.Tarih = tarih;
                         kayit.IslemTuru = islemTuru;
                         kayit.BelgeNo = txtBelgeNo.Text;
-                        _repo.KaydetSutKaydi(kayit);
-                        
-                        // Update inventory for the new transaction
-                        _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.Miktar);
+
+                        // If ID is 0, it's a new record
+                        if (kayit.SutKayitId == 0)
+                        {
+                            _repo.KaydetSutKaydi(kayit);
+                            _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.Miktar);
+                        }
+                        // Otherwise, it's an existing record to update
+                        else
+                        {
+                            // We need the original state to calculate the inventory difference
+                            var originalRecord = _repo.GetSutKaydiById(kayit.SutKayitId);
+                            _repo.GuncelleSutKaydi(kayit);
+
+                            if (originalRecord != null)
+                            {
+                                _envanterService.UpdateInventoryForTransactionChange(
+                                    originalRecord.Tarih.Date,
+                                    originalRecord.IslemTuru,
+                                    kayit.IslemTuru,
+                                    originalRecord.Miktar,
+                                    kayit.Miktar);
+                            }
+                        }
                     }
-                    MessageBox.Show("Tüm süt kayıtları başarıyla kaydedildi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
-                    TedarikciListesi.Clear();
+                    MessageBox.Show("Belgedeki tüm kayıtlar başarıyla kaydedildi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
+                _deletedRecords.Clear();
+                TedarikciListesi.Clear();
+                UpdateCurrentDayInventoryDisplay(); // Refresh inventory display after save
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Kayıt sırasında hata oluştu:\n{ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Kayıt sırasında bir hata oluştu:\n{ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         
@@ -402,10 +393,11 @@ namespace By_ProV2
                 if (MessageBox.Show("Seçili satırı silmek istediğine emin misin?",
                                     "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    // Add to deleted records collection to be removed from database on save
-                    if (secili.SutKayitId > 0) // Only if it's an existing record (has been saved to DB)
+                    // If it's an existing record, revert the inventory transaction immediately
+                    if (secili.SutKayitId > 0)
                     {
-                        _deletedRecords.Add(secili);
+                        _envanterService.RevertTransaction(secili.Tarih.Date, secili.IslemTuru, secili.Miktar);
+                        _deletedRecords.Add(secili); // Track for final DB deletion on save
                     }
                     
                     // Remove from the display list
@@ -641,6 +633,8 @@ namespace By_ProV2
             isDocumentViewMode = false;
             btnListeyeEkle.IsEnabled = true;
             btnListeyeEkle.Content = "➕ Listeye Ekle"; // Reset button text
+
+            UpdateCurrentDayInventoryDisplay(); // Refresh inventory display after new form
         }
     }
 }

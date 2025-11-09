@@ -28,8 +28,9 @@
                        HorizontalAlignment="Center"/>
         </Border>
 
-        <!-- 🔢 Belge Numarası ve İşlem Türü -->
+        <!-- 🔢 Belge Numarası, İşlem Türü ve Güncel Envanter -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Center">
+            <!-- Belge No -->
             <StackPanel Margin="0,0,30,0">
                 <TextBlock Text="Belge No:" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <TextBox x:Name="txtBelgeNo" Width="150" Height="25" IsReadOnly="True" 
@@ -37,13 +38,23 @@
                          TextAlignment="Center" Background="#F0F0F0"/>
             </StackPanel>
             
-            <StackPanel Margin="30,0,0,0">
+            <!-- İşlem Türü -->
+            <StackPanel Margin="30,0,30,0">
                 <TextBlock Text="İşlem Türü:" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <RadioButton x:Name="rbDepoAlim" Content="Depoya Alım" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
                     <RadioButton x:Name="rbDirekSevk" Content="Direkt Sevk" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
                     <RadioButton x:Name="rbDepodanSevk" Content="Depodan Sevk" GroupName="IslemTuru" Margin="5,0" Checked="IslemTuru_Checked"/>
                 </StackPanel>
+            </StackPanel>
+
+            <!-- Güncel Envanter -->
+            <StackPanel Margin="30,0,0,0">
+                <TextBlock Text="Güncel Envanter (Lt):" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="lblCurrentDayInventory" Width="150" Height="25" 
+                           HorizontalAlignment="Center" Margin="0,5,0,0" FontSize="12" 
+                           TextAlignment="Center" Background="#F0F0F0" Padding="5,0,0,0"
+                           Text="0.00"/> <!-- Default value -->
             </StackPanel>
         </StackPanel>
 

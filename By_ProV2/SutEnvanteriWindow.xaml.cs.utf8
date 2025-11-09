@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using By_ProV2.DataAccess;
 using By_ProV2.Models;
-using By_ProV2.Services;
 
 namespace By_ProV2
 {
@@ -22,20 +21,45 @@ namespace By_ProV2
             InitializeComponent();
             EnvanterListesi = new ObservableCollection<SutEnvanteri>();
             dgEnvanter.ItemsSource = EnvanterListesi;
-
+            
             // Set initialization flag to prevent auto-actions during setup
             _isInitializing = true;
-
+            
             // Set default date to today
             dpTarih.SelectedDate = DateTime.Today;
-
+            
             // Reset the flag after initialization
             _isInitializing = false;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            YukleEnvanterleri(); // Load data
+            YukleEnvanterleri();
+            
+            // After loading data, check if today's inventory exists
+            // If not, auto-populate based on previous day's closing stock
+            var todayInventory = _repo.GetEnvanterByTarih(DateTime.Today);
+            if (todayInventory == null)
+            {
+                // Auto-populate Devir Süt from previous day's Kalan Sut for today's date
+                DateTime previousDay = DateTime.Today.AddDays(-1);
+                var previousDayEnvanter = _repo.GetEnvanterByTarih(previousDay);
+                
+                if (previousDayEnvanter != null)
+                {
+                    txtDevirSut.Text = previousDayEnvanter.KalanSut.ToString("N2");
+                }
+                else
+                {
+                    // If no previous day record exists, set to 0
+                    txtDevirSut.Text = "0.00";
+                }
+                
+                // Clear daily transaction fields since it's a new day
+                txtGunlukAlinanSut.Text = "0.00";
+                txtGunlukSatilanSut.Text = "0.00";
+                GuncelleKalanSut(); // Update the calculated remaining amount
+            }
         }
 
         private void YukleEnvanterleri()
@@ -44,12 +68,12 @@ namespace By_ProV2
             {
                 var envanterler = _repo.GetAllEnvanter();
                 EnvanterListesi.Clear();
-
+                
                 foreach (var envanter in envanterler)
                 {
                     EnvanterListesi.Add(envanter);
                 }
-
+                
                 GuncelleOzet();
             }
             catch (Exception ex)
@@ -62,7 +86,6 @@ namespace By_ProV2
         {
             try
             {
-                // Only allow creating a new record if it's for today and no record exists yet
                 if (!dpTarih.SelectedDate.HasValue)
                 {
                     MessageBox.Show("Lütfen bir tarih seçin.", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -70,40 +93,37 @@ namespace By_ProV2
                 }
 
                 var existingEnvanter = _repo.GetEnvanterByTarih(dpTarih.SelectedDate.Value);
-                
-                if (existingEnvanter == null)
+                if (existingEnvanter != null)
                 {
-                    decimal devirSut = ParseDecimal(txtDevirSut.Text);
-                    decimal gunlukAlinanSut = ParseDecimal(txtGunlukAlinanSut.Text);
-                    decimal gunlukSatilanSut = ParseDecimal(txtGunlukSatilanSut.Text);
-
-                    // Calculate remaining milk: Devir + Alınan - Satılan
-                    decimal kalanSut = devirSut + gunlukAlinanSut - gunlukSatilanSut;
-
-                    var yeniEnvanter = new SutEnvanteri
-                    {
-                        Tarih = dpTarih.SelectedDate.Value,
-                        DevirSut = devirSut,
-                        GunlukAlinanSut = gunlukAlinanSut,
-                        GunlukSatilanSut = gunlukSatilanSut,
-                        KalanSut = kalanSut,
-                        CreatedBy = App.AuthService?.CurrentUser?.Id
-                    };
-
-                    _repo.KaydetEnvanter(yeniEnvanter);
-                    EnvanterListesi.Add(yeniEnvanter);
-
-                    GuncelleOzet();
-
-                    MessageBox.Show("Envanter kaydı başarıyla eklendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
-                    TemizleAlanlari();
-                }
-                else
-                {
-                    MessageBox.Show("Bu tarih için zaten envanter kaydı mevcut. Lütfen Güncelle butonunu kullanın.", 
+                    MessageBox.Show("Bu tarih için zaten envanter kaydı mevcut. Lütfen Güncelle butonunu kullanın veya farklı bir tarih seçin.", 
                                     "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
+                decimal devirSut = ParseDecimal(txtDevirSut.Text);
+                decimal gunlukAlinanSut = ParseDecimal(txtGunlukAlinanSut.Text);
+                decimal gunlukSatilanSut = ParseDecimal(txtGunlukSatilanSut.Text);
+
+                // Calculate remaining milk: Devir + Alınan - Satılan
+                decimal kalanSut = devirSut + gunlukAlinanSut - gunlukSatilanSut;
+
+                var yeniEnvanter = new SutEnvanteri
+                {
+                    Tarih = dpTarih.SelectedDate.Value,
+                    DevirSut = devirSut,
+                    GunlukAlinanSut = gunlukAlinanSut,
+                    GunlukSatilanSut = gunlukSatilanSut,
+                    KalanSut = kalanSut,
+                    CreatedBy = App.AuthService?.CurrentUser?.Id
+                };
+
+                _repo.KaydetEnvanter(yeniEnvanter);
+                EnvanterListesi.Add(yeniEnvanter);
+                
+                GuncelleOzet();
+                
+                MessageBox.Show("Envanter kaydı başarıyla eklendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
+                TemizleAlanlari();
             }
             catch (Exception ex)
             {
@@ -144,10 +164,10 @@ namespace By_ProV2
                 seciliEnvanter.ModifiedAt = DateTime.Now;
 
                 _repo.GuncelleEnvanter(seciliEnvanter);
-
+                
                 dgEnvanter.Items.Refresh();
                 GuncelleOzet();
-
+                
                 MessageBox.Show("Envanter kaydı başarıyla güncellendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -167,15 +187,15 @@ namespace By_ProV2
                     return;
                 }
 
-                var result = MessageBox.Show($"Seçili envanter kaydını silmek istediğinize emin misiniz?\nTarih: {seciliEnvanter.Tarih:dd.MM.yyyy}",
+                var result = MessageBox.Show($"Seçili envanter kaydını silmek istediğinize emin misiniz?\nTarih: {seciliEnvanter.Tarih:dd.MM.yyyy}", 
                                             "Onay", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No) return;
 
                 _repo.SilEnvanter(seciliEnvanter.Id);
                 EnvanterListesi.Remove(seciliEnvanter);
-
+                
                 GuncelleOzet();
-
+                
                 MessageBox.Show("Envanter kaydı başarıyla silindi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                 TemizleAlanlari();
             }
@@ -212,12 +232,12 @@ namespace By_ProV2
         private decimal ParseDecimal(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return 0;
-
+            
             if (decimal.TryParse(text, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal result))
             {
                 return result;
             }
-
+            
             return 0;
         }
 
@@ -310,17 +330,17 @@ namespace By_ProV2
                     // Don't auto-populate if there's already a record for this date
                     return;
                 }
-
+                
                 // Only auto-populate Devir Süt from previous day if the selected date is today or in the future
                 DateTime selectedDate = dpTarih.SelectedDate.Value.Date;
                 DateTime today = DateTime.Today;
-
+                
                 if (selectedDate >= today)
                 {
                     // Auto-populate Devir Süt from previous day's Kalan Sut
                     DateTime previousDay = selectedDate.AddDays(-1);
                     var previousDayEnvanter = _repo.GetEnvanterByTarih(previousDay);
-
+                    
                     if (previousDayEnvanter != null)
                     {
                         txtDevirSut.Text = previousDayEnvanter.KalanSut.ToString("N2");
@@ -330,7 +350,7 @@ namespace By_ProV2
                         // If no previous day record exists, set to 0
                         txtDevirSut.Text = "0.00";
                     }
-
+                    
                     // Clear daily transaction fields since they're for a different day
                     txtGunlukAlinanSut.Text = "0.00";
                     txtGunlukSatilanSut.Text = "0.00";

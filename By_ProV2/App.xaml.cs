@@ -31,6 +31,17 @@ namespace By_ProV2
             // Veritabanı başlatma - Initialize database first to ensure Users table exists
             DatabaseInitializer.InitializeDatabase();
 
+            // Handle daily inventory logic on startup
+            try
+            {
+                var envanterService = new SutEnvanteriService();
+                envanterService.HandleDayChange();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Envanter güncellenirken bir hata oluştu: {ex.Message}", "Envanter Hatası", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             // Initialize authentication service
             AuthService = new AuthenticationService();
             

@@ -18,35 +18,31 @@ namespace By_ProV2.DataAccess
 
         public void KaydetEnvanter(SutEnvanteri envanter)
         {
-            using (var conn = new SqlConnection(_connectionString))
-            {
-                conn.Open();
-                using (var cmd = new SqlCommand(@"
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var cmd = new SqlCommand(@"
                     INSERT INTO SutEnvanteri (Tarih, DevirSut, GunlukAlinanSut, GunlukSatilanSut, KalanSut, Aciklama, CreatedBy, CreatedAt, ModifiedBy, ModifiedAt)
-                    VALUES (@Tarih, @DevirSut, @GunlukAlinanSut, @GunlukSatilanSut, @KalanSut, @Aciklama, @CreatedBy, @CreatedAt, @ModifiedBy, @ModifiedAt)", conn))
-                {
-                    cmd.Parameters.AddWithValue("@Tarih", envanter.Tarih);
-                    cmd.Parameters.AddWithValue("@DevirSut", envanter.DevirSut);
-                    cmd.Parameters.AddWithValue("@GunlukAlinanSut", envanter.GunlukAlinanSut);
-                    cmd.Parameters.AddWithValue("@GunlukSatilanSut", envanter.GunlukSatilanSut);
-                    cmd.Parameters.AddWithValue("@KalanSut", envanter.KalanSut);
-                    cmd.Parameters.AddWithValue("@Aciklama", envanter.Aciklama ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@CreatedBy", envanter.CreatedBy ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@CreatedAt", envanter.CreatedAt);
-                    cmd.Parameters.AddWithValue("@ModifiedBy", envanter.ModifiedBy ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ModifiedAt", envanter.ModifiedAt);
+                    OUTPUT INSERTED.Id
+                    VALUES (@Tarih, @DevirSut, @GunlukAlinanSut, @GunlukSatilanSut, @KalanSut, @Aciklama, @CreatedBy, @CreatedAt, @ModifiedBy, @ModifiedAt)", conn);
+            cmd.Parameters.AddWithValue("@Tarih", envanter.Tarih);
+            cmd.Parameters.AddWithValue("@DevirSut", envanter.DevirSut);
+            cmd.Parameters.AddWithValue("@GunlukAlinanSut", envanter.GunlukAlinanSut);
+            cmd.Parameters.AddWithValue("@GunlukSatilanSut", envanter.GunlukSatilanSut);
+            cmd.Parameters.AddWithValue("@KalanSut", envanter.KalanSut);
+            cmd.Parameters.AddWithValue("@Aciklama", envanter.Aciklama ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@CreatedBy", envanter.CreatedBy ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@CreatedAt", envanter.CreatedAt);
+            cmd.Parameters.AddWithValue("@ModifiedBy", envanter.ModifiedBy ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@ModifiedAt", envanter.ModifiedAt);
 
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            envanter.Id = (int)cmd.ExecuteScalar();
         }
 
         public void GuncelleEnvanter(SutEnvanteri envanter)
         {
-            using (var conn = new SqlConnection(_connectionString))
-            {
-                conn.Open();
-                using (var cmd = new SqlCommand(@"
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var cmd = new SqlCommand(@"
                     UPDATE SutEnvanteri 
                     SET Tarih = @Tarih, 
                         DevirSut = @DevirSut, 
@@ -56,21 +52,18 @@ namespace By_ProV2.DataAccess
                         Aciklama = @Aciklama, 
                         ModifiedBy = @ModifiedBy,
                         ModifiedAt = @ModifiedAt
-                    WHERE Id = @Id", conn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", envanter.Id);
-                    cmd.Parameters.AddWithValue("@Tarih", envanter.Tarih);
-                    cmd.Parameters.AddWithValue("@DevirSut", envanter.DevirSut);
-                    cmd.Parameters.AddWithValue("@GunlukAlinanSut", envanter.GunlukAlinanSut);
-                    cmd.Parameters.AddWithValue("@GunlukSatilanSut", envanter.GunlukSatilanSut);
-                    cmd.Parameters.AddWithValue("@KalanSut", envanter.KalanSut);
-                    cmd.Parameters.AddWithValue("@Aciklama", envanter.Aciklama ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ModifiedBy", envanter.ModifiedBy ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ModifiedAt", envanter.ModifiedAt);
+                    WHERE Id = @Id", conn);
+            cmd.Parameters.AddWithValue("@Id", envanter.Id);
+            cmd.Parameters.AddWithValue("@Tarih", envanter.Tarih);
+            cmd.Parameters.AddWithValue("@DevirSut", envanter.DevirSut);
+            cmd.Parameters.AddWithValue("@GunlukAlinanSut", envanter.GunlukAlinanSut);
+            cmd.Parameters.AddWithValue("@GunlukSatilanSut", envanter.GunlukSatilanSut);
+            cmd.Parameters.AddWithValue("@KalanSut", envanter.KalanSut);
+            cmd.Parameters.AddWithValue("@Aciklama", envanter.Aciklama ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@ModifiedBy", envanter.ModifiedBy ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@ModifiedAt", envanter.ModifiedAt);
 
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            cmd.ExecuteNonQuery();
         }
 
         public List<SutEnvanteri> GetAllEnvanter()
@@ -80,32 +73,28 @@ namespace By_ProV2.DataAccess
             using (var conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                using (var cmd = new SqlCommand(@"
+                using var cmd = new SqlCommand(@"
                     SELECT Id, Tarih, DevirSut, GunlukAlinanSut, GunlukSatilanSut, KalanSut, Aciklama, CreatedBy, CreatedAt, ModifiedBy, ModifiedAt
                     FROM SutEnvanteri 
-                    ORDER BY Tarih DESC", conn))
+                    ORDER BY Tarih DESC", conn);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    var envanter = new SutEnvanteri
                     {
-                        while (reader.Read())
-                        {
-                            var envanter = new SutEnvanteri
-                            {
-                                Id = reader.GetInt32("Id"),
-                                Tarih = reader.GetDateTime("Tarih"),
-                                DevirSut = reader.GetDecimal("DevirSut"),
-                                GunlukAlinanSut = reader.GetDecimal("GunlukAlinanSut"),
-                                GunlukSatilanSut = reader.GetDecimal("GunlukSatilanSut"),
-                                KalanSut = reader.GetDecimal("KalanSut"),
-                                Aciklama = reader["Aciklama"]?.ToString(),
-                                CreatedBy = reader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(reader["CreatedBy"]) : (int?)null,
-                                CreatedAt = reader.GetDateTime("CreatedAt"),
-                                ModifiedBy = reader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(reader["ModifiedBy"]) : (int?)null,
-                                ModifiedAt = reader.GetDateTime("ModifiedAt")
-                            };
-                            envanterler.Add(envanter);
-                        }
-                    }
+                        Id = reader.GetInt32("Id"),
+                        Tarih = reader.GetDateTime("Tarih"),
+                        DevirSut = reader.GetDecimal("DevirSut"),
+                        GunlukAlinanSut = reader.GetDecimal("GunlukAlinanSut"),
+                        GunlukSatilanSut = reader.GetDecimal("GunlukSatilanSut"),
+                        KalanSut = reader.GetDecimal("KalanSut"),
+                        Aciklama = reader["Aciklama"]?.ToString(),
+                        CreatedBy = reader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(reader["CreatedBy"]) : (int?)null,
+                        CreatedAt = reader.GetDateTime("CreatedAt"),
+                        ModifiedBy = reader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(reader["ModifiedBy"]) : (int?)null,
+                        ModifiedAt = reader.GetDateTime("ModifiedAt")
+                    };
+                    envanterler.Add(envanter);
                 }
             }
             
@@ -114,53 +103,113 @@ namespace By_ProV2.DataAccess
 
         public SutEnvanteri GetEnvanterByTarih(DateTime tarih)
         {
-            using (var conn = new SqlConnection(_connectionString))
-            {
-                conn.Open();
-                using (var cmd = new SqlCommand(@"
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var cmd = new SqlCommand(@"
                     SELECT Id, Tarih, DevirSut, GunlukAlinanSut, GunlukSatilanSut, KalanSut, Aciklama, CreatedBy, CreatedAt, ModifiedBy, ModifiedAt
                     FROM SutEnvanteri 
-                    WHERE CAST(Tarih AS DATE) = @Tarih", conn))
+                    WHERE CAST(Tarih AS DATE) = @Tarih", conn);
+            cmd.Parameters.AddWithValue("@Tarih", tarih.Date);
+
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                return new SutEnvanteri
                 {
-                    cmd.Parameters.AddWithValue("@Tarih", tarih.Date);
-                    
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return new SutEnvanteri
-                            {
-                                Id = reader.GetInt32("Id"),
-                                Tarih = reader.GetDateTime("Tarih"),
-                                DevirSut = reader.GetDecimal("DevirSut"),
-                                GunlukAlinanSut = reader.GetDecimal("GunlukAlinanSut"),
-                                GunlukSatilanSut = reader.GetDecimal("GunlukSatilanSut"),
-                                KalanSut = reader.GetDecimal("KalanSut"),
-                                Aciklama = reader["Aciklama"]?.ToString(),
-                                CreatedBy = reader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(reader["CreatedBy"]) : (int?)null,
-                                CreatedAt = reader.GetDateTime("CreatedAt"),
-                                ModifiedBy = reader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(reader["ModifiedBy"]) : (int?)null,
-                                ModifiedAt = reader.GetDateTime("ModifiedAt")
-                            };
-                        }
-                    }
-                }
+                    Id = reader.GetInt32("Id"),
+                    Tarih = reader.GetDateTime("Tarih"),
+                    DevirSut = reader.GetDecimal("DevirSut"),
+                    GunlukAlinanSut = reader.GetDecimal("GunlukAlinanSut"),
+                    GunlukSatilanSut = reader.GetDecimal("GunlukSatilanSut"),
+                    KalanSut = reader.GetDecimal("KalanSut"),
+                    Aciklama = reader["Aciklama"]?.ToString(),
+                    CreatedBy = reader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(reader["CreatedBy"]) : (int?)null,
+                    CreatedAt = reader.GetDateTime("CreatedAt"),
+                    ModifiedBy = reader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(reader["ModifiedBy"]) : (int?)null,
+                    ModifiedAt = reader.GetDateTime("ModifiedAt")
+                };
+
+
             }
-            
+
+
             return null;
         }
 
         public void SilEnvanter(int id)
         {
-            using (var conn = new SqlConnection(_connectionString))
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var cmd = new SqlCommand("DELETE FROM SutEnvanteri WHERE Id = @Id", conn);
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.ExecuteNonQuery();
+        }
+        
+        public SutEnvanteri GetEnvanterByTarihWithIdCheck(DateTime tarih)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var cmd = new SqlCommand(@"
+                    SELECT Id, Tarih, DevirSut, GunlukAlinanSut, GunlukSatilanSut, KalanSut, Aciklama, CreatedBy, CreatedAt, ModifiedBy, ModifiedAt
+                    FROM SutEnvanteri
+                    WHERE CAST(Tarih AS DATE) = @Tarih", conn);
+            cmd.Parameters.AddWithValue("@Tarih", tarih.Date);
+
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
             {
-                conn.Open();
-                using (var cmd = new SqlCommand("DELETE FROM SutEnvanteri WHERE Id = @Id", conn))
+                return new SutEnvanteri
                 {
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    cmd.ExecuteNonQuery();
-                }
+                    Id = reader.GetInt32("Id"),
+                    Tarih = reader.GetDateTime("Tarih"),
+                    DevirSut = reader.GetDecimal("DevirSut"),
+                    GunlukAlinanSut = reader.GetDecimal("GunlukAlinanSut"),
+                    GunlukSatilanSut = reader.GetDecimal("GunlukSatilanSut"),
+                    KalanSut = reader.GetDecimal("KalanSut"),
+                    Aciklama = reader["Aciklama"]?.ToString(),
+                    CreatedBy = reader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(reader["CreatedBy"]) : (int?)null,
+                    CreatedAt = reader.GetDateTime("CreatedAt"),
+                    ModifiedBy = reader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(reader["ModifiedBy"]) : (int?)null,
+                    ModifiedAt = reader.GetDateTime("ModifiedAt")
+                };
+
+
+
             }
+
+            return null;
+        }
+        
+        public SutEnvanteri GetMostRecentEnvanter()
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            using var cmd = new SqlCommand(@"
+                    SELECT TOP 1 Id, Tarih, DevirSut, GunlukAlinanSut, GunlukSatilanSut, KalanSut, Aciklama, CreatedBy, CreatedAt, ModifiedBy, ModifiedAt
+                    FROM SutEnvanteri
+                    ORDER BY Tarih DESC", conn);
+
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                return new SutEnvanteri
+                {
+                    Id = reader.GetInt32("Id"),
+                    Tarih = reader.GetDateTime("Tarih"),
+                    DevirSut = reader.GetDecimal("DevirSut"),
+                    GunlukAlinanSut = reader.GetDecimal("GunlukAlinanSut"),
+                    GunlukSatilanSut = reader.GetDecimal("GunlukSatilanSut"),
+                    KalanSut = reader.GetDecimal("KalanSut"),
+                    Aciklama = reader["Aciklama"]?.ToString(),
+                    CreatedBy = reader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(reader["CreatedBy"]) : (int?)null,
+                    CreatedAt = reader.GetDateTime("CreatedAt"),
+                    ModifiedBy = reader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(reader["ModifiedBy"]) : (int?)null,
+                    ModifiedAt = reader.GetDateTime("ModifiedAt")
+                };
+
+            }
+
+            return null;
         }
     }
 }
