@@ -10,6 +10,16 @@ using PdfSharp.Pdf;
 
 namespace By_ProV2
 {
+    public class AlisIcmalKaydi
+    {
+        public DateTime Tarih { get; set; }
+        public string CariKod { get; set; }
+        public decimal Miktar { get; set; }
+        public decimal? Kesinti { get; set; }
+        public decimal? Yag { get; set; }
+        public decimal? Protein { get; set; }
+    }
+
     public partial class AlisReportWindow : Window
     {
         private readonly string _connectionString;
@@ -38,17 +48,24 @@ namespace By_ProV2
                     conn.Open();
 
                     string cariAdi = "";
+                    decimal sutFiyati = 0;
+                    decimal nakliyeFiyati = 0;
+
                     if (!string.IsNullOrEmpty(_cariKod))
                     {
-                        // Get Cari Name
-                        string getCariAdiSql = "SELECT CariAdi FROM Cari WHERE CariKod = @CariKod";
-                        using (var cmd = new SqlCommand(getCariAdiSql, conn))
+                        // Get Cari Name, Süt Fiyatı, and Nakliye Fiyatı
+                        string getCariDataSql = "SELECT c.CariAdi, cb.SUTFIYATI, cb.NAKFIYATI FROM Cari c LEFT JOIN CASABIT cb ON c.CariKod = cb.CARIKOD WHERE c.CariKod = @CariKod";
+                        using (var cmd = new SqlCommand(getCariDataSql, conn))
                         {
                             cmd.Parameters.AddWithValue("@CariKod", _cariKod);
-                            var result = cmd.ExecuteScalar();
-                            if (result != null)
+                            using (var reader = cmd.ExecuteReader())
                             {
-                                cariAdi = result.ToString();
+                                if (reader.Read())
+                                {
+                                    cariAdi = reader["CariAdi"] as string;
+                                    sutFiyati = reader.IsDBNull(reader.GetOrdinal("SUTFIYATI")) ? 0 : reader.GetDecimal(reader.GetOrdinal("SUTFIYATI"));
+                                    nakliyeFiyati = reader.IsDBNull(reader.GetOrdinal("NAKFIYATI")) ? 0 : reader.GetDecimal(reader.GetOrdinal("NAKFIYATI"));
+                                }
                             }
                         }
                     }
@@ -59,6 +76,8 @@ namespace By_ProV2
 
                     txtCariKod.Text = string.IsNullOrEmpty(_cariKod) ? "(Tümü)" : _cariKod;
                     txtCariAdi.Text = cariAdi;
+                    txtSutFiyati.Text = sutFiyati.ToString("N2");
+                    txtNakliyeFiyati.Text = nakliyeFiyati.ToString("N2");
 
                     // Set date range text
                     string dateRangeText = "";
@@ -114,7 +133,7 @@ namespace By_ProV2
 
                             while (reader.Read())
                             {
-                                var newKayit = new SatisIcmalKaydi
+                                var newKayit = new AlisIcmalKaydi
                                 {
                                     Tarih = reader.GetDateTime(reader.GetOrdinal("Tarih")),
                                     CariKod = reader["CariKod"] as string,
