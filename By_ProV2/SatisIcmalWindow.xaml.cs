@@ -1,14 +1,17 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Helpers;
+using By_ProV2.Models;
 
 namespace By_ProV2
 {
-    public partial class AlisIcmalWindow : Window
+    public partial class SatisIcmalWindow : Window
     {
-        public AlisIcmalWindow()
+        public SatisIcmalWindow()
         {
             InitializeComponent();
             
@@ -26,22 +29,26 @@ namespace By_ProV2
                 return;
             }
 
+            // Check if the Cari Kodu exists in the database (only when not empty)
             if (!CariKoduExists(cariKodu))
             {
                 MessageBox.Show("Girdiğiniz Cari Kodu sistemde bulunamadı.", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // Get the selected date range
             DateTime? startDate = dpStartDate.SelectedDate;
             DateTime? endDate = dpEndDate.SelectedDate;
 
+            // Validate date range
             if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value)
             {
                 MessageBox.Show("Başlangıç tarihi bitiş tarihinden büyük olamaz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            AlisReportWindow reportWindow = new AlisReportWindow(cariKodu, startDate, endDate);
+            // Open the SatisReportWindow for the specified CariKodu and date range
+            SatisReportWindow reportWindow = new SatisReportWindow(cariKodu, startDate, endDate);
             reportWindow.ShowDialog();
         }
 
@@ -64,24 +71,28 @@ namespace By_ProV2
             }
             catch
             {
-                return false;
+                return false; // If there's an error checking, assume it doesn't exist
             }
         }
 
         private void BtnTumunuListele_Click(object sender, RoutedEventArgs e)
         {
+            // Clear the CariKodu field
             txtCariKodu.Text = "";
 
+            // Get the selected date range
             DateTime? startDate = dpStartDate.SelectedDate;
             DateTime? endDate = dpEndDate.SelectedDate;
 
+            // Validate date range
             if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value)
             {
                 MessageBox.Show("Başlangıç tarihi bitiş tarihinden büyük olamaz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            AlisReportWindow reportWindow = new AlisReportWindow("", startDate, endDate);
+            // Open the SatisReportWindow for all customers with the selected date range
+            SatisReportWindow reportWindow = new SatisReportWindow("", startDate, endDate); // Empty string for all customers
             reportWindow.ShowDialog();
         }
 

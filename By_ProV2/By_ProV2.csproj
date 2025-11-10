@@ -87,8 +87,11 @@
     <Compile Update="SutDepoSevkFormu.xaml.cs">
       <DependentUpon>SutDepoSevkFormu.xaml</DependentUpon>
     </Compile>
-    <Compile Update="SutDirekSevkFormu.xaml.cs">
-      <DependentUpon>SutDirekSevkFormu.xaml</DependentUpon>
+    <Compile Update="SatisIcmalWindow.xaml.cs">
+      <DependentUpon>SatisIcmalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="SatisReportWindow.xaml.cs">
+      <DependentUpon>SatisReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Update="SutRaporlari.xaml.cs">
       <DependentUpon>SutRaporlari.xaml</DependentUpon>

@@ -4,6 +4,7 @@
         Title="Süt Alım Belgesi Sorgulama"
         Height="600" Width="800"
         WindowStartupLocation="CenterScreen"
+        Icon="/Resources/Logo.png"
         Background="#F9F9F9">
     <Grid Margin="20">
         <Grid.RowDefinitions>

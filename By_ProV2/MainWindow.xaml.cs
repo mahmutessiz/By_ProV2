@@ -676,7 +676,7 @@ namespace By_ProV2
         }
         private void BtnSutDirekSevk_Click(object sender, RoutedEventArgs e)
         {
-            SutDirekSevkFormu pencere = new SutDirekSevkFormu();
+            SatisIcmalWindow pencere = new SatisIcmalWindow();
             pencere.ShowDialog();
         }
         private void BtnRapor_Click(object sender, RoutedEventArgs e)

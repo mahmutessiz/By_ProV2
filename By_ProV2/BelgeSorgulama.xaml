@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Belge Sorgulama" Height="250" Width="400"
         ResizeMode="CanMinimize"
+        Icon="/Resources/Logo.png"
         WindowStartupLocation="CenterScreen">
     
     <Grid Margin="20">

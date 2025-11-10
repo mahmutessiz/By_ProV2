@@ -241,4 +241,14 @@ namespace By_ProV2.Models
     }
 
 
+    public class SatisIcmalKaydi
+    {
+        public DateTime Tarih { get; set; }
+        public string CariKod { get; set; }
+        public decimal Miktar { get; set; }
+        public decimal? Kesinti { get; set; }
+        public decimal? Yag { get; set; }
+        public decimal? Protein { get; set; }
+    }
+
 }

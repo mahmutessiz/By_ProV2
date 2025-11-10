@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Sipariş / Proforma Eski Kayıt" Height="750" Width="1300"
+        Icon="/Resources/Logo.png"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
