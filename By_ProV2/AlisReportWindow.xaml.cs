@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Helpers;
 using By_ProV2.Models;
+using By_ProV2.DataAccess;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 
@@ -429,6 +430,102 @@ namespace By_ProV2
             }
             
             return 0;
+        }
+
+        private void ChkYagKesintisi_Click(object sender, RoutedEventArgs e)
+        {
+            spYagKesintiOrani.Visibility = chkYagKesintisi.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            
+            // Load the default value from Parametreler table
+            if (chkYagKesintisi.IsChecked == true)
+            {
+                LoadParameterDefaults();
+            }
+            
+            // Show/hide dizem başı TL based on whether either checkbox is checked
+            UpdateDizemBasiTlVisibility();
+        }
+
+        private void ChkProteinKesintisi_Click(object sender, RoutedEventArgs e)
+        {
+            spProteinKesintiOrani.Visibility = chkProteinKesintisi.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            
+            // Load the default value from Parametreler table
+            if (chkProteinKesintisi.IsChecked == true)
+            {
+                LoadParameterDefaults();
+            }
+            
+            // Show/hide dizem başı TL based on whether either checkbox is checked
+            UpdateDizemBasiTlVisibility();
+        }
+        
+        private void UpdateDizemBasiTlVisibility()
+        {
+            // Show dizem başı TL field if either checkbox is checked
+            if (chkYagKesintisi.IsChecked == true || chkProteinKesintisi.IsChecked == true)
+            {
+                spDizemBasiTl.Visibility = Visibility.Visible;
+                
+                // Load the default value if the field is empty
+                if (string.IsNullOrEmpty(txtDizemBasiTl.Text))
+                {
+                    try
+                    {
+                        var paramRepo = new ParameterRepository();
+                        var latestParams = paramRepo.GetLatestParametreler();
+                        if (latestParams != null)
+                        {
+                            txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Parametreler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                spDizemBasiTl.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void LoadParameterDefaults()
+        {
+            try
+            {
+                var paramRepo = new ParameterRepository();
+                var latestParams = paramRepo.GetLatestParametreler();
+
+                if (latestParams != null)
+                {
+                    // Only set the value if the field is empty
+                    if (chkYagKesintisi.IsChecked == true && string.IsNullOrEmpty(txtYagKesintiOrani.Text))
+                    {
+                        txtYagKesintiOrani.Text = latestParams.YagKesintiParametresi?.ToString("N2") ?? "";
+                    }
+                    
+                    if (chkProteinKesintisi.IsChecked == true && string.IsNullOrEmpty(txtProteinKesintiOrani.Text))
+                    {
+                        txtProteinKesintiOrani.Text = latestParams.ProteinParametresi?.ToString("N2") ?? "";
+                    }
+                    
+                    // Show dizem başı TL input when either checkbox is checked and set the value if empty
+                    if (chkYagKesintisi.IsChecked == true || chkProteinKesintisi.IsChecked == true)
+                    {
+                        spDizemBasiTl.Visibility = Visibility.Visible; // Show dizem başı TL when either checkbox is checked
+                        if (string.IsNullOrEmpty(txtDizemBasiTl.Text))
+                        {
+                            txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Parametreler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
