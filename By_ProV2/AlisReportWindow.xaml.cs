@@ -253,6 +253,9 @@ namespace By_ProV2
                             lblOrtalamaYag.Text = $"{ortalamaYag:N2}";
                             lblOrtalamaProtein.Text = $"{ortalamaProtein:N2}";
                             lblToplamKayit.Text = $"{toplamKayit}";
+                            
+                            // Set the new textblock to show the summed net miktar
+                            txtNetSutOdemesi.Text = $"Toplam Net Miktar: {toplamNetMiktar:N2}";
                         }
                     }
                 }
@@ -261,6 +264,9 @@ namespace By_ProV2
             {
                 MessageBox.Show($"Rapor yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            
+            // Load parameter defaults when window loads
+            LoadParameterDefaults();
         }
     
 
@@ -434,61 +440,20 @@ namespace By_ProV2
 
         private void ChkYagKesintisi_Click(object sender, RoutedEventArgs e)
         {
-            spYagKesintiOrani.Visibility = chkYagKesintisi.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            
-            // Load the default value from Parametreler table
-            if (chkYagKesintisi.IsChecked == true)
-            {
-                LoadParameterDefaults();
-            }
-            
-            // Show/hide dizem başı TL based on whether either checkbox is checked
-            UpdateDizemBasiTlVisibility();
+            // Checkbox click event is intentionally left empty
+            // Parameters are loaded on window load
         }
 
         private void ChkProteinKesintisi_Click(object sender, RoutedEventArgs e)
         {
-            spProteinKesintiOrani.Visibility = chkProteinKesintisi.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-            
-            // Load the default value from Parametreler table
-            if (chkProteinKesintisi.IsChecked == true)
-            {
-                LoadParameterDefaults();
-            }
-            
-            // Show/hide dizem başı TL based on whether either checkbox is checked
-            UpdateDizemBasiTlVisibility();
+            // Checkbox click event is intentionally left empty
+            // Parameters are loaded on window load
         }
         
         private void UpdateDizemBasiTlVisibility()
         {
-            // Show dizem başı TL field if either checkbox is checked
-            if (chkYagKesintisi.IsChecked == true || chkProteinKesintisi.IsChecked == true)
-            {
-                spDizemBasiTl.Visibility = Visibility.Visible;
-                
-                // Load the default value if the field is empty
-                if (string.IsNullOrEmpty(txtDizemBasiTl.Text))
-                {
-                    try
-                    {
-                        var paramRepo = new ParameterRepository();
-                        var latestParams = paramRepo.GetLatestParametreler();
-                        if (latestParams != null)
-                        {
-                            txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Parametreler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-            else
-            {
-                spDizemBasiTl.Visibility = Visibility.Collapsed;
-            }
+            // Method is intentionally left empty
+            // Parameters are loaded on window load
         }
 
         private void LoadParameterDefaults()
@@ -500,26 +465,10 @@ namespace By_ProV2
 
                 if (latestParams != null)
                 {
-                    // Only set the value if the field is empty
-                    if (chkYagKesintisi.IsChecked == true && string.IsNullOrEmpty(txtYagKesintiOrani.Text))
-                    {
-                        txtYagKesintiOrani.Text = latestParams.YagKesintiParametresi?.ToString("N2") ?? "";
-                    }
-                    
-                    if (chkProteinKesintisi.IsChecked == true && string.IsNullOrEmpty(txtProteinKesintiOrani.Text))
-                    {
-                        txtProteinKesintiOrani.Text = latestParams.ProteinParametresi?.ToString("N2") ?? "";
-                    }
-                    
-                    // Show dizem başı TL input when either checkbox is checked and set the value if empty
-                    if (chkYagKesintisi.IsChecked == true || chkProteinKesintisi.IsChecked == true)
-                    {
-                        spDizemBasiTl.Visibility = Visibility.Visible; // Show dizem başı TL when either checkbox is checked
-                        if (string.IsNullOrEmpty(txtDizemBasiTl.Text))
-                        {
-                            txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
-                        }
-                    }
+                    // Always set the parameter values regardless of checkbox state
+                    txtYagKesintiOrani.Text = latestParams.YagKesintiParametresi?.ToString("N2") ?? "";
+                    txtProteinKesintiOrani.Text = latestParams.ProteinParametresi?.ToString("N2") ?? "";
+                    txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
                 }
             }
             catch (Exception ex)

@@ -50,47 +50,48 @@
                 <TextBlock Text="Nakliye Fiyatı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"  Margin="25,0,0,0"/>
                 <TextBlock x:Name="txtNakliyeFiyati" FontSize="14" VerticalAlignment="Center"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                <TextBlock Text="Yağ Kesinti Oranı:" FontWeight="Bold" Width="100" VerticalAlignment="Center" Margin="25,0,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="txtYagKesintiOrani" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="%" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="12"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                <TextBlock Text="Protein Kesinti Oranı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"  Margin="25,0,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="txtProteinKesintiOrani" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="%" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="12"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                <TextBlock Text="Dizem Başına TL:" FontWeight="Bold" Width="100" VerticalAlignment="Center"  Margin="25,0,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="txtDizemBasiTl" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="TL" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="12"/>
+                </StackPanel>
+            </StackPanel>
             
-            <TextBlock Text="Net Süt Ödemesi" FontWeight="Bold" FontSize="14" 
-                       VerticalAlignment="Center" Margin="25,10,0,5"/>
+            <StackPanel Orientation="Horizontal" Margin="25,10,0,5">
+                <TextBlock Text="Net Süt Ödemesi" FontWeight="Bold" FontSize="14"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtNetSutOdemesi" FontWeight="Bold" FontSize="14"
+                           VerticalAlignment="Center" Margin="10,0,0,0"/>
+            </StackPanel>
             
             <CheckBox x:Name="chkYagKesintisi" Content="Yağ kesintisi yapmak istiyor musunuz?" 
                       VerticalAlignment="Center" HorizontalAlignment="Left" 
                       Margin="25,0,0,5" FontSize="14" 
                       Click="ChkYagKesintisi_Click"/>
-            <StackPanel x:Name="spYagKesintiOrani" Visibility="Collapsed" Margin="45,0,0,5">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Yağ Kesinti Oranı:" VerticalAlignment="Center" 
-                               Margin="0,0,10,0" FontSize="12" Width="120"/>
-                    <TextBox x:Name="txtYagKesintiOrani" Width="100" VerticalAlignment="Center" 
-                             TextAlignment="Right" Padding="2"/>
-                    <TextBlock Text="%" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="12"/>
-                </StackPanel>
-            </StackPanel>
+
             
             <CheckBox x:Name="chkProteinKesintisi" Content="Protein kesintisi yapmak istiyor musunuz?" 
                       VerticalAlignment="Center" HorizontalAlignment="Left" 
                       Margin="25,0,0,5" FontSize="14" 
                       Click="ChkProteinKesintisi_Click"/>
-            <StackPanel x:Name="spProteinKesintiOrani" Visibility="Collapsed" Margin="45,0,0,5">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Protein Kesinti Oranı:" VerticalAlignment="Center" 
-                               Margin="0,0,10,0" FontSize="12" Width="120"/>
-                    <TextBox x:Name="txtProteinKesintiOrani" Width="100" VerticalAlignment="Center" 
-                             TextAlignment="Right" Padding="2"/>
-                    <TextBlock Text="%" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="12"/>
-                </StackPanel>
-            </StackPanel>
+
             
-            <StackPanel x:Name="spDizemBasiTl" Visibility="Collapsed" Margin="25,0,0,10">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Dizem Başına TL:" VerticalAlignment="Center" 
-                               Margin="0,0,10,0" FontSize="12" Width="120"/>
-                    <TextBox x:Name="txtDizemBasiTl" Width="100" VerticalAlignment="Center" 
-                             TextAlignment="Right" Padding="2"/>
-                    <TextBlock Text="TL" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="12"/>
-                </StackPanel>
-            </StackPanel>
+
         </StackPanel>
 
         <!-- Başlık Satırı -->
