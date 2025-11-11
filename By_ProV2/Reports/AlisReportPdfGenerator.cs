@@ -1,5 +1,4 @@
 using PdfSharp.Drawing;
-using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
@@ -62,9 +61,6 @@ public static class AlisReportGenerator
     /// <param name="filePath">The full path where the PDF file will be saved.</param>
     public static void GenerateReport(AlisReportData data, string filePath)
     {
-        // Set up font resolver for proper font rendering
-        GlobalFontSettings.FontResolver = new By_ProV2.Reports.PdfFontResolver();
-        
         using (PdfDocument document = new PdfDocument())
         {
             PdfPage page = document.AddPage();

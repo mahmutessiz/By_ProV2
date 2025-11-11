@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\sutalimsorgulama.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\sutalimsorgulama.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\sutalimsorgulama.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\sutalimsorgulama.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\alisreportwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\alisreportwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -55,10 +71,6 @@
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\sutenvanteriwindow.xaml.cs.utf8||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\sutalimsorgulama.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\sutalimsorgulama.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|c:\\users\\mustafa\\desktop\\by_prov2\\by_prov2\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{E6F45A75-3B59-4FF7-9D70-EE31A6674E31}|By_ProV2\\By_ProV2.csproj|solutionrelative:by_prov2\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -82,11 +94,50 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\appsettings.json",
+              "RelativeDocumentMoniker": "By_ProV2\\appsettings.json",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\appsettings.json",
+              "RelativeToolTip": "By_ProV2\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-11T10:49:38.242Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\App.config",
+              "RelativeDocumentMoniker": "By_ProV2\\App.config",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\App.config",
+              "RelativeToolTip": "By_ProV2\\App.config",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-11-11T10:49:25.73Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SutAlimSorgulama.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml.cs",
+              "RelativeDocumentMoniker": "By_ProV2\\SutAlimSorgulama.xaml.cs",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml.cs",
+              "RelativeToolTip": "By_ProV2\\SutAlimSorgulama.xaml.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T10:31:37.183Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "AlisIcmalWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisIcmalWindow.xaml.cs",
               "RelativeDocumentMoniker": "By_ProV2\\AlisIcmalWindow.xaml.cs",
@@ -99,7 +150,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "CariKayitWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\CariKayitWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\CariKayitWindow.xaml",
@@ -111,7 +162,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "AlisReportPdfGenerator.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\Reports\\AlisReportPdfGenerator.cs",
               "RelativeDocumentMoniker": "By_ProV2\\Reports\\AlisReportPdfGenerator.cs",
@@ -124,7 +175,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "AlisReportWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisReportWindow.xaml.cs",
               "RelativeDocumentMoniker": "By_ProV2\\AlisReportWindow.xaml.cs",
@@ -137,18 +188,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AlisReportWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisReportWindow.xaml",
-              "RelativeDocumentMoniker": "By_ProV2\\AlisReportWindow.xaml",
-              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisReportWindow.xaml",
-              "RelativeToolTip": "By_ProV2\\AlisReportWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-10T12:33:59.34Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "AlisIcmalWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisIcmalWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\AlisIcmalWindow.xaml",
@@ -160,7 +200,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "SatisIcmalWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SatisIcmalWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SatisIcmalWindow.xaml",
@@ -171,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "SatisReportWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SatisReportWindow.xaml.cs",
               "RelativeDocumentMoniker": "By_ProV2\\SatisReportWindow.xaml.cs",
@@ -183,7 +223,30 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
+              "Title": "SutAlimSorgulama.xaml",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml",
+              "RelativeDocumentMoniker": "By_ProV2\\SutAlimSorgulama.xaml",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml",
+              "RelativeToolTip": "By_ProV2\\SutAlimSorgulama.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-07T08:55:28.819Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AlisReportWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisReportWindow.xaml",
+              "RelativeDocumentMoniker": "By_ProV2\\AlisReportWindow.xaml",
+              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\AlisReportWindow.xaml",
+              "RelativeToolTip": "By_ProV2\\AlisReportWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-10T12:33:59.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "SatisReportWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SatisReportWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SatisReportWindow.xaml",
@@ -194,7 +257,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "SutAlimFormu.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimFormu.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutAlimFormu.xaml",
@@ -205,7 +268,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "SutEnvanteriWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutEnvanteriWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutEnvanteriWindow.xaml",
@@ -216,7 +279,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "GunlukSutAlimPreview.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\Reports\\GunlukSutAlimPreview.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\Reports\\GunlukSutAlimPreview.xaml",
@@ -227,7 +290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\MainWindow.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\MainWindow.xaml",
@@ -238,7 +301,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "SutDepoSevkFormu.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutDepoSevkFormu.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutDepoSevkFormu.xaml",
@@ -249,7 +312,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 16,
               "Title": "SutEnvanteriWindow.xaml.cs.utf8",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutEnvanteriWindow.xaml.cs.utf8",
               "RelativeDocumentMoniker": "By_ProV2\\SutEnvanteriWindow.xaml.cs.utf8",
@@ -261,18 +324,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "SutAlimSorgulama.xaml",
-              "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml",
-              "RelativeDocumentMoniker": "By_ProV2\\SutAlimSorgulama.xaml",
-              "ToolTip": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutAlimSorgulama.xaml",
-              "RelativeToolTip": "By_ProV2\\SutAlimSorgulama.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-11-07T08:55:28.819Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "SutRaporlari.xaml",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\SutRaporlari.xaml",
               "RelativeDocumentMoniker": "By_ProV2\\SutRaporlari.xaml",
@@ -283,7 +335,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 20,
               "Title": "By_ProV2.csproj",
               "DocumentMoniker": "C:\\Users\\MUSTAFA\\Desktop\\By_ProV2\\By_ProV2\\By_ProV2.csproj",
               "RelativeDocumentMoniker": "By_ProV2\\By_ProV2.csproj",
@@ -291,7 +343,8 @@
               "RelativeToolTip": "By_ProV2\\By_ProV2.csproj",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAACAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-11-07T08:13:23.677Z"
+              "WhenOpened": "2025-11-07T08:13:23.677Z",
+              "EditorCaption": ""
             }
           ]
         }
