@@ -319,7 +319,7 @@ namespace By_ProV2
                             Kesinti = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblToplamKesinti)),
                             OrtYag = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaYag)),
                             OrtProtein = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaProtein)),
-                            SutFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtSutFiyati)),
+                            SutFiyati = Convert.ToDouble(ParseDecimalFromTextBox(txtSutFiyati)),
                             NakliyeFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtNakliyeFiyati)),
                             YagKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtYagKesintiTutari)),
                             ProteinKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtProteinKesintiTutari)),
@@ -362,7 +362,7 @@ namespace By_ProV2
                         Kesinti = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblToplamKesinti)),
                         OrtYag = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaYag)),
                         OrtProtein = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaProtein)),
-                        SutFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtSutFiyati)),
+                        SutFiyati = Convert.ToDouble(ParseDecimalFromTextBox(txtSutFiyati)),
                         NakliyeFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtNakliyeFiyati)),
                         YagKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtYagKesintiTutari)),
                         ProteinKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtProteinKesintiTutari)),
@@ -546,6 +546,41 @@ namespace By_ProV2
 
 // ====== EVENT HANDLERS (add these if not already present) ======
 
+private void TxtSutFiyati_LostFocus(object sender, RoutedEventArgs e)
+{
+    // Recalculate net süt ödemesi when süt fiyatı is changed
+    CalculateNetSutOdemesi();
+}
+
+private void TxtSutFiyati_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+{
+    // Allow only numeric characters, decimal point and comma
+    string text = e.Text;
+    // Check if the character is a digit, decimal point, or comma
+    if (!char.IsDigit(e.Text, 0) && e.Text != "." && e.Text != ",")
+    {
+        e.Handled = true;
+    }
+}
+
+private void TxtSutFiyati_Pasting(object sender, DataObjectPastingEventArgs e)
+{
+    // Validate pasted content
+    if (e.DataObject.GetDataPresent(typeof(string)))
+    {
+        string text = (string)e.DataObject.GetData(typeof(string));
+        // Validate that the text consists only of allowed characters
+        if (!System.Text.RegularExpressions.Regex.IsMatch(text, @"^[0-9,.]+$"))
+        {
+            e.CancelCommand();
+        }
+    }
+    else
+    {
+        e.CancelCommand();
+    }
+}
+
 private void ChkYagKesintisi_Click(object sender, RoutedEventArgs e)
 {
     // Recalculate net süt ödemesi when checkbox state changes
@@ -593,7 +628,7 @@ private void ChkProteinKesintisi_Click(object sender, RoutedEventArgs e)
                 decimal proteinParametresi = latestParams?.ProteinParametresi ?? 0;
                 decimal dizemBasiTl = latestParams?.DizemBasiTl ?? 0;
                 
-                // Use süt fiyatı from the text block using Turkish culture for proper decimal parsing
+                // Use süt fiyatı from the text box using Turkish culture for proper decimal parsing
                 decimal cariSutFiyati = 0;
                 if (txtSutFiyati.Text != null)
                 {
@@ -648,6 +683,27 @@ private void ChkProteinKesintisi_Click(object sender, RoutedEventArgs e)
             }
         }
 
+        private decimal ParseDecimalFromTextBox(TextBox textBox)
+        {
+            string text = textBox.Text;
+            // Remove " TL" suffix if present and parse the number
+            if (text.EndsWith(" TL"))
+            {
+                text = text.Substring(0, text.Length - 3).Trim();
+            }
+            // Handle Turkish number format
+            if (decimal.TryParse(text, NumberStyles.Number, CultureInfo.GetCultureInfo("tr-TR"), out decimal result))
+            {
+                return result;
+            }
+            // Fallback: replace comma with dot for parsing
+            else if (decimal.TryParse(text.Replace(",", "."), NumberStyles.Number, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            return 0;
+        }
+        
         private decimal ParseDecimalFromTextBlock(TextBlock textBlock)
         {
             string text = textBlock.Text;

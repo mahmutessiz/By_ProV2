@@ -52,7 +52,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <TextBlock Text="Süt Fiyatı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="txtSutFiyati" FontSize="14" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtSutFiyati" FontSize="14" VerticalAlignment="Center" Width="100" HorizontalAlignment="Left" TextAlignment="Right" Padding="5" LostFocus="TxtSutFiyati_LostFocus" PreviewTextInput="TxtSutFiyati_PreviewTextInput" DataObject.Pasting="TxtSutFiyati_Pasting"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Nakliye Fiyatı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
