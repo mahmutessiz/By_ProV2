@@ -57,5 +57,23 @@ namespace By_ProV2
             lblError.Text = message;
             lblError.Visibility = Visibility.Visible;
         }
+
+        private void TxtUsername_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                // Move focus to password field when Enter is pressed in username
+                txtPassword.Focus();
+            }
+        }
+
+        private void TxtPassword_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                // Trigger login when Enter is pressed in password field
+                btnLogin_Click(sender, new RoutedEventArgs());
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 <Window x:Class="By_ProV2.FirstTimeSetupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="İlk Kurulum - Admin Hesabı Oluştur" Height="500" Width="500"
+        Title="İlk Kurulum - Admin Hesabı Oluştur" Height="550" Width="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Icon="/Resources/Logo.png">
