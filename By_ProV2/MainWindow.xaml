@@ -163,8 +163,8 @@
                 <MenuItem Header="Süt">
                     <MenuItem Header="Süt Alım Formu" Click="BtnSutAlim_Click" />
                     <MenuItem Header="Süt Alım Belge Sorgulama" Click="BtnSutAlimSorgulama_Click" />
-                    <MenuItem Header="Alış İcmal" Click="BtnSutDepoSevk_Click"/>
-                    <MenuItem Header="Satış İcmal" Click="BtnSutDirekSevk_Click" />
+                    <MenuItem Header="Süt Alış İcmali" Click="BtnSutDepoSevk_Click"/>
+                    <MenuItem Header="Süt Satış İcmali" Click="BtnSutDirekSevk_Click" />
                     <MenuItem Header="Süt Raporları" Click="BtnSutRapor_Click" />
                 </MenuItem>
 

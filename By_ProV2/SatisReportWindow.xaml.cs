@@ -257,7 +257,7 @@ namespace By_ProV2
                         // Prepare report data from current display
                         var reportData = new ReportData
                         {
-                            Title = "SATIŞ İCMAL RAPORU",
+                            Title = "SÜT SATIŞ İCMALİ",
                             DateRange = lblDateRange.Text,
                             CustomerCode = txtCariKod.Text,
                             CustomerName = txtCariAdi.Text,
@@ -297,7 +297,7 @@ namespace By_ProV2
                     // Prepare report data from current display
                     var reportData = new ReportData
                     {
-                        Title = "SATIŞ İCMAL RAPORU",
+                        Title = "SÜT SATIŞ İCMALİ",
                         DateRange = lblDateRange.Text,
                         CustomerCode = txtCariKod.Text,
                         CustomerName = txtCariAdi.Text,

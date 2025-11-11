@@ -307,7 +307,7 @@ namespace By_ProV2
                     // Prepare report data from current display
                     var reportData = new AlisReportData
                     {
-                        Title = "ALIŞ İCMAL RAPORU",
+                        Title = "SÜT ALIŞ İCMALİ",
                         DateRange = lblDateRange.Text,
                         CustomerCode = txtCariKod.Text,
                         CustomerName = txtCariAdi.Text,
@@ -350,7 +350,7 @@ namespace By_ProV2
                 // Prepare report data from current display
                 var reportData = new AlisReportData
                 {
-                    Title = "ALIŞ İCMAL RAPORU",
+                    Title = "SÜT ALIŞ İCMALİ",
                     DateRange = lblDateRange.Text,
                     CustomerCode = txtCariKod.Text,
                     CustomerName = txtCariAdi.Text,

@@ -1,4 +1,5 @@
 using PdfSharp.Drawing;
+using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,9 @@ public static class AlisReportGenerator
     /// <param name="filePath">The full path where the PDF file will be saved.</param>
     public static void GenerateReport(AlisReportData data, string filePath)
     {
+        // Set up font resolver for proper font rendering
+        GlobalFontSettings.FontResolver = new By_ProV2.Reports.PdfFontResolver();
+        
         using (PdfDocument document = new PdfDocument())
         {
             PdfPage page = document.AddPage();
@@ -102,10 +106,10 @@ public static class AlisReportGenerator
             XSize cariAdiSize = gfx.MeasureString("Cari Adı:", fontHeader);
             double labelWidth = Math.Max(cariKoduSize.Width, cariAdiSize.Width) + 10;
 
-            gfx.DrawString("Cari Kodu:", fontHeader, brushBlack, infoX, currentY, formatLeft);
+            gfx.DrawString("Cari Kodu:", fontBody, brushBlack, infoX, currentY, formatLeft);
             gfx.DrawString(data.CustomerCode, fontBody, brushBlack, infoX + labelWidth, currentY, formatLeft);
             currentY += cariKoduSize.Height + 5;
-            gfx.DrawString("Cari Adı:", fontHeader, brushBlack, infoX, currentY, formatLeft);
+            gfx.DrawString("Cari Adı:", fontBody, brushBlack, infoX, currentY, formatLeft);
             gfx.DrawString(data.CustomerName, fontBody, brushBlack, infoX + labelWidth, currentY, formatLeft);
             currentY += cariAdiSize.Height + 20;
 
@@ -123,22 +127,22 @@ public static class AlisReportGenerator
             
             // First column - Base prices
             gfx.DrawString("Süt Fiyatı:", fontBody, brushBlack, paymentFirstColX, paymentY, formatLeft);
-            gfx.DrawString($"{data.PaymentSummary.SutFiyati:N2} TL", fontBodyBold, brushBlack, paymentFirstColX + paymentLabelWidth, paymentY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.SutFiyati:N2} TL", fontBody, brushBlack, paymentFirstColX + paymentLabelWidth, paymentY, formatLeft);
             paymentY += 18;
             
             gfx.DrawString("Nakliye Fiyatı:", fontBody, brushBlack, paymentFirstColX, paymentY, formatLeft);
-            gfx.DrawString($"{data.PaymentSummary.NakliyeFiyati:N2} TL", fontBodyBold, brushBlack, paymentFirstColX + paymentLabelWidth, paymentY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.NakliyeFiyati:N2} TL", fontBody, brushBlack, paymentFirstColX + paymentLabelWidth, paymentY, formatLeft);
             paymentY += 25; // Extra space before deductions
             
             // Second column - Deduction values (aligned with the prices)
             double deductionStartY = currentY + 20; // Start deductions at same Y as Süt Fiyatı but in second column
             
             gfx.DrawString("Yağ Kesinti Tutarı:", fontBody, brushBlack, paymentSecondColX, deductionStartY, formatLeft);
-            gfx.DrawString($"{data.PaymentSummary.YagKesintiTutari:N2} TL", fontBodyBold, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.YagKesintiTutari:N2} TL", fontBody, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
             deductionStartY += 18;
             
             gfx.DrawString("Protein Kesinti Tutarı:", fontBody, brushBlack, paymentSecondColX, deductionStartY, formatLeft);
-            gfx.DrawString($"{data.PaymentSummary.ProteinKesintiTutari:N2} TL", fontBodyBold, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.ProteinKesintiTutari:N2} TL", fontBody, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
             deductionStartY += 18;
             
             // Net payment (in second column, below the deductions)
@@ -254,25 +258,25 @@ public static class AlisReportGenerator
             double col2ValueGap = 20;
 
             // Row 1: Net Miktar and Ort. Yağ
-            gfx.DrawString("Net Miktar:", fontHeader, brushBlack, summaryStartX, currentY, formatLeft);
-            gfx.DrawString(data.PaymentSummary.NetMiktar.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString("Net Miktar:", fontBody, brushBlack, summaryStartX, currentY, formatLeft);
+            gfx.DrawString(data.PaymentSummary.NetMiktar.ToString("N2"), fontBody, brushBlack,
                 summaryStartX + col1LabelWidth, currentY, formatLeft);
 
-            gfx.DrawString("Ort. Yağ:", fontHeader, brushBlack,
+            gfx.DrawString("Ort. Yağ:", fontBody, brushBlack,
                 summaryStartX + col2Offset, currentY, formatLeft);
-            gfx.DrawString(data.PaymentSummary.OrtYag.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString(data.PaymentSummary.OrtYag.ToString("N2"), fontBody, brushBlack,
                 summaryStartX + col2Offset + col2LabelWidth, currentY, formatLeft);
 
             currentY += netMiktarSize.Height + 5;
 
             // Row 2: Kesinti and Ort. Protein
-            gfx.DrawString("Kesinti:", fontHeader, brushBlack, summaryStartX, currentY, formatLeft);
-            gfx.DrawString(data.PaymentSummary.Kesinti.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString("Kesinti:", fontBody, brushBlack, summaryStartX, currentY, formatLeft);
+            gfx.DrawString(data.PaymentSummary.Kesinti.ToString("N2"), fontBody, brushBlack,
                 summaryStartX + col1LabelWidth, currentY, formatLeft);
 
-            gfx.DrawString("Ort. Protein:", fontHeader, brushBlack,
+            gfx.DrawString("Ort. Protein:", fontBody, brushBlack,
                 summaryStartX + col2Offset, currentY, formatLeft);
-            gfx.DrawString(data.PaymentSummary.OrtProtein.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString(data.PaymentSummary.OrtProtein.ToString("N2"), fontBody, brushBlack,
                 summaryStartX + col2Offset + col2LabelWidth, currentY, formatLeft);
 
             // === Save ===
