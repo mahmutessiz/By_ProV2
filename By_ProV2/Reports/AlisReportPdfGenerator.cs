@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-// --- Data Models (to hold your report data) ---
+// --- Data Models (to hold your Alis report data) ---
 
-public class ReportItem
+public class AlisReportItem
 {
     public string Tarih { get; set; }
     public double Miktar { get; set; }
@@ -17,41 +17,49 @@ public class ReportItem
 }
 
 /// <summary>
-/// Represents the summary section at the bottom of the report.
+/// Represents the payment summary section at the bottom of the report.
 /// </summary>
-public class ReportSummary
+public class AlisReportPaymentSummary
 {
+    public double SutFiyati { get; set; }
+    public double NakliyeFiyati { get; set; }
+    public double YagKesintiTutari { get; set; }
+    public double ProteinKesintiTutari { get; set; }
+    public double NetSutOdemesi { get; set; }
+    public bool IsYagKesintisiApplied { get; set; }
+    public bool IsProteinKesintisiApplied { get; set; }
     public double NetMiktar { get; set; }
     public double Kesinti { get; set; }
     public double OrtYag { get; set; }
     public double OrtProtein { get; set; }
+    public int ToplamKayit { get; set; }
 }
 
 /// <summary>
-/// Represents all data needed for the entire report.
+/// Represents all data needed for the entire Alis report.
 /// </summary>
-public class ReportData
+public class AlisReportData
 {
     public string Title { get; set; }
     public string DateRange { get; set; }
     public string CustomerCode { get; set; }
     public string CustomerName { get; set; }
     public List<string> ColumnHeaders { get; set; } = new List<string>();
-    public List<ReportItem> Items { get; set; } = new List<ReportItem>();
-    public ReportSummary Summary { get; set; }
+    public List<AlisReportItem> Items { get; set; } = new List<AlisReportItem>();
+    public AlisReportPaymentSummary PaymentSummary { get; set; }
 }
 
 /// <summary>
-/// Main class responsible for generating the PDF report.
+/// Main class responsible for generating the Alis PDF report.
 /// </summary>
-public static class ReportGenerator
+public static class AlisReportGenerator
 {
     /// <summary>
-    /// Generates the PDF report from the provided data and saves it to the specified file path.
+    /// Generates the Alis PDF report from the provided data and saves it to the specified file path.
     /// </summary>
     /// <param name="data">The report data to render.</param>
     /// <param name="filePath">The full path where the PDF file will be saved.</param>
-    public static void GenerateReport(ReportData data, string filePath)
+    public static void GenerateReport(AlisReportData data, string filePath)
     {
         using (PdfDocument document = new PdfDocument())
         {
@@ -100,6 +108,45 @@ public static class ReportGenerator
             gfx.DrawString("Cari Adı:", fontHeader, brushBlack, infoX, currentY, formatLeft);
             gfx.DrawString(data.CustomerName, fontBody, brushBlack, infoX + labelWidth, currentY, formatLeft);
             currentY += cariAdiSize.Height + 20;
+
+            // === Payment Information ===
+            double paymentStartX = leftMargin;
+            double paymentY = currentY;
+            
+            gfx.DrawString("Ödeme Bilgileri:", fontHeader, brushBlack, paymentStartX + 70, paymentY, formatLeft);
+            paymentY += 20;
+            
+            // Payment details in two columns
+            double paymentLabelWidth = 100;
+            double paymentFirstColX = paymentStartX + 70;
+            double paymentSecondColX = paymentStartX + 250;
+            
+            // First column - Base prices
+            gfx.DrawString("Süt Fiyatı:", fontBody, brushBlack, paymentFirstColX, paymentY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.SutFiyati:N2} TL", fontBodyBold, brushBlack, paymentFirstColX + paymentLabelWidth, paymentY, formatLeft);
+            paymentY += 18;
+            
+            gfx.DrawString("Nakliye Fiyatı:", fontBody, brushBlack, paymentFirstColX, paymentY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.NakliyeFiyati:N2} TL", fontBodyBold, brushBlack, paymentFirstColX + paymentLabelWidth, paymentY, formatLeft);
+            paymentY += 25; // Extra space before deductions
+            
+            // Second column - Deduction values (aligned with the prices)
+            double deductionStartY = currentY + 20; // Start deductions at same Y as Süt Fiyatı but in second column
+            
+            gfx.DrawString("Yağ Kesinti Tutarı:", fontBody, brushBlack, paymentSecondColX, deductionStartY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.YagKesintiTutari:N2} TL", fontBodyBold, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
+            deductionStartY += 18;
+            
+            gfx.DrawString("Protein Kesinti Tutarı:", fontBody, brushBlack, paymentSecondColX, deductionStartY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.ProteinKesintiTutari:N2} TL", fontBodyBold, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
+            deductionStartY += 18;
+            
+            // Net payment (in second column, below the deductions)
+            gfx.DrawString("Net Süt Ödemesi:", fontHeader, brushBlack, paymentSecondColX, deductionStartY, formatLeft);
+            gfx.DrawString($"{data.PaymentSummary.NetSutOdemesi:N2} TL", fontBodyBold, brushBlack, paymentSecondColX + paymentLabelWidth, deductionStartY, formatLeft);
+            
+            // Update main Y position to continue with the rest of the content
+            currentY = Math.Max(paymentY, deductionStartY + 45); // Use the lower point of either column
 
             // === Table setup with dynamic column widths ===
             // Measure header text to determine minimum column widths
@@ -198,40 +245,38 @@ public static class ReportGenerator
             XSize kesintiLabelSize = gfx.MeasureString("Kesinti:", fontHeader);
             XSize ortYagSize = gfx.MeasureString("Ort. Yağ:", fontHeader);
             XSize ortProteinSize = gfx.MeasureString("Ort. Protein:", fontHeader);
+            XSize toplamKayitSize = gfx.MeasureString("Toplam Kayıt:", fontHeader);
 
             double col1LabelWidth = Math.Max(netMiktarSize.Width, kesintiLabelSize.Width) + 10;
             double col1ValueGap = 20;
             double col2Offset = col1LabelWidth + col1ValueGap + 120;
             double col2LabelWidth = Math.Max(ortYagSize.Width, ortProteinSize.Width) + 10;
+            double col2ValueGap = 20;
 
             // Row 1: Net Miktar and Ort. Yağ
             gfx.DrawString("Net Miktar:", fontHeader, brushBlack, summaryStartX, currentY, formatLeft);
-            gfx.DrawString(data.Summary.NetMiktar.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString(data.PaymentSummary.NetMiktar.ToString("N2"), fontBodyBold, brushBlack,
                 summaryStartX + col1LabelWidth, currentY, formatLeft);
 
             gfx.DrawString("Ort. Yağ:", fontHeader, brushBlack,
                 summaryStartX + col2Offset, currentY, formatLeft);
-            gfx.DrawString(data.Summary.OrtYag.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString(data.PaymentSummary.OrtYag.ToString("N2"), fontBodyBold, brushBlack,
                 summaryStartX + col2Offset + col2LabelWidth, currentY, formatLeft);
 
             currentY += netMiktarSize.Height + 5;
 
             // Row 2: Kesinti and Ort. Protein
             gfx.DrawString("Kesinti:", fontHeader, brushBlack, summaryStartX, currentY, formatLeft);
-            gfx.DrawString(data.Summary.Kesinti.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString(data.PaymentSummary.Kesinti.ToString("N2"), fontBodyBold, brushBlack,
                 summaryStartX + col1LabelWidth, currentY, formatLeft);
 
             gfx.DrawString("Ort. Protein:", fontHeader, brushBlack,
                 summaryStartX + col2Offset, currentY, formatLeft);
-            gfx.DrawString(data.Summary.OrtProtein.ToString("N2"), fontBodyBold, brushBlack,
+            gfx.DrawString(data.PaymentSummary.OrtProtein.ToString("N2"), fontBodyBold, brushBlack,
                 summaryStartX + col2Offset + col2LabelWidth, currentY, formatLeft);
-
-            currentY += kesintiLabelSize.Height + 15;
 
             // === Save ===
             document.Save(filePath);
         }
     }
-
-
 }

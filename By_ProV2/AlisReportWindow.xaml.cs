@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Data.SqlClient;
@@ -27,6 +28,12 @@ namespace By_ProV2
         private readonly string _cariKod;
         private readonly DateTime? _startDate;
         private readonly DateTime? _endDate;
+        
+        // Fields to store calculation values
+        private decimal _toplamNetMiktar = 0;
+        private decimal _toplamKesinti = 0;
+        private decimal _ortalamaYag = 0;
+        private decimal _ortalamaProtein = 0;
 
         public AlisReportWindow(string cariKod, DateTime? startDate = null, DateTime? endDate = null)
         {
@@ -130,7 +137,6 @@ namespace By_ProV2
                             decimal toplamSutForYag = 0;
                             decimal agirlikliProteinToplami = 0;
                             decimal toplamSutForProtein = 0;
-                            int toplamKayit = 0;
 
                             while (reader.Read())
                             {
@@ -230,7 +236,6 @@ namespace By_ProV2
 
                                 toplamNetMiktar += newKayit.Miktar;
                                 toplamKesinti += newKayit.Kesinti ?? 0;
-                                toplamKayit++;
 
                                 if (newKayit.Yag.HasValue && newKayit.Yag.Value != 0)
                                 {
@@ -245,29 +250,47 @@ namespace By_ProV2
                                 }
                             }
 
-                            decimal ortalamaYag = toplamSutForYag > 0 ? agirlikliYagToplami / toplamSutForYag : 0;
-                            decimal ortalamaProtein = toplamSutForProtein > 0 ? agirlikliProteinToplami / toplamSutForProtein : 0;
+                            _ortalamaYag = toplamSutForYag > 0 ? agirlikliYagToplami / toplamSutForYag : 0;
+                            _ortalamaProtein = toplamSutForProtein > 0 ? agirlikliProteinToplami / toplamSutForProtein : 0;
+                            _toplamNetMiktar = toplamNetMiktar;
+                            _toplamKesinti = toplamKesinti;
 
-                            lblNetMiktar.Text = $"{toplamNetMiktar:N2}";
-                            lblToplamKesinti.Text = $"{toplamKesinti:N2}";
-                            lblOrtalamaYag.Text = $"{ortalamaYag:N2}";
-                            lblOrtalamaProtein.Text = $"{ortalamaProtein:N2}";
-                            lblToplamKayit.Text = $"{toplamKayit}";
+                            lblNetMiktar.Text = $"{_toplamNetMiktar:N2}";
+                            lblToplamKesinti.Text = $"{_toplamKesinti:N2}";
+                            lblOrtalamaYag.Text = $"{_ortalamaYag:N2}";
+                            lblOrtalamaProtein.Text = $"{_ortalamaProtein:N2}";
                             
-                            // Set the new textblock to show the summed net miktar
-                            txtNetSutOdemesi.Text = $"Toplam Net Miktar: {toplamNetMiktar:N2}";
+                            // Calculate net süt ödemesi
+                            CalculateNetSutOdemesi();
                         }
                     }
                 }
+                LoadKesintiParameters();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Rapor yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
-            // Load parameter defaults when window loads
-            LoadParameterDefaults();
         }
+    private void LoadKesintiParameters()
+    {
+        try
+        {
+            var paramRepo = new ParameterRepository();
+            var latestParams = paramRepo.GetLatestParametreler();
+
+            if (latestParams != null)
+            {
+                txtYagKesintiOrani.Text = latestParams.YagKesintiParametresi?.ToString("N2") ?? "0";
+                txtProteinKesintiOrani.Text = latestParams.ProteinParametresi?.ToString("N2") ?? "0";
+                txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "0";
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Kesinti parametreleri yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
     
 
     private void BtnExportToPDF_Click(object sender, RoutedEventArgs e)
@@ -282,28 +305,34 @@ namespace By_ProV2
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     // Prepare report data from current display
-                    var reportData = new ReportData
+                    var reportData = new AlisReportData
                     {
                         Title = "ALIŞ İCMAL RAPORU",
                         DateRange = lblDateRange.Text,
                         CustomerCode = txtCariKod.Text,
                         CustomerName = txtCariAdi.Text,
                         ColumnHeaders = new List<string> { "Tarih", "Alınan Süt", "Kesinti", "Yağ Oranı", "Protein" },
-                        Items = new List<ReportItem>(),
-                        Summary = new ReportSummary
+                        Items = new List<AlisReportItem>(),
+                        PaymentSummary = new AlisReportPaymentSummary
                         {
-                            NetMiktar = decimal.ToDouble(ParseDecimalValue(lblNetMiktar.Text)),
-                            Kesinti = decimal.ToDouble(ParseDecimalValue(lblToplamKesinti.Text)),
-                            OrtYag = decimal.ToDouble(ParseDecimalValue(lblOrtalamaYag.Text)),
-                            OrtProtein = decimal.ToDouble(ParseDecimalValue(lblOrtalamaProtein.Text)),
-                            ToplamKayit = (int)ParseDecimalValue(lblToplamKayit.Text)
+                            NetMiktar = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblNetMiktar)),
+                            Kesinti = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblToplamKesinti)),
+                            OrtYag = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaYag)),
+                            OrtProtein = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaProtein)),
+                            SutFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtSutFiyati)),
+                            NakliyeFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtNakliyeFiyati)),
+                            YagKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtYagKesintiTutari)),
+                            ProteinKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtProteinKesintiTutari)),
+                            NetSutOdemesi = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtNetSutOdemesi)),
+                            IsYagKesintisiApplied = chkYagKesintisi.IsChecked == true,
+                            IsProteinKesintisiApplied = chkProteinKesintisi.IsChecked == true
                         }
                     };
 
                     // Collect items from the displayed records
-                    ReloadDataForPDF(reportData.Items);
+                    ReloadDataForPDFWithPayment(reportData.Items);
 
-                    ReportGenerator.GenerateReport(reportData, saveFileDialog.FileName);
+                    AlisReportGenerator.GenerateReport(reportData, saveFileDialog.FileName);
 
                     MessageBox.Show("PDF raporu başarıyla oluşturuldu!", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -319,29 +348,35 @@ namespace By_ProV2
             try
             {
                 // Prepare report data from current display
-                var reportData = new ReportData
+                var reportData = new AlisReportData
                 {
                     Title = "ALIŞ İCMAL RAPORU",
                     DateRange = lblDateRange.Text,
                     CustomerCode = txtCariKod.Text,
                     CustomerName = txtCariAdi.Text,
                     ColumnHeaders = new List<string> { "Tarih", "Alınan Süt", "Kesinti", "Yağ Oranı", "Protein" },
-                    Items = new List<ReportItem>(),
-                    Summary = new ReportSummary
+                    Items = new List<AlisReportItem>(),
+                    PaymentSummary = new AlisReportPaymentSummary
                     {
-                        NetMiktar = decimal.ToDouble(ParseDecimalValue(lblNetMiktar.Text)),
-                        Kesinti = decimal.ToDouble(ParseDecimalValue(lblToplamKesinti.Text)),
-                        OrtYag = decimal.ToDouble(ParseDecimalValue(lblOrtalamaYag.Text)),
-                        OrtProtein = decimal.ToDouble(ParseDecimalValue(lblOrtalamaProtein.Text)),
-                        ToplamKayit = (int)ParseDecimalValue(lblToplamKayit.Text)
+                        NetMiktar = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblNetMiktar)),
+                        Kesinti = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblToplamKesinti)),
+                        OrtYag = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaYag)),
+                        OrtProtein = Convert.ToDouble(ParseSummaryValueFromTextBlock(lblOrtalamaProtein)),
+                        SutFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtSutFiyati)),
+                        NakliyeFiyati = Convert.ToDouble(ParseDecimalFromTextBlock(txtNakliyeFiyati)),
+                        YagKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtYagKesintiTutari)),
+                        ProteinKesintiTutari = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtProteinKesintiTutari)),
+                        NetSutOdemesi = Convert.ToDouble(ParsePaymentAmountFromTextBlock(txtNetSutOdemesi)),
+                        IsYagKesintisiApplied = chkYagKesintisi.IsChecked == true,
+                        IsProteinKesintisiApplied = chkProteinKesintisi.IsChecked == true
                     }
                 };
 
-                ReloadDataForPDF(reportData.Items);
+                ReloadDataForPDFWithPayment(reportData.Items);
 
                 // Generate to a temporary file
                 string tempPdfPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"AlisRaporu_Preview_{Guid.NewGuid()}.pdf");
-                ReportGenerator.GenerateReport(reportData, tempPdfPath);
+                AlisReportGenerator.GenerateReport(reportData, tempPdfPath);
 
                 // Open the PDF
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(tempPdfPath) { UseShellExecute = true });
@@ -352,7 +387,7 @@ namespace By_ProV2
             }
         }
 
-        private void ReloadDataForPDF(List<ReportItem> items)
+        private void ReloadDataForPDFWithPayment(List<AlisReportItem> items)
         {
             // Reload data specifically for PDF generation using same query as in LoadReport
             try
@@ -387,7 +422,7 @@ namespace By_ProV2
                         {
                             while (reader.Read())
                             {
-                                var item = new ReportItem
+                                var item = new AlisReportItem
                                 {
                                     Tarih = reader.GetDateTime(reader.GetOrdinal("Tarih")).ToString("dd.MM.yyyy"),
                                     Miktar = Convert.ToDouble(reader.GetDecimal(reader.GetOrdinal("Miktar"))),
@@ -416,7 +451,7 @@ namespace By_ProV2
                 if (colonIndex >= 0)
                 {
                     string valuePart = text.Substring(colonIndex + 1).Trim();
-                    if (decimal.TryParse(valuePart, out decimal result))
+                    if (decimal.TryParse(valuePart, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
                     {
                         return result;
                     }
@@ -424,7 +459,7 @@ namespace By_ProV2
                 else
                 {
                     // If no colon exists, try to parse the entire string
-                    if (decimal.TryParse(text, out decimal result))
+                    if (decimal.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
                     {
                         return result;
                     }
@@ -438,22 +473,37 @@ namespace By_ProV2
             return 0;
         }
 
-        private void ChkYagKesintisi_Click(object sender, RoutedEventArgs e)
-        {
-            // Checkbox click event is intentionally left empty
-            // Parameters are loaded on window load
-        }
-
-        private void ChkProteinKesintisi_Click(object sender, RoutedEventArgs e)
-        {
-            // Checkbox click event is intentionally left empty
-            // Parameters are loaded on window load
-        }
+       
         
         private void UpdateDizemBasiTlVisibility()
         {
-            // Method is intentionally left empty
-            // Parameters are loaded on window load
+            // Show dizem başı TL field if either checkbox is checked
+            if (chkYagKesintisi.IsChecked == true || chkProteinKesintisi.IsChecked == true)
+            {
+                spDizemBasiTl.Visibility = Visibility.Visible;
+                
+                // Load the default value if the field is empty
+                if (string.IsNullOrEmpty(txtDizemBasiTl.Text))
+                {
+                    try
+                    {
+                        var paramRepo = new ParameterRepository();
+                        var latestParams = paramRepo.GetLatestParametreler();
+                        if (latestParams != null)
+                        {
+                            txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Parametreler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                spDizemBasiTl.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void LoadParameterDefaults()
@@ -465,16 +515,203 @@ namespace By_ProV2
 
                 if (latestParams != null)
                 {
-                    // Always set the parameter values regardless of checkbox state
-                    txtYagKesintiOrani.Text = latestParams.YagKesintiParametresi?.ToString("N2") ?? "";
-                    txtProteinKesintiOrani.Text = latestParams.ProteinParametresi?.ToString("N2") ?? "";
-                    txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
+                    // Only set the value if the field is empty
+                    if (chkYagKesintisi.IsChecked == true && string.IsNullOrEmpty(txtYagKesintiOrani.Text))
+                    {
+                        txtYagKesintiOrani.Text = latestParams.YagKesintiParametresi?.ToString("N2") ?? "";
+                    }
+
+                    if (chkProteinKesintisi.IsChecked == true && string.IsNullOrEmpty(txtProteinKesintiOrani.Text))
+                    {
+                        txtProteinKesintiOrani.Text = latestParams.ProteinParametresi?.ToString("N2") ?? "";
+                    }
+
+                    // Show dizem başı TL input when either checkbox is checked and set the value if empty
+                    if (chkYagKesintisi.IsChecked == true || chkProteinKesintisi.IsChecked == true)
+                    {
+                        spDizemBasiTl.Visibility = Visibility.Visible; // Show dizem başı TL when either checkbox is checked
+                        if (string.IsNullOrEmpty(txtDizemBasiTl.Text))
+                        {
+                            txtDizemBasiTl.Text = latestParams.DizemBasiTl?.ToString("N2") ?? "";
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Parametreler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+
+// ====== EVENT HANDLERS (add these if not already present) ======
+
+private void ChkYagKesintisi_Click(object sender, RoutedEventArgs e)
+{
+    // Recalculate net süt ödemesi when checkbox state changes
+    CalculateNetSutOdemesi();
+}
+
+private void ChkProteinKesintisi_Click(object sender, RoutedEventArgs e)
+{
+    // Recalculate net süt ödemesi when checkbox state changes
+    CalculateNetSutOdemesi();
+}
+
+        private double ParseDoubleValue(string text)
+        {
+            // Extract the numeric part from text like "0,00" or any formatted number
+            try
+            {
+                // Remove formatting characters and use invariant culture for parsing
+                if (!string.IsNullOrEmpty(text) && double.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+                {
+                    return result;
+                }
+            }
+            catch
+            {
+                // Return 0 if parsing fails
+            }
+
+            return 0;
+        }
+
+        private void CalculateNetSutOdemesi()
+        {
+            try
+            {
+                // Initialize deduction amount fields
+                txtYagKesintiTutari.Text = "0.00 TL";
+                txtProteinKesintiTutari.Text = "0.00 TL";
+
+                // Load parameters for calculations
+                var paramRepo = new ParameterRepository();
+                var latestParams = paramRepo.GetLatestParametreler();
+                
+                decimal yagKesintiParametresi = latestParams?.YagKesintiParametresi ?? 0;
+                decimal proteinParametresi = latestParams?.ProteinParametresi ?? 0;
+                decimal dizemBasiTl = latestParams?.DizemBasiTl ?? 0;
+                
+                // Use süt fiyatı from the text block using Turkish culture for proper decimal parsing
+                decimal cariSutFiyati = 0;
+                if (txtSutFiyati.Text != null)
+                {
+                    string formattedText = txtSutFiyati.Text.Replace(" ", ""); // Remove any spaces
+                    if (decimal.TryParse(formattedText, System.Globalization.NumberStyles.Number, 
+                                         System.Globalization.CultureInfo.GetCultureInfo("tr-TR"), out cariSutFiyati))
+                    {
+                        // Parsing successful with Turkish culture
+                    }
+                    else
+                    {
+                        // Fallback to replace comma with dot
+                        cariSutFiyati = decimal.Parse(txtSutFiyati.Text.Replace(",", "."));
+                    }
+                }
+                
+                // Use values from class-level fields (these are already correct decimals)
+                decimal toplamNetMiktar = _toplamNetMiktar;
+                decimal ortalamaYag = _ortalamaYag;
+                decimal ortalamaProtein = _ortalamaProtein;
+                
+                // Calculate yağ kesintisi if average yağ < yağ parametresi AND checkbox is checked
+                decimal toplamYagKesintisi = 0;
+                if (chkYagKesintisi.IsChecked == true && ortalamaYag < yagKesintiParametresi)
+                {
+                    decimal dizem = (yagKesintiParametresi - ortalamaYag) * 10;
+                    decimal tllitre = dizem * dizemBasiTl;
+                    toplamYagKesintisi = toplamNetMiktar * tllitre;
+                }
+                
+                // Calculate protein kesintisi if average protein < protein parametresi AND checkbox is checked
+                decimal toplamProteinKesintisi = 0;
+                if (chkProteinKesintisi.IsChecked == true && ortalamaProtein < proteinParametresi)
+                {
+                    decimal dizem = (proteinParametresi - ortalamaProtein) * 10;
+                    decimal tllitre = dizem * dizemBasiTl;
+                    toplamProteinKesintisi = toplamNetMiktar * tllitre;
+                }
+
+                // Update the new deduction amount TextBlocks
+                txtYagKesintiTutari.Text = $"{toplamYagKesintisi:N2} TL";
+                txtProteinKesintiTutari.Text = $"{toplamProteinKesintisi:N2} TL";
+                
+                // Calculate final net süt ödemesi
+                decimal netSutOdemesi = (toplamNetMiktar * cariSutFiyati) - toplamYagKesintisi - toplamProteinKesintisi;
+                
+                txtNetSutOdemesi.Text = $"{netSutOdemesi:N2} TL";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Net süt ödemesi hesaplanırken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private decimal ParseDecimalFromTextBlock(TextBlock textBlock)
+        {
+            string text = textBlock.Text;
+            // Remove " TL" suffix if present and parse the number
+            if (text.EndsWith(" TL"))
+            {
+                text = text.Substring(0, text.Length - 3).Trim();
+            }
+            // Handle Turkish number format
+            if (decimal.TryParse(text, NumberStyles.Number, CultureInfo.GetCultureInfo("tr-TR"), out decimal result))
+            {
+                return result;
+            }
+            // Fallback: replace comma with dot for parsing
+            else if (decimal.TryParse(text.Replace(",", "."), NumberStyles.Number, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            return 0;
+        }
+
+        private decimal ParsePaymentAmountFromTextBlock(TextBlock textBlock)
+        {
+            string text = textBlock.Text;
+            // Remove " TL" suffix if present and parse the number
+            if (text.EndsWith(" TL"))
+            {
+                text = text.Substring(0, text.Length - 3).Trim();
+            }
+            // Handle Turkish number format
+            if (decimal.TryParse(text, NumberStyles.Number, CultureInfo.GetCultureInfo("tr-TR"), out decimal result))
+            {
+                return result;
+            }
+            // Fallback: replace comma with dot for parsing
+            else if (decimal.TryParse(text.Replace(",", "."), NumberStyles.Number, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            return 0;
+        }
+
+        private decimal ParseSummaryValueFromTextBlock(TextBlock textBlock)
+        {
+            string text = textBlock.Text;
+            // Handle Turkish number format (for labels like "Net Miktar: 7.500,00")
+            // First, try to extract value after colon if format is "Label: value"
+            int colonIndex = text.IndexOf(':');
+            if (colonIndex >= 0)
+            {
+                text = text.Substring(colonIndex + 1).Trim();
+            }
+            
+            // Handle Turkish number format
+            if (decimal.TryParse(text, NumberStyles.Number, CultureInfo.GetCultureInfo("tr-TR"), out decimal result))
+            {
+                return result;
+            }
+            // Fallback: replace comma with dot for parsing
+            else if (decimal.TryParse(text.Replace(",", "."), NumberStyles.Number, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            return 0;
         }
     }
 }

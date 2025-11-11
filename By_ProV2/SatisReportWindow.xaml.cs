@@ -232,7 +232,6 @@ namespace By_ProV2
                             lblToplamKesinti.Text = $"{toplamKesinti:N2}";
                             lblOrtalamaYag.Text = $"{ortalamaYag:N2}";
                             lblOrtalamaProtein.Text = $"{ortalamaProtein:N2}";
-                            lblToplamKayit.Text = $"{toplamKayit}";
                         }
                     }
                 }
@@ -269,8 +268,8 @@ namespace By_ProV2
                                 NetMiktar = decimal.ToDouble(ParseDecimalValue(lblNetMiktar.Text)),
                                 Kesinti = decimal.ToDouble(ParseDecimalValue(lblToplamKesinti.Text)),
                                 OrtYag = decimal.ToDouble(ParseDecimalValue(lblOrtalamaYag.Text)),
-                                OrtProtein = decimal.ToDouble(ParseDecimalValue(lblOrtalamaProtein.Text)),
-                                ToplamKayit = (int)ParseDecimalValue(lblToplamKayit.Text)
+                                OrtProtein = decimal.ToDouble(ParseDecimalValue(lblOrtalamaProtein.Text))
+                                // ToplamKayit has been removed as requested
                             }
                         };
     
@@ -309,8 +308,8 @@ namespace By_ProV2
                             NetMiktar = decimal.ToDouble(ParseDecimalValue(lblNetMiktar.Text)),
                             Kesinti = decimal.ToDouble(ParseDecimalValue(lblToplamKesinti.Text)),
                             OrtYag = decimal.ToDouble(ParseDecimalValue(lblOrtalamaYag.Text)),
-                            OrtProtein = decimal.ToDouble(ParseDecimalValue(lblOrtalamaProtein.Text)),
-                            ToplamKayit = (int)ParseDecimalValue(lblToplamKayit.Text)
+                            OrtProtein = decimal.ToDouble(ParseDecimalValue(lblOrtalamaProtein.Text))
+                            // ToplamKayit has been removed as requested
                         }
                     };
     
