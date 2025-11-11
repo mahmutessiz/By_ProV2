@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Data.SqlClient;
 using By_ProV2.Helpers;
@@ -101,6 +103,78 @@ namespace By_ProV2
             if (e.Key == Key.Enter)
             {
                 BtnSorgula_Click(sender, e);
+            }
+        }
+
+        private void BtnCariListe_Click(object sender, RoutedEventArgs e)
+        {
+            LoadCariListesi();
+            popupCariListesi.IsOpen = true;
+        }
+
+        private void LoadCariListesi()
+        {
+            string connectionString = ConfigurationHelper.GetConnectionString("db");
+            lstCariListesi.Items.Clear();
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT CariKod, CariAdi FROM Cari ORDER BY CariKod";
+                    using (var cmd = new SqlCommand(sql, conn))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var cariInfo = new CariInfo
+                                {
+                                    CariKod = reader["CariKod"].ToString(),
+                                    CariAdi = reader["CariAdi"].ToString(),
+                                    DisplayText = $"{reader["CariKod"]} - {reader["CariAdi"]}"
+                                };
+                                lstCariListesi.Items.Add(cariInfo);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Cari listesi yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LstCariListesi_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstCariListesi.SelectedItem is CariInfo selectedCari)
+            {
+                txtCariKodu.Text = selectedCari.CariKod;
+                popupCariListesi.IsOpen = false;
+            }
+        }
+
+        private void LstCariListesi_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (lstCariListesi.SelectedItem is CariInfo selectedCari)
+            {
+                txtCariKodu.Text = selectedCari.CariKod;
+                popupCariListesi.IsOpen = false;
+
+                // Open the report window with the selected supplier and current date filters
+                DateTime? startDate = dpStartDate.SelectedDate;
+                DateTime? endDate = dpEndDate.SelectedDate;
+
+                if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value)
+                {
+                    MessageBox.Show("Başlangıç tarihi bitiş tarihinden büyük olamaz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                SatisReportWindow reportWindow = new SatisReportWindow(selectedCari.CariKod, startDate, endDate);
+                reportWindow.ShowDialog();
             }
         }
     }

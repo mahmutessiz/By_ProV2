@@ -22,17 +22,28 @@
         </Border>
 
         <!-- 🔍 Arama Paneli -->
-        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,15">
+        <Grid Grid.Row="1" Margin="0,0,0,15">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Text="Tarih Aralığı:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,10,0"/>
                 <DatePicker x:Name="dpStartDate" Width="120" Height="25" Margin="0,0,10,0"/>
                 <TextBlock Text="ile" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <DatePicker x:Name="dpEndDate" Width="120" Height="25" Margin="0,0,15,0"/>
                 <TextBlock Text="Cari Kodu:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,10,0"/>
-                <TextBox x:Name="txtCariKodu" Width="150" Height="25" Margin="0,0,15,0" KeyDown="TxtCariKodu_KeyDown"/>
+                <TextBox x:Name="txtCariKodu" Width="150" Height="25" Margin="0,0,5,0" KeyDown="TxtCariKodu_KeyDown"/>
+                <Button x:Name="btnCariListe" Content="🔍" Width="25" Height="25" Margin="0,0,10,0" Click="BtnCariListe_Click" ToolTip="Cari Listesi"/>
                 <Button x:Name="btnSorgula" Content="Raporu Görüntüle" Width="150" Height="25" Margin="0,0,10,0" Click="BtnSorgula_Click"/>
                 <Button x:Name="btnTumunuListele" Content="Tüm Carileri Listele" Width="150" Height="25" Click="BtnTumunuListele_Click"/>
             </StackPanel>
-        </StackPanel>
+            <Popup x:Name="popupCariListesi" PlacementTarget="{Binding ElementName=txtCariKodu}" Placement="Bottom" StaysOpen="False" MaxHeight="200" AllowsTransparency="True">
+                <Border Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
+                    <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                        <ListBox x:Name="lstCariListesi" DisplayMemberPath="DisplayText"
+                                 Width="400" Height="Auto"
+                                 SelectionChanged="LstCariListesi_SelectionChanged"
+                                 MouseDoubleClick="LstCariListesi_MouseDoubleClick"/>
+                    </ScrollViewer>
+                </Border>
+            </Popup>
+        </Grid>
     </Grid>
 </Window>
