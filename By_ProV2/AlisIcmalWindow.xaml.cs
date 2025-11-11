@@ -12,6 +12,8 @@ namespace By_ProV2
 {
     public partial class AlisIcmalWindow : Window
     {
+        private List<CariInfo> _allCariList = new List<CariInfo>();
+
         public AlisIcmalWindow()
         {
             InitializeComponent();
@@ -106,7 +108,7 @@ namespace By_ProV2
         private void LoadCariListesi()
         {
             string connectionString = ConfigurationHelper.GetConnectionString("db");
-            lstCariListesi.Items.Clear();
+            _allCariList.Clear();
 
             try
             {
@@ -126,11 +128,14 @@ namespace By_ProV2
                                     CariAdi = reader["CariAdi"].ToString(),
                                     DisplayText = $"{reader["CariKod"]} - {reader["CariAdi"]}"
                                 };
-                                lstCariListesi.Items.Add(cariInfo);
+                                _allCariList.Add(cariInfo);
                             }
                         }
                     }
                 }
+                
+                // Set the ItemsSource to the full list
+                lstCariListesi.ItemsSource = _allCariList;
             }
             catch (Exception ex)
             {
@@ -166,6 +171,77 @@ namespace By_ProV2
 
                 AlisReportWindow reportWindow = new AlisReportWindow(selectedCari.CariKod, startDate, endDate);
                 reportWindow.ShowDialog();
+            }
+        }
+
+        // Overload for when called from Enter key event
+        private void LstCariListesi_MouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            if (lstCariListesi.SelectedItem is CariInfo selectedCari)
+            {
+                txtCariKodu.Text = selectedCari.CariKod;
+                popupCariListesi.IsOpen = false;
+
+                // Open the report window with the selected supplier and current date filters
+                DateTime? startDate = dpStartDate.SelectedDate;
+                DateTime? endDate = dpEndDate.SelectedDate;
+
+                if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value)
+                {
+                    MessageBox.Show("Başlangıç tarihi bitiş tarihinden büyük olamaz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                AlisReportWindow reportWindow = new AlisReportWindow(selectedCari.CariKod, startDate, endDate);
+                reportWindow.ShowDialog();
+            }
+        }
+
+        private void TxtCariAra_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterCariListesi();
+        }
+
+        private void TxtCariAra_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && lstCariListesi.SelectedItem != null)
+            {
+                // If an item is selected and Enter is pressed, treat it like double-click
+                LstCariListesi_MouseDoubleClick(sender, null);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                // Close the popup if Escape is pressed
+                popupCariListesi.IsOpen = false;
+            }
+        }
+
+        private void FilterCariListesi()
+        {
+            try
+            {
+                string searchText = txtCariAra.Text?.ToLower() ?? "";
+
+                if (string.IsNullOrEmpty(searchText))
+                {
+                    // If search text is empty, show all items
+                    lstCariListesi.ItemsSource = _allCariList;
+                }
+                else
+                {
+                    // Filter the list based on the search text
+                    var filteredList = _allCariList
+                        .Where(cari => cari.CariKod?.ToLower().Contains(searchText) == true || 
+                                       cari.CariAdi?.ToLower().Contains(searchText) == true ||
+                                       cari.DisplayText?.ToLower().Contains(searchText) == true)
+                        .ToList();
+
+                    lstCariListesi.ItemsSource = filteredList;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Arama sırasında hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

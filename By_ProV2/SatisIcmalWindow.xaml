@@ -34,14 +34,28 @@
                 <Button x:Name="btnSorgula" Content="Raporu Görüntüle" Width="150" Height="25" Margin="0,0,10,0" Click="BtnSorgula_Click"/>
                 <Button x:Name="btnTumunuListele" Content="Tüm Carileri Listele" Width="150" Height="25" Click="BtnTumunuListele_Click"/>
             </StackPanel>
-            <Popup x:Name="popupCariListesi" PlacementTarget="{Binding ElementName=txtCariKodu}" Placement="Bottom" StaysOpen="False" MaxHeight="200" AllowsTransparency="True">
+            <Popup x:Name="popupCariListesi" PlacementTarget="{Binding ElementName=txtCariKodu}" Placement="Bottom" StaysOpen="False" MaxHeight="250" AllowsTransparency="True">
                 <Border Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
-                    <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
-                        <ListBox x:Name="lstCariListesi" DisplayMemberPath="DisplayText"
-                                 Width="400" Height="Auto"
-                                 SelectionChanged="LstCariListesi_SelectionChanged"
-                                 MouseDoubleClick="LstCariListesi_MouseDoubleClick"/>
-                    </ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="txtCariAra" Grid.Row="0" Margin="5" Padding="3" 
+                                 TextChanged="TxtCariAra_TextChanged" 
+                                 KeyDown="TxtCariAra_KeyDown"
+                                 HorizontalAlignment="Stretch" 
+                                 VerticalAlignment="Top"
+                                 Width="390" Height="25" 
+                                 HorizontalContentAlignment="Left" 
+                                 VerticalContentAlignment="Center"/>
+                        <ScrollViewer Grid.Row="1" MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                            <ListBox x:Name="lstCariListesi" DisplayMemberPath="DisplayText"
+                                     Width="400" Height="Auto"
+                                     SelectionChanged="LstCariListesi_SelectionChanged"
+                                     MouseDoubleClick="LstCariListesi_MouseDoubleClick"/>
+                        </ScrollViewer>
+                    </Grid>
                 </Border>
             </Popup>
         </Grid>
