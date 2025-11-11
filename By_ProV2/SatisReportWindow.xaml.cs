@@ -249,7 +249,8 @@ namespace By_ProV2
                 {
                     // Create SaveFileDialog
                     Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-                    saveFileDialog.FileName = "SatisRaporu.pdf";
+                    string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                    saveFileDialog.FileName = $"SatisRaporu_{timestamp}.pdf";
                     saveFileDialog.Filter = "PDF Documents (*.pdf)|*.pdf";
     
                     if (saveFileDialog.ShowDialog() == true)
