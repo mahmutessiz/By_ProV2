@@ -192,8 +192,8 @@ namespace By_ProV2
                             originalRecord.Tarih.Date,
                             originalRecord.IslemTuru,
                             currentEditRecord.IslemTuru,
-                            originalRecord.Miktar,
-                            currentEditRecord.Miktar);
+                            originalRecord.NetMiktar,
+                            currentEditRecord.NetMiktar);
                     }
                     MessageBox.Show("Süt kaydı başarıyla güncellendi.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -230,7 +230,7 @@ namespace By_ProV2
                         if (kayit.SutKayitId == 0)
                         {
                             _repo.KaydetSutKaydi(kayit);
-                            _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.Miktar);
+                            _envanterService.UpdateInventoryForTransaction(kayit.Tarih.Date, kayit.IslemTuru, kayit.NetMiktar);
                         }
                         // Otherwise, it's an existing record to update
                         else
@@ -245,8 +245,8 @@ namespace By_ProV2
                                     originalRecord.Tarih.Date,
                                     originalRecord.IslemTuru,
                                     kayit.IslemTuru,
-                                    originalRecord.Miktar,
-                                    kayit.Miktar);
+                                    originalRecord.NetMiktar,
+                                    kayit.NetMiktar);
                             }
                         }
                     }
@@ -396,7 +396,7 @@ namespace By_ProV2
                     // If it's an existing record, revert the inventory transaction immediately
                     if (secili.SutKayitId > 0)
                     {
-                        _envanterService.RevertTransaction(secili.Tarih.Date, secili.IslemTuru, secili.Miktar);
+                        _envanterService.RevertTransaction(secili.Tarih.Date, secili.IslemTuru, secili.NetMiktar);
                         _deletedRecords.Add(secili); // Track for final DB deletion on save
                     }
                     

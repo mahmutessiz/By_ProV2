@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Controls;
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using System.Diagnostics;
 using System.IO;
@@ -124,19 +125,19 @@ namespace By_ProV2.Reports
 
             // Kolonları oluştur ve genişliklerini ayarla - daha dengeli ve toplamda 1100px'ten fazla olmamalı A4 yatay için
             TableColumn col1 = new TableColumn { Width = new GridLength(180) }; // Tedarikçi
-            TableColumn col2 = new TableColumn { Width = new GridLength(70) };  // Miktar
-            TableColumn col3 = new TableColumn { Width = new GridLength(70) };  // Net Miktar
-            TableColumn col4 = new TableColumn { Width = new GridLength(50) };  // Yağ
-            TableColumn col5 = new TableColumn { Width = new GridLength(50) };  // Protein
-            TableColumn col6 = new TableColumn { Width = new GridLength(50) };  // TKM
-            TableColumn col7 = new TableColumn { Width = new GridLength(50) };  // Laktoz
-            TableColumn col8 = new TableColumn { Width = new GridLength(45) };  // pH
-            TableColumn col9 = new TableColumn { Width = new GridLength(60) };  // İletkenlik
-            TableColumn col10 = new TableColumn { Width = new GridLength(70) }; // Donma Noktası
-            TableColumn col11 = new TableColumn { Width = new GridLength(60) }; // Kesinti
-            TableColumn col12 = new TableColumn { Width = new GridLength(60) }; // Antibiyotik
+            TableColumn col2 = new TableColumn { Width = new GridLength(80) };  // Miktar
+            TableColumn col3 = new TableColumn { Width = new GridLength(90) };  // Net Miktar
+            TableColumn col4 = new TableColumn { Width = new GridLength(70) };  // Yağ
+            TableColumn col5 = new TableColumn { Width = new GridLength(80) };  // Protein
+            TableColumn col6 = new TableColumn { Width = new GridLength(70) };  // TKM
+            TableColumn col7 = new TableColumn { Width = new GridLength(70) };  // Laktoz
+            TableColumn col8 = new TableColumn { Width = new GridLength(55) };  // pH
+            TableColumn col9 = new TableColumn { Width = new GridLength(90) };  // İletkenlik
+            TableColumn col10 = new TableColumn { Width = new GridLength(100) }; // Donma Noktası
+            TableColumn col11 = new TableColumn { Width = new GridLength(70) }; // Kesinti
+            TableColumn col12 = new TableColumn { Width = new GridLength(80) }; // Antibiyotik
             TableColumn col13 = new TableColumn { Width = new GridLength(60) }; // Durum
-            TableColumn col14 = new TableColumn { Width = new GridLength(120) }; // Açıklama
+            TableColumn col14 = new TableColumn { Width = new GridLength(100) }; // Açıklama
 
             table.Columns.Add(col1); // Tedarikçi
             table.Columns.Add(col2); // Miktar
@@ -177,7 +178,13 @@ namespace By_ProV2.Reports
             foreach (var k in kayitlar)
             {
                 TableRow row = new TableRow();
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.TedarikciAdi ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
+                // Truncate long supplier names for the FlowDocument view
+                string tedarikciAdi = k.TedarikciAdi ?? "-";
+                if (tedarikciAdi.Length > 30) // Truncate if too long
+                {
+                    tedarikciAdi = tedarikciAdi.Substring(0, 27) + "...";
+                }
+                row.Cells.Add(new TableCell(new Paragraph(new Run(tedarikciAdi))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Miktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.NetMiktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Yag?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
@@ -190,10 +197,14 @@ namespace By_ProV2.Reports
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Kesinti.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Antibiyotik ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Durumu ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
-                // Açıklama sütununa uzun metinler için wrapping ekle
-                var aciklamaParagraph = new Paragraph(new Run(k.Aciklama ?? "-"));
+                // Açıklama sütununa uzun metinler için kısaltma ekle
+                string aciklamaText = k.Aciklama ?? "-";
+                if (aciklamaText.Length > 40) // Truncate if too long
+                {
+                    aciklamaText = aciklamaText.Substring(0, 37) + "...";
+                }
+                var aciklamaParagraph = new Paragraph(new Run(aciklamaText));
                 var aciklamaCell = new TableCell(aciklamaParagraph) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left };
-                // FlowDocument tablosunda wrapping genellikle otomatik olarak işler, alternatif olarak max genişlik ayarlanabilir
                 row.Cells.Add(aciklamaCell);
                 dataGroup.Rows.Add(row);
             }
@@ -523,22 +534,65 @@ namespace By_ProV2.Reports
             k.Aciklama ?? "-"
         };
 
+        // Calculate row height based on content in supplier name column and description column
+        double calculatedRowHeight = rowHeight;
+        
+        // For supplier name column (index 0), check if text needs more vertical space
+        string supplierNameText = rowData[0];
+        // Create a simple text measurement approach
+        XSize supplierTextSize = gfx.MeasureString(supplierNameText, normalFont);
+        // Estimate row height needed based on text width vs column width
+        double estimatedSupplierRows = Math.Ceiling(supplierTextSize.Width / (colWidths[0] - 4));
+        double supplierNeededHeight = estimatedSupplierRows * (normalFont.Size + 4); // Add some padding
+        if (supplierNeededHeight > calculatedRowHeight)
+        {
+            calculatedRowHeight = supplierNeededHeight;
+        }
+        
+        // For description column (index 13), check if text needs more vertical space (after truncation)
+        string descText = rowData[13];
+        if (descText.Length > 40) // Truncate description for display
+        {
+            descText = descText.Substring(0, 37) + "...";
+        }
+        XSize descTextSize = gfx.MeasureString(descText, normalFont);
+        double estimatedDescRows = Math.Ceiling(descTextSize.Width / (colWidths[13] - 4));
+        double descNeededHeight = estimatedDescRows * (normalFont.Size + 4); // Add some padding
+        if (descNeededHeight > calculatedRowHeight)
+        {
+            calculatedRowHeight = descNeededHeight;
+        }
+        
+        // Ensure minimum row height
+        calculatedRowHeight = Math.Max(calculatedRowHeight, rowHeight);
+        
         currentX = startX;
         for (int i = 0; i < rowData.Length; i++)
         {
             string cellText = rowData[i];
-            if (i == 13 && cellText.Length > 40) // Açıklama sütunu - increased from 20 to 40 characters
+            if (i == 13 && cellText.Length > 40) // Açıklama sütunu - truncate if too long
             {
                 cellText = cellText.Substring(0, 37) + "...";
             }
 
-            gfx.DrawRectangle(XPens.Black, new XRect(currentX, yPos, colWidths[i], rowHeight));
+            gfx.DrawRectangle(XPens.Black, new XRect(currentX, yPos, colWidths[i], calculatedRowHeight));
             
-            XStringFormat format = i == 0 || i == 13 ? XStringFormats.CenterLeft : XStringFormats.Center;
-            gfx.DrawString(cellText, normalFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), format);
+            if (i == 0 || i == 13) // For supplier name and description, use text wrapping
+            {
+                // Use XTextFormatter for proper text wrapping in cells
+                var textFormatter = new PdfSharp.Drawing.Layout.XTextFormatter(gfx);
+                XRect cellRect = new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, calculatedRowHeight - 4);
+                textFormatter.Alignment = XParagraphAlignment.Left;
+                textFormatter.DrawString(cellText, normalFont, XBrushes.Black, cellRect);
+            }
+            else // For other columns, use regular text alignment
+            {
+                XStringFormat format = XStringFormats.Center;
+                gfx.DrawString(cellText, normalFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, calculatedRowHeight - 4), format);
+            }
             currentX += colWidths[i];
         }
-        yPos += rowHeight;
+        yPos += calculatedRowHeight;
     }
 
     // Alt toplam satırı

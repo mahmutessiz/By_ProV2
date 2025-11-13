@@ -245,21 +245,36 @@ namespace By_ProV2
                 return;
             }
 
-            decimal toplamAlinan = 0;
-            decimal toplamSatilan = 0;
+            // Find today's specific record
+            DateTime today = DateTime.Today;
+            SutEnvanteri todayEnvanter = null;
 
             foreach (var envanter in EnvanterListesi)
             {
-                toplamAlinan += envanter.GunlukAlinanSut;
-                toplamSatilan += envanter.GunlukSatilanSut;
+                if (envanter.Tarih.Date == today)
+                {
+                    todayEnvanter = envanter;
+                    break; // Found today's record, no need to continue
+                }
             }
 
-            lblToplamAlinan.Text = toplamAlinan.ToString("N2");
-            lblToplamSatilan.Text = toplamSatilan.ToString("N2");
-
-            // Get the last entry's remaining milk
-            var sonEnvanter = EnvanterListesi[0]; // Since it's ordered by date descending
-            lblSonKalan.Text = sonEnvanter.KalanSut.ToString("N2");
+            // Show today's specific values (not cumulative)
+            if (todayEnvanter != null)
+            {
+                lblToplamAlinan.Text = todayEnvanter.GunlukAlinanSut.ToString("N2");
+                lblToplamSatilan.Text = todayEnvanter.GunlukSatilanSut.ToString("N2");
+                lblSonKalan.Text = todayEnvanter.KalanSut.ToString("N2");
+            }
+            else
+            {
+                // If no record for today exists, show 0.00 for daily values and latest remaining amount
+                lblToplamAlinan.Text = "0.00";
+                lblToplamSatilan.Text = "0.00";
+                
+                // Show the latest day's remaining amount
+                var sonEnvanter = EnvanterListesi[0]; // Since it's ordered by date descending
+                lblSonKalan.Text = sonEnvanter.KalanSut.ToString("N2");
+            }
         }
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)

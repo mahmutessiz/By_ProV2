@@ -48,7 +48,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <TextBlock Text="Cari Adı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="txtCariAdi" FontSize="14" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="txtCariAdi" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="200"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <TextBlock Text="Süt Fiyatı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
