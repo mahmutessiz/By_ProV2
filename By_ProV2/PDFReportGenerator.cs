@@ -1,4 +1,5 @@
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
@@ -98,8 +99,17 @@ public static class ReportGenerator
             gfx.DrawString(data.CustomerCode, fontBody, brushBlack, infoX + labelWidth, currentY, formatLeft);
             currentY += cariKoduSize.Height + 5;
             gfx.DrawString("Cari Adı:", fontHeader, brushBlack, infoX, currentY, formatLeft);
-            gfx.DrawString(data.CustomerName, fontBody, brushBlack, infoX + labelWidth, currentY, formatLeft);
-            currentY += cariAdiSize.Height + 20;
+            
+            // Draw customer name with proper text wrapping using XTextFormatter
+            double availableWidth = Math.Min(300, pageWidth - (infoX + labelWidth + rightMargin/2)); // Limit width to prevent overly wide lines
+            XRect customerNameRect = new XRect(infoX + labelWidth, currentY, availableWidth, 60); // Allow more height for wrapped text
+            
+            var textFormatter = new XTextFormatter(gfx);
+            textFormatter.Alignment = XParagraphAlignment.Left;
+            textFormatter.DrawString(data.CustomerName, fontBody, brushBlack, customerNameRect);
+            
+            // Increase the currentY position more to account for potentially multiple lines of wrapped text
+            currentY += Math.Max(cariAdiSize.Height + 20, 50); // Use a minimum of 50 to accommodate wrapped text
 
             // === Table setup with dynamic column widths ===
             // Measure header text to determine minimum column widths

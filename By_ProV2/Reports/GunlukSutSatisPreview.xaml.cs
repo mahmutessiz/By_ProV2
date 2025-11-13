@@ -177,13 +177,14 @@ namespace By_ProV2.Reports
             foreach (var k in kayitlar)
             {
                 TableRow row = new TableRow();
-                // Truncate long customer names for the FlowDocument view
+                // For the FlowDocument view, allow text wrapping by reducing truncation
                 string musteriAdi = k.MusteriAdi ?? "-";
-                if (musteriAdi.Length > 30) // Truncate if too long
+                if (musteriAdi.Length > 40) // Truncate if too long (increased from 30)
                 {
-                    musteriAdi = musteriAdi.Substring(0, 27) + "...";
+                    musteriAdi = musteriAdi.Substring(0, 37) + "...";
                 }
-                row.Cells.Add(new TableCell(new Paragraph(new Run(musteriAdi))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
+                var musteriParagraph = new Paragraph(new Run(musteriAdi));
+                row.Cells.Add(new TableCell(musteriParagraph) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Miktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.NetMiktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Yag?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });

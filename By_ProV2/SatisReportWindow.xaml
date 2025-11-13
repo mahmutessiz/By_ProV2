@@ -40,7 +40,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Cari Adı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"  Margin="25,0,0,0"/>
-                <TextBlock x:Name="txtCariAdi" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtCariAdi" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="300" Width="300"/>
             </StackPanel>
         </StackPanel>
 

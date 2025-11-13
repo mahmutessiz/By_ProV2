@@ -124,7 +124,7 @@ namespace By_ProV2.Reports
             Table table = new Table { CellSpacing = 0, Margin = new Thickness(0, 0, 0, 10) };
 
             // Kolonları oluştur ve genişliklerini ayarla - daha dengeli ve toplamda 1100px'ten fazla olmamalı A4 yatay için
-            TableColumn col1 = new TableColumn { Width = new GridLength(180) }; // Tedarikçi
+            TableColumn col1 = new TableColumn { Width = new GridLength(180) }; // Tedarikçi - narrower to force text wrapping
             TableColumn col2 = new TableColumn { Width = new GridLength(80) };  // Miktar
             TableColumn col3 = new TableColumn { Width = new GridLength(90) };  // Net Miktar
             TableColumn col4 = new TableColumn { Width = new GridLength(60) };  // Yağ
@@ -178,13 +178,14 @@ namespace By_ProV2.Reports
             foreach (var k in kayitlar)
             {
                 TableRow row = new TableRow();
-                // Truncate long supplier names for the FlowDocument view
+                // For the FlowDocument view, allow text wrapping by reducing truncation
                 string tedarikciAdi = k.TedarikciAdi ?? "-";
-                if (tedarikciAdi.Length > 30) // Truncate if too long
+                if (tedarikciAdi.Length > 40) // Truncate if too long (increased from 30)
                 {
-                    tedarikciAdi = tedarikciAdi.Substring(0, 27) + "...";
+                    tedarikciAdi = tedarikciAdi.Substring(0, 37) + "...";
                 }
-                row.Cells.Add(new TableCell(new Paragraph(new Run(tedarikciAdi))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
+                var tedarikciParagraph = new Paragraph(new Run(tedarikciAdi));
+                row.Cells.Add(new TableCell(tedarikciParagraph) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Miktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.NetMiktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Yag?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
