@@ -142,9 +142,9 @@ namespace By_ProV2
                             {
                                 var newKayit = new AlisIcmalKaydi
                                 {
-                                    Tarih = reader.GetDateTime(reader.GetOrdinal("Tarih")),
+                                    Tarih = reader.IsDBNull(reader.GetOrdinal("Tarih")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("Tarih")),
                                     CariKod = reader["CariKod"] as string,
-                                    Miktar = reader.GetDecimal(reader.GetOrdinal("NetMiktar")),
+                                    Miktar = reader.IsDBNull(reader.GetOrdinal("NetMiktar")) ? 0 : reader.GetDecimal(reader.GetOrdinal("NetMiktar")),
                                     Kesinti = reader.IsDBNull(reader.GetOrdinal("Kesinti")) ? 0 : reader.GetDecimal(reader.GetOrdinal("Kesinti")),
                                     Yag = reader.IsDBNull(reader.GetOrdinal("Yag")) ? null : reader.GetDecimal(reader.GetOrdinal("Yag")),
                                     Protein = reader.IsDBNull(reader.GetOrdinal("Protein")) ? null : reader.GetDecimal(reader.GetOrdinal("Protein"))
@@ -425,8 +425,8 @@ namespace By_ProV2
                             {
                                 var item = new AlisReportItem
                                 {
-                                    Tarih = reader.GetDateTime(reader.GetOrdinal("Tarih")).ToString("dd.MM.yyyy"),
-                                    Miktar = Convert.ToDouble(reader.GetDecimal(reader.GetOrdinal("NetMiktar"))),
+                                    Tarih = (reader.IsDBNull(reader.GetOrdinal("Tarih")) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal("Tarih"))).ToString("dd.MM.yyyy"),
+                                    Miktar = reader.IsDBNull(reader.GetOrdinal("NetMiktar")) ? 0.0 : Convert.ToDouble(reader.GetDecimal(reader.GetOrdinal("NetMiktar"))),
                                     Kesinti = reader.IsDBNull(reader.GetOrdinal("Kesinti")) ? 0.0 : Convert.ToDouble(reader.GetDecimal(reader.GetOrdinal("Kesinti"))),
                                     Yag = reader.IsDBNull(reader.GetOrdinal("Yag")) ? 0.0 : Convert.ToDouble(reader.GetDecimal(reader.GetOrdinal("Yag"))),
                                     Protein = reader.IsDBNull(reader.GetOrdinal("Protein")) ? 0.0 : Convert.ToDouble(reader.GetDecimal(reader.GetOrdinal("Protein")))

@@ -322,7 +322,7 @@
 
                 <!-- DataGrid -->
                 <DataGrid x:Name="dgTedarikciler"
-                          Grid.Row="1"                          
+                          Grid.Row="1"
                           RowHeight="25"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
@@ -330,7 +330,8 @@
                           AlternatingRowBackground="#F2F2F2"
                           HeadersVisibility="Column"
                           Margin="0,5,0,0"
-                          MouseDoubleClick="dgTedarikciler_MouseDoubleClick">                    
+                          MouseDoubleClick="dgTedarikciler_MouseDoubleClick"
+                          SelectionChanged="dgTedarikciler_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Belge No" Binding="{Binding BelgeNo}" Width="*"/>
                         <DataGridTextColumn Header="Tedarikçi Kod" Binding="{Binding TedarikciKod}" Width="*"/>

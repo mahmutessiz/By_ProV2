@@ -104,9 +104,15 @@ namespace By_ProV2
 
         private void dgTedarikciler_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (isDocumentViewMode && dgTedarikciler.SelectedItem is SutKaydi selectedKayit)
+            if (dgTedarikciler.SelectedItem is SutKaydi selectedKayit)
             {
                 PopulateFieldsFromKayit(selectedKayit);
+
+                // Change button text to indicate update mode
+                if (!isDocumentViewMode && currentEditRecord == null)
+                {
+                    btnListeyeEkle.Content = "✏️ Güncelle";
+                }
             }
         }
 
@@ -118,14 +124,26 @@ namespace By_ProV2
             }
             else
             {
-                AddNewRecordToList();
+                // If there's a selected item in the grid, update it; otherwise, add as new
+                if (dgTedarikciler.SelectedItem != null)
+                {
+                    UpdateSelectedRecordInList();
+                    // Reset button text after update
+                    btnListeyeEkle.Content = "➕ Listeye Ekle";
+                }
+                else
+                {
+                    AddNewRecordToList();
+                    // Ensure button shows "Add" text for new records
+                    btnListeyeEkle.Content = "➕ Listeye Ekle";
+                }
             }
         }
 
         private void AddNewRecordToList()
         {
-            string islemTuru = rbDepoAlim.IsChecked == true ? "Depoya Alım" 
-                : rbDepodanSevk.IsChecked == true ? "Depodan Sevk" 
+            string islemTuru = rbDepoAlim.IsChecked == true ? "Depoya Alım"
+                : rbDepodanSevk.IsChecked == true ? "Depodan Sevk"
                 : "Direkt Sevk";
 
             // For "Depodan Sevk", tedarikçi is not required but müşteri is required
@@ -157,19 +175,53 @@ namespace By_ProV2
             dgTedarikciler.SelectedItem = kayit;
             dgTedarikciler.ScrollIntoView(kayit);
             ClearAnalysisFields();
+
+            // Reset button text after adding new record
+            btnListeyeEkle.Content = "➕ Listeye Ekle";
         }
 
         private void UpdateSelectedRecordInList()
         {
             if (dgTedarikciler.SelectedItem is SutKaydi selectedKayit)
             {
+                // Store the original ID to know if this is an existing record
+                int originalId = selectedKayit.SutKayitId;
+
                 UpdateKayitFromFields(selectedKayit);
-                dgTedarikciler.Items.Refresh();
-                MessageBox.Show("Kayıt listede güncellendi. Kaydetmek için ana 'Kaydet' butonunu kullanın.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // If this was an existing record in document view mode, or we're in edit mode for single record
+                if (isDocumentViewMode || currentEditRecord != null)
+                {
+                    dgTedarikciler.Items.Refresh();
+                    MessageBox.Show("Kayıt listede güncellendi. Kaydetmek için ana 'Kaydet' butonunu kullanın.", "Bilgi", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    // For regular mode, we remove the old item and add the updated one
+                    int index = TedarikciListesi.IndexOf(selectedKayit);
+                    if (index >= 0)
+                    {
+                        TedarikciListesi.RemoveAt(index);
+                        TedarikciListesi.Insert(index, selectedKayit);
+                        dgTedarikciler.SelectedItem = selectedKayit;
+                    }
+                }
+
+                // Clear the input fields after updating
+                ClearAnalysisFields();
             }
             else
             {
                 MessageBox.Show("Lütfen listeden güncellenecek bir kayıt seçin.", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void dgTedarikciler_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // If no item is selected, reset the button text to default
+            if (dgTedarikciler.SelectedItem == null && !isDocumentViewMode && currentEditRecord == null)
+            {
+                btnListeyeEkle.Content = "➕ Listeye Ekle";
             }
         }
 
