@@ -92,7 +92,7 @@ namespace By_ProV2.Reports
                 var tumKesinti = sutKayitlar.Sum(x => x.Kesinti);
 
                 Paragraph genelToplam = new Paragraph(new Bold(new Run(
-                    $"GENEL TOPLAM — Miktar: {tumMiktar:N2} lt | Yağ: {genelYag:N2}% | Protein: {genelProtein:N2}% | TKM: {genelTKM:N2}% | Laktoz: {genelLaktoz:N2}% | pH: {genelpH:N2} | İletkenlik: {genelIletkenlik:N2}mS | Donma Noktası: {genelDonma:N2}°C | Kesinti: {tumKesinti:N2}lt"
+                    $"GENEL TOPLAM — Miktar: {tumMiktar:N2} lt | Yağ: {genelYag:N2}% | Protein: {genelProtein:N2}% | TKM: {genelTKM:N2}% | Laktoz: {genelLaktoz:N2}% | pH: {genelpH:N2} | İletkenlik: {genelIletkenlik:N2}mS | Donma Noktası: {genelDonma:N3}°C | Kesinti: {tumKesinti:N2}lt"
                 )))
                 {
                     TextAlignment = TextAlignment.Center,
@@ -185,7 +185,7 @@ namespace By_ProV2.Reports
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Laktoz?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.pH?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Iletkenlik?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.DonmaN?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+                row.Cells.Add(new TableCell(new Paragraph(new Run(k.DonmaN?.ToString("N3") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Kesinti.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Antibiyotik ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Durumu ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
@@ -218,7 +218,7 @@ namespace By_ProV2.Reports
             toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortLaktoz.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
             toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortpH.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
             toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortIletkenlik.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
-            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortDonma.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
+            toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(ortDonma.ToString("N3"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
             toplamRow.Cells.Add(new TableCell(new Paragraph(new Bold(new Run(toplamKesinti.ToString("N2"))))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
             toplamRow.Cells.Add(new TableCell(new Paragraph(new Run(""))) { Padding = new Thickness(5) });
             toplamRow.Cells.Add(new TableCell(new Paragraph(new Run(""))) { Padding = new Thickness(5) });
@@ -400,7 +400,7 @@ namespace By_ProV2.Reports
                         var genelDonma = WeightedAverage(sutKayitlar.Select(x => x.DonmaN), sutKayitlar.Select(x => x.Miktar));
                         var tumKesinti = sutKayitlar.Sum(x => x.Kesinti);
 
-                        string genelToplam = $"GENEL TOPLAM — Miktar: {tumMiktar:N2} lt | Yağ: {genelYag:N2}% | Protein: {genelProtein:N2}% | TKM: {genelTKM:N2}% | Laktoz: {genelLaktoz:N2}% | pH: {genelpH:N2} | İletkenlik: {genelIletkenlik:N2}mS | Donma Noktası: {genelDonma:N2}°C | Kesinti: {tumKesinti:N2}lt";
+                        string genelToplam = $"GENEL TOPLAM — Miktar: {tumMiktar:N2} lt | Yağ: {genelYag:N2}% | Protein: {genelProtein:N2}% | TKM: {genelTKM:N2}% | Laktoz: {genelLaktoz:N2}% | pH: {genelpH:N2} | İletkenlik: {genelIletkenlik:N2}mS | Donma Noktası: {genelDonma:N3}°C | Kesinti: {tumKesinti:N2}lt";
                 
                         XSize textSize = gfx.MeasureString(genelToplam, kalinFont);
                         if (textSize.Width > (page.Width - 40))
@@ -504,7 +504,7 @@ namespace By_ProV2.Reports
                     k.Laktoz?.ToString("N2") ?? "-",
                     k.pH?.ToString("N2") ?? "-",
                     k.Iletkenlik?.ToString("N2") ?? "-",
-                    k.DonmaN?.ToString("N2") ?? "-",
+                    k.DonmaN?.ToString("N3") ?? "-",
                     k.Kesinti.ToString("N2"),
                     k.Antibiyotik ?? "-",
                     k.Durumu ?? "-",
@@ -571,7 +571,7 @@ namespace By_ProV2.Reports
                     ortLaktoz.ToString("N2"),
                     ortpH.ToString("N2"),
                     ortIletkenlik.ToString("N2"),
-                    ortDonma.ToString("N2"),
+                    ortDonma.ToString("N3"),
                     toplamKesinti.ToString("N2"),
                     "", "", ""
                 };

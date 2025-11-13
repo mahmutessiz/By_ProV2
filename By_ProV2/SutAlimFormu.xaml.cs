@@ -299,7 +299,7 @@ namespace By_ProV2
             cmbAracTemizlik.SelectedItem = cmbAracTemizlik.Items.Cast<ComboBoxItem>().FirstOrDefault(x => x.Content.ToString() == kayit.AracTemizlik);
             txtPlaka.Text = kayit.Plaka;
             cmbDurumu.SelectedItem = cmbDurumu.Items.Cast<ComboBoxItem>().FirstOrDefault(x => x.Content.ToString() == kayit.Durumu);
-            txtDonma.Text = kayit.DonmaN?.ToString();
+            txtDonma.Text = kayit.DonmaN?.ToString("F3"); // Show with 3 decimal places to maintain precision
             txtBakteri.Text = kayit.Bakteri?.ToString();
             txtSomatik.Text = kayit.Somatik?.ToString();
             txtAciklama.Text = kayit.Aciklama;
