@@ -3,8 +3,6 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Linq;
-using System;
 using System.Globalization;
 using By_ProV2.DataAccess;
 using By_ProV2.Models;
