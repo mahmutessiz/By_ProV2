@@ -45,6 +45,45 @@ namespace By_ProV2.Helpers
                     command.ExecuteNonQuery();
                 }
 
+                // Create CASABIT Table
+                string createCasabitTable = @"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CASABIT' and xtype='U')
+                CREATE TABLE CASABIT (
+                    ID INT PRIMARY KEY,
+                    CARIKOD NVARCHAR(50) NOT NULL UNIQUE,
+                    CARIADI NVARCHAR(255),
+                    ADRES NVARCHAR(MAX),
+                    TELEFON NVARCHAR(50),
+                    YETKILIKISI NVARCHAR(100),
+                    BAGLICARIKOD NVARCHAR(50),
+                    VERGIDAIRESI NVARCHAR(100),
+                    VERGINO NVARCHAR(50),
+                    ISK1 DECIMAL(18, 2),
+                    ISK2 DECIMAL(18, 2),
+                    ISK3 DECIMAL(18, 2),
+                    ISK4 DECIMAL(18, 2),
+                    KKISK1 DECIMAL(18, 2),
+                    KKISK2 DECIMAL(18, 2),
+                    KKISK3 DECIMAL(18, 2),
+                    KKISK4 DECIMAL(18, 2),
+                    NAKISK DECIMAL(18, 2),
+                    PLAKA1 NVARCHAR(50),
+                    PLAKA2 NVARCHAR(50),
+                    PLAKA3 NVARCHAR(50),
+                    SOFORADSOYAD NVARCHAR(255),
+                    KAYITTARIHI DATETIME,
+                    SUTFIYATI DECIMAL(18, 2),
+                    NAKFIYATI DECIMAL(18, 2),
+                    CreatedBy INT NULL,
+                    ModifiedBy INT NULL,
+                    CreatedAt DATETIME,
+                    ModifiedAt DATETIME
+                )";
+                using (var command = new SqlCommand(createCasabitTable, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
                 // Create SutKayit Table
                 string createSutKayitTable = @"
                 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SutKayit' and xtype='U')
@@ -748,6 +787,152 @@ namespace By_ProV2.Helpers
                     command.ExecuteNonQuery();
                 }
 
+                UpdateSchema(connection);
+            }
+        }
+
+        public static void UpdateSchema(SqlConnection connection)
+        {
+            // Create SchemaVersions Table
+            string createSchemaVersionsTable = @"
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SchemaVersions' and xtype='U')
+            CREATE TABLE SchemaVersions (
+                Version INT NOT NULL
+            )";
+            using (var command = new SqlCommand(createSchemaVersionsTable, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            // Check current version
+            int currentVersion = 0;
+            string getVersionQuery = "SELECT TOP 1 Version FROM SchemaVersions";
+            using (var command = new SqlCommand(getVersionQuery, connection))
+            {
+                var result = command.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    currentVersion = (int)result;
+                }
+                else
+                {
+                    // If no version is present, we can assume it's a fresh database or pre-versioning schema
+                    // and we insert the first version entry.
+                    string insertInitialVersion = "INSERT INTO SchemaVersions (Version) VALUES (0)";
+                    using (var insertCmd = new SqlCommand(insertInitialVersion, connection))
+                    {
+                        insertCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            if (currentVersion < 1)
+            {
+                // Version 1 Migrations
+                string version1Migration = @"
+                ALTER TABLE SutKayit ALTER COLUMN Iletkenlik DECIMAL(18, 2);
+
+                IF EXISTS (SELECT * FROM sysobjects WHERE name='Cari' and xtype='U')
+                BEGIN
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'KKIsk1')
+                        ALTER TABLE Cari ALTER COLUMN KKIsk1 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'KKIsk2')
+                        ALTER TABLE Cari ALTER COLUMN KKIsk2 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'KKIsk3')
+                        ALTER TABLE Cari ALTER COLUMN KKIsk3 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'KKIsk4')
+                        ALTER TABLE Cari ALTER COLUMN KKIsk4 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'Isk1')
+                        ALTER TABLE Cari ALTER COLUMN Isk1 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'Isk2')
+                        ALTER TABLE Cari ALTER COLUMN Isk2 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'Isk3')
+                        ALTER TABLE Cari ALTER COLUMN Isk3 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'Isk4')
+                        ALTER TABLE Cari ALTER COLUMN Isk4 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Cari') AND name = 'NakliyeIskonto')
+                        ALTER TABLE Cari ALTER COLUMN NakliyeIskonto DECIMAL(18, 2);
+                END
+
+                -- Comprehensive CASABIT column type check
+                IF EXISTS (SELECT * FROM sysobjects WHERE name='CASABIT' and xtype='U')
+                BEGIN
+                    -- NVARCHAR columns
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'CARIKOD')
+                        ALTER TABLE CASABIT ALTER COLUMN CARIKOD NVARCHAR(50) NOT NULL;
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'CARIADI')
+                        ALTER TABLE CASABIT ALTER COLUMN CARIADI NVARCHAR(255);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ADRES')
+                        ALTER TABLE CASABIT ALTER COLUMN ADRES NVARCHAR(MAX);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'TELEFON')
+                        ALTER TABLE CASABIT ALTER COLUMN TELEFON NVARCHAR(50);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'YETKILIKISI')
+                        ALTER TABLE CASABIT ALTER COLUMN YETKILIKISI NVARCHAR(100);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'BAGLICARIKOD')
+                        ALTER TABLE CASABIT ALTER COLUMN BAGLICARIKOD NVARCHAR(50);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'VERGIDAIRESI')
+                        ALTER TABLE CASABIT ALTER COLUMN VERGIDAIRESI NVARCHAR(100);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'VERGINO')
+                        ALTER TABLE CASABIT ALTER COLUMN VERGINO NVARCHAR(50);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'PLAKA1')
+                        ALTER TABLE CASABIT ALTER COLUMN PLAKA1 NVARCHAR(50);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'PLAKA2')
+                        ALTER TABLE CASABIT ALTER COLUMN PLAKA2 NVARCHAR(50);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'PLAKA3')
+                        ALTER TABLE CASABIT ALTER COLUMN PLAKA3 NVARCHAR(50);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'SOFORADSOYAD')
+                        ALTER TABLE CASABIT ALTER COLUMN SOFORADSOYAD NVARCHAR(255);
+
+                    -- DECIMAL columns
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ISK1')
+                        ALTER TABLE CASABIT ALTER COLUMN ISK1 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ISK2')
+                        ALTER TABLE CASABIT ALTER COLUMN ISK2 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ISK3')
+                        ALTER TABLE CASABIT ALTER COLUMN ISK3 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ISK4')
+                        ALTER TABLE CASABIT ALTER COLUMN ISK4 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'KKISK1')
+                        ALTER TABLE CASABIT ALTER COLUMN KKISK1 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'KKISK2')
+                        ALTER TABLE CASABIT ALTER COLUMN KKISK2 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'KKISK3')
+                        ALTER TABLE CASABIT ALTER COLUMN KKISK3 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'KKISK4')
+                        ALTER TABLE CASABIT ALTER COLUMN KKISK4 DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'NAKISK')
+                        ALTER TABLE CASABIT ALTER COLUMN NAKISK DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'SUTFIYATI')
+                        ALTER TABLE CASABIT ALTER COLUMN SUTFIYATI DECIMAL(18, 2);
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'NAKFIYATI')
+                        ALTER TABLE CASABIT ALTER COLUMN NAKFIYATI DECIMAL(18, 2);
+
+                    -- DATETIME columns
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'KAYITTARIHI')
+                        ALTER TABLE CASABIT ALTER COLUMN KAYITTARIHI DATETIME;
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'CreatedAt')
+                        ALTER TABLE CASABIT ALTER COLUMN CreatedAt DATETIME;
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ModifiedAt')
+                        ALTER TABLE CASABIT ALTER COLUMN ModifiedAt DATETIME;
+
+                    -- INT columns
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'CreatedBy')
+                        ALTER TABLE CASABIT ALTER COLUMN CreatedBy INT;
+                    IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('CASABIT') AND name = 'ModifiedBy')
+                        ALTER TABLE CASABIT ALTER COLUMN ModifiedBy INT;
+                END
+                ";
+                using (var command = new SqlCommand(version1Migration, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
+                // Update version
+                string updateVersionQuery = "UPDATE SchemaVersions SET Version = 1";
+                using (var command = new SqlCommand(updateVersionQuery, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
