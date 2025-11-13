@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Controls;
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using System.Diagnostics;
 using System.IO;
@@ -122,18 +123,18 @@ namespace By_ProV2.Reports
             Table table = new Table { CellSpacing = 0, Margin = new Thickness(0, 0, 0, 10) };
 
             // Kolonları oluştur ve genişliklerini ayarla - müşteri sütununa daha fazla alan ver
-            TableColumn col1 = new TableColumn { Width = new GridLength(180) }; // Müşteri
-            TableColumn col2 = new TableColumn { Width = new GridLength(70) };  // Miktar
-            TableColumn col3 = new TableColumn { Width = new GridLength(70) };  // Net Miktar
-            TableColumn col4 = new TableColumn { Width = new GridLength(50) };  // Yağ
-            TableColumn col5 = new TableColumn { Width = new GridLength(50) };  // Protein
-            TableColumn col6 = new TableColumn { Width = new GridLength(50) };  // TKM
-            TableColumn col7 = new TableColumn { Width = new GridLength(50) };  // Laktoz
+            TableColumn col1 = new TableColumn { Width = new GridLength(180) }; // Tedarikçi
+            TableColumn col2 = new TableColumn { Width = new GridLength(80) };  // Miktar
+            TableColumn col3 = new TableColumn { Width = new GridLength(90) };  // Net Miktar
+            TableColumn col4 = new TableColumn { Width = new GridLength(60) };  // Yağ
+            TableColumn col5 = new TableColumn { Width = new GridLength(70) };  // Protein
+            TableColumn col6 = new TableColumn { Width = new GridLength(70) };  // TKM
+            TableColumn col7 = new TableColumn { Width = new GridLength(60) };  // Laktoz
             TableColumn col8 = new TableColumn { Width = new GridLength(45) };  // pH
-            TableColumn col9 = new TableColumn { Width = new GridLength(60) };  // İletkenlik
-            TableColumn col10 = new TableColumn { Width = new GridLength(70) }; // Donma Noktası
-            TableColumn col11 = new TableColumn { Width = new GridLength(60) }; // Kesinti
-            TableColumn col12 = new TableColumn { Width = new GridLength(60) }; // Antibiyotik
+            TableColumn col9 = new TableColumn { Width = new GridLength(90) };  // İletkenlik
+            TableColumn col10 = new TableColumn { Width = new GridLength(80) }; // Donma Noktası
+            TableColumn col11 = new TableColumn { Width = new GridLength(70) }; // Kesinti
+            TableColumn col12 = new TableColumn { Width = new GridLength(80) }; // Antibiyotik
             TableColumn col13 = new TableColumn { Width = new GridLength(60) }; // Durum
             TableColumn col14 = new TableColumn { Width = new GridLength(120) }; // Açıklama
 
@@ -176,7 +177,13 @@ namespace By_ProV2.Reports
             foreach (var k in kayitlar)
             {
                 TableRow row = new TableRow();
-                row.Cells.Add(new TableCell(new Paragraph(new Run(k.MusteriAdi ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
+                // Truncate long customer names for the FlowDocument view
+                string musteriAdi = k.MusteriAdi ?? "-";
+                if (musteriAdi.Length > 30) // Truncate if too long
+                {
+                    musteriAdi = musteriAdi.Substring(0, 27) + "...";
+                }
+                row.Cells.Add(new TableCell(new Paragraph(new Run(musteriAdi))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Miktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.NetMiktar.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Yag?.ToString("N2") ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
@@ -189,8 +196,13 @@ namespace By_ProV2.Reports
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Kesinti.ToString("N2")))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Right });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Antibiyotik ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
                 row.Cells.Add(new TableCell(new Paragraph(new Run(k.Durumu ?? "-"))) { Padding = new Thickness(5), TextAlignment = TextAlignment.Center });
-                // Açıklama sütununa uzun metinler için wrapping ekle
-                var aciklamaParagraph = new Paragraph(new Run(k.Aciklama ?? "-"));
+                // Açıklama sütununa uzun metinler için kısaltma ekle
+                string aciklamaText = k.Aciklama ?? "-";
+                if (aciklamaText.Length > 40) // Truncate if too long
+                {
+                    aciklamaText = aciklamaText.Substring(0, 37) + "...";
+                }
+                var aciklamaParagraph = new Paragraph(new Run(aciklamaText));
                 var aciklamaCell = new TableCell(aciklamaParagraph) { Padding = new Thickness(5), TextAlignment = TextAlignment.Left };
                 row.Cells.Add(aciklamaCell);
                 dataGroup.Rows.Add(row);
@@ -511,22 +523,63 @@ namespace By_ProV2.Reports
                     k.Aciklama ?? "-"
                 };
 
+                // Calculate row height based on content in customer name column and description column
+                double calculatedRowHeight = rowHeight;
+                
+                // For customer name column (index 0), roughly estimate required height
+                string customerNameText = rowData[0];
+                XSize customerTextSize = gfx.MeasureString(customerNameText, normalFont);
+                double estimatedCustomerRows = Math.Ceiling(customerTextSize.Width / (colWidths[0] - 4));
+                double customerNeededHeight = estimatedCustomerRows * (normalFont.Size + 4); // Add some padding
+                if (customerNeededHeight > calculatedRowHeight)
+                {
+                    calculatedRowHeight = customerNeededHeight;
+                }
+                
+                // For description column (index 13), roughly estimate required height
+                string descText = rowData[13];
+                if (descText.Length > 40) // Truncate description for display
+                {
+                    descText = descText.Substring(0, 37) + "...";
+                }
+                XSize descTextSize = gfx.MeasureString(descText, normalFont);
+                double estimatedDescRows = Math.Ceiling(descTextSize.Width / (colWidths[13] - 4));
+                double descNeededHeight = estimatedDescRows * (normalFont.Size + 4); // Add some padding
+                if (descNeededHeight > calculatedRowHeight)
+                {
+                    calculatedRowHeight = descNeededHeight;
+                }
+                
+                // Ensure minimum row height
+                calculatedRowHeight = Math.Max(calculatedRowHeight, rowHeight);
+                
                 currentX = startX;
                 for (int i = 0; i < rowData.Length; i++)
                 {
                     string cellText = rowData[i];
-                    if (i == 13 && cellText.Length > 40) // Açıklama sütunu - increased from 20 to 40 characters
+                    if (i == 13 && cellText.Length > 40) // Açıklama sütunu - truncate if too long
                     {
                         cellText = cellText.Substring(0, 37) + "...";
                     }
 
-                    gfx.DrawRectangle(XPens.Black, new XRect(currentX, yPos, colWidths[i], rowHeight));
+                    gfx.DrawRectangle(XPens.Black, new XRect(currentX, yPos, colWidths[i], calculatedRowHeight));
                     
-                    XStringFormat format = i == 0 || i == 13 ? XStringFormats.CenterLeft : XStringFormats.Center;
-                    gfx.DrawString(cellText, normalFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, rowHeight - 4), format);
+                    if (i == 0 || i == 13) // For customer name and description, use text wrapping
+                    {
+                        // Use XTextFormatter for proper text wrapping in cells
+                        var textFormatter = new PdfSharp.Drawing.Layout.XTextFormatter(gfx);
+                        XRect cellRect = new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, calculatedRowHeight - 4);
+                        textFormatter.Alignment = XParagraphAlignment.Left;
+                        textFormatter.DrawString(cellText, normalFont, XBrushes.Black, cellRect);
+                    }
+                    else // For other columns, use regular text alignment
+                    {
+                        XStringFormat format = XStringFormats.Center;
+                        gfx.DrawString(cellText, normalFont, XBrushes.Black, new XRect(currentX + 2, yPos + 2, colWidths[i] - 4, calculatedRowHeight - 4), format);
+                    }
                     currentX += colWidths[i];
                 }
-                yPos += rowHeight;
+                yPos += calculatedRowHeight;
             }
 
             // Alt toplam satırı

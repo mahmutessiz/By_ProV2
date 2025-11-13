@@ -127,17 +127,17 @@ namespace By_ProV2.Reports
             TableColumn col1 = new TableColumn { Width = new GridLength(180) }; // Tedarikçi
             TableColumn col2 = new TableColumn { Width = new GridLength(80) };  // Miktar
             TableColumn col3 = new TableColumn { Width = new GridLength(90) };  // Net Miktar
-            TableColumn col4 = new TableColumn { Width = new GridLength(70) };  // Yağ
-            TableColumn col5 = new TableColumn { Width = new GridLength(80) };  // Protein
+            TableColumn col4 = new TableColumn { Width = new GridLength(60) };  // Yağ
+            TableColumn col5 = new TableColumn { Width = new GridLength(70) };  // Protein
             TableColumn col6 = new TableColumn { Width = new GridLength(70) };  // TKM
-            TableColumn col7 = new TableColumn { Width = new GridLength(70) };  // Laktoz
-            TableColumn col8 = new TableColumn { Width = new GridLength(55) };  // pH
+            TableColumn col7 = new TableColumn { Width = new GridLength(60) };  // Laktoz
+            TableColumn col8 = new TableColumn { Width = new GridLength(45) };  // pH
             TableColumn col9 = new TableColumn { Width = new GridLength(90) };  // İletkenlik
-            TableColumn col10 = new TableColumn { Width = new GridLength(100) }; // Donma Noktası
+            TableColumn col10 = new TableColumn { Width = new GridLength(80) }; // Donma Noktası
             TableColumn col11 = new TableColumn { Width = new GridLength(70) }; // Kesinti
             TableColumn col12 = new TableColumn { Width = new GridLength(80) }; // Antibiyotik
             TableColumn col13 = new TableColumn { Width = new GridLength(60) }; // Durum
-            TableColumn col14 = new TableColumn { Width = new GridLength(100) }; // Açıklama
+            TableColumn col14 = new TableColumn { Width = new GridLength(120) }; // Açıklama
 
             table.Columns.Add(col1); // Tedarikçi
             table.Columns.Add(col2); // Miktar
@@ -157,7 +157,7 @@ namespace By_ProV2.Reports
             // Başlık satırı
             TableRowGroup headerGroup = new TableRowGroup();
             TableRow headerRow = new TableRow();
-            string[] headers = { "Tedarikçi", "Miktar (lt)", "Net Miktar (lt)", "Yağ (%)", "Protein (%)", "TKM (%)", "Laktoz (%)", "pH ", "İletkenlik (mS)", "Donma Noktası (°C)", "Kesinti (lt)", "Antibiyotik", "Durum", "Açıklama" };
+            string[] headers = { "Tedarikçi", "Miktar (lt)", "Net Miktar (lt)", "Yağ (%)", "Protein (%)", "TKM (%)", "Laktoz (%)", "pH ", "İletkenlik (mS)", "Donma N. (°C)", "Kesinti (lt)", "Antibiyotik", "Durum", "Açıklama" };
             TextAlignment[] headerAlignments = { TextAlignment.Left, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Right, TextAlignment.Center, TextAlignment.Center, TextAlignment.Left };
 
             for (int i = 0; i < headers.Length; i++)
