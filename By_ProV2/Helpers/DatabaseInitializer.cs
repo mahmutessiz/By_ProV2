@@ -110,8 +110,8 @@ namespace By_ProV2.Helpers
                     Arac NVARCHAR(100),
                     Plaka NVARCHAR(50),
                     DonmaN DECIMAL(5, 3),
-                    Bakteri DECIMAL(18, 0),
-                    Somatik DECIMAL(18, 0),
+                    Bakteri INT,
+                    Somatik INT,
                     Durumu NVARCHAR(50),
                     Aciklama NVARCHAR(MAX),
                     FOREIGN KEY (TedarikciId) REFERENCES Cari(CariId),
@@ -929,6 +929,44 @@ namespace By_ProV2.Helpers
 
                 // Update version
                 string updateVersionQuery = "UPDATE SchemaVersions SET Version = 1";
+                using (var command = new SqlCommand(updateVersionQuery, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            if (currentVersion < 2)
+            {
+                // Version 2 Migration - Change Bakteri and Somatik columns from DECIMAL to INT
+                string version2Migration = @"
+                IF EXISTS (SELECT * FROM sysobjects WHERE name='SutKayit' and xtype='U')
+                BEGIN
+                    -- Check if Bakteri column exists and is currently decimal/numeric type (system_type_id 106), then alter to INT
+                    IF EXISTS (SELECT * FROM sys.columns c
+                               JOIN sys.types t ON c.user_type_id = t.user_type_id
+                               WHERE c.object_id = OBJECT_ID('SutKayit') AND c.name = 'Bakteri'
+                               AND t.name IN ('decimal', 'numeric'))
+                    BEGIN
+                        ALTER TABLE SutKayit ALTER COLUMN Bakteri INT;
+                    END
+
+                    -- Check if Somatik column exists and is currently decimal/numeric type (system_type_id 106), then alter to INT
+                    IF EXISTS (SELECT * FROM sys.columns c
+                               JOIN sys.types t ON c.user_type_id = t.user_type_id
+                               WHERE c.object_id = OBJECT_ID('SutKayit') AND c.name = 'Somatik'
+                               AND t.name IN ('decimal', 'numeric'))
+                    BEGIN
+                        ALTER TABLE SutKayit ALTER COLUMN Somatik INT;
+                    END
+                END
+                ";
+                using (var command = new SqlCommand(version2Migration, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
+                // Update version
+                string updateVersionQuery = "UPDATE SchemaVersions SET Version = 2";
                 using (var command = new SqlCommand(updateVersionQuery, connection))
                 {
                     command.ExecuteNonQuery();
