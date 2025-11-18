@@ -64,7 +64,12 @@ namespace By_ProV2
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT COUNT(*) FROM Cari WHERE CariKod = @CariKod";
+                    // Check if the Cari Kodu exists and has sales records
+                    string sql = @"SELECT COUNT(*)
+                                   FROM Cari c
+                                   INNER JOIN SutKayit sk ON c.CariId = sk.MusteriId
+                                   WHERE c.CariKod = @CariKod
+                                   AND sk.IslemTuru IN ('Direkt Sevk', 'Depodan Sevk')";
                     using (var cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@CariKod", cariKodu);
@@ -124,7 +129,12 @@ namespace By_ProV2
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT CariKod, CariAdi FROM Cari ORDER BY CariKod";
+                    // Load only customers who have sales records (Musteri)
+                    string sql = @"SELECT DISTINCT c.CariKod, c.CariAdi
+                                   FROM Cari c
+                                   INNER JOIN SutKayit sk ON c.CariId = sk.MusteriId
+                                   WHERE sk.IslemTuru IN ('Direkt Sevk', 'Depodan Sevk')
+                                   ORDER BY c.CariKod";
                     using (var cmd = new SqlCommand(sql, conn))
                     {
                         using (var reader = cmd.ExecuteReader())
@@ -142,8 +152,8 @@ namespace By_ProV2
                         }
                     }
                 }
-                
-                // Set the ItemsSource to the full list
+
+                // Set the ItemsSource to the filtered list
                 lstCariListesi.ItemsSource = _allCariList;
             }
             catch (Exception ex)

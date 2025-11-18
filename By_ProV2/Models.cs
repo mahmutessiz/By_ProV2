@@ -251,4 +251,75 @@ namespace By_ProV2.Models
         public decimal? Protein { get; set; }
     }
 
+    // Classes for Satis Report
+    public class SatisReportData
+    {
+        public string Title { get; set; }
+        public string DateRange { get; set; }
+        public string CustomerCode { get; set; }
+        public string CustomerName { get; set; }
+        public List<string> ColumnHeaders { get; set; }
+        public List<SatisReportItem> Items { get; set; }
+        public SatisReportPaymentSummary Summary { get; set; }
+    }
+
+    public class SatisReportItem
+    {
+        public string Tarih { get; set; }
+        public double Miktar { get; set; }
+        public double Kesinti { get; set; }
+        public double Yag { get; set; }
+        public double Protein { get; set; }
+    }
+
+    public class SatisReportPaymentSummary
+    {
+        public double NetMiktar { get; set; }
+        public double Kesinti { get; set; }
+        public double OrtYag { get; set; }
+        public double OrtProtein { get; set; }
+        public double SutFiyati { get; set; }
+        public double NakliyeFiyati { get; set; }
+        public double YagKesintiTutari { get; set; }
+        public double ProteinKesintiTutari { get; set; }
+        public double NetSutOdemesi { get; set; }
+        public bool IsYagKesintisiApplied { get; set; }
+        public bool IsProteinKesintisiApplied { get; set; }
+    }
+
+    // Classes for Alis Report (for consistency)
+    public class AlisReportData
+    {
+        public string Title { get; set; }
+        public string DateRange { get; set; }
+        public string CustomerCode { get; set; }
+        public string CustomerName { get; set; }
+        public List<string> ColumnHeaders { get; set; }
+        public List<AlisReportItem> Items { get; set; }
+        public AlisReportPaymentSummary PaymentSummary { get; set; }
+    }
+
+    public class AlisReportItem
+    {
+        public string Tarih { get; set; }
+        public double Miktar { get; set; }
+        public double Kesinti { get; set; }
+        public double Yag { get; set; }
+        public double Protein { get; set; }
+    }
+
+    public class AlisReportPaymentSummary
+    {
+        public double NetMiktar { get; set; }
+        public double Kesinti { get; set; }
+        public double OrtYag { get; set; }
+        public double OrtProtein { get; set; }
+        public double SutFiyati { get; set; }
+        public double NakliyeFiyati { get; set; }
+        public double YagKesintiTutari { get; set; }
+        public double ProteinKesintiTutari { get; set; }
+        public double NetSutOdemesi { get; set; }
+        public bool IsYagKesintisiApplied { get; set; }
+        public bool IsProteinKesintisiApplied { get; set; }
+    }
 }

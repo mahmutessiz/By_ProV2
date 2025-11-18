@@ -32,17 +32,67 @@
                        Margin="0,5,0,15"/>
         </StackPanel>
 
-        <!-- Cari Bilgileri -->
-        <StackPanel Margin="0,0,0,20">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Cari Kodu:" FontWeight="Bold" Width="100" VerticalAlignment="Center" Margin="25,0,0,0"/>
-                <TextBlock x:Name="txtCariKod" FontSize="14" VerticalAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Cari Adı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"  Margin="25,0,0,0"/>
-                <TextBlock x:Name="txtCariAdi" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="300" Width="300"/>
-            </StackPanel>
-        </StackPanel>
+        <!-- Cari ve Ödeme Detayları -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Cari Bilgileri -->
+            <GroupBox Header="Cari Bilgileri" Grid.Column="0" Margin="0,0,10,20" FontWeight="Bold">
+                <StackPanel Margin="10">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBlock Text="Cari Kodu:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="txtCariKod" FontSize="14" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBlock Text="Cari Adı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="txtCariAdi" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="200"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBlock Text="Süt Fiyatı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtSutFiyati" FontSize="14" VerticalAlignment="Center" Width="100" HorizontalAlignment="Left" TextAlignment="Right" Padding="5" LostFocus="TxtSutFiyati_LostFocus" PreviewTextInput="TxtSutFiyati_PreviewTextInput" DataObject.Pasting="TxtSutFiyati_Pasting"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Nakliye Fiyatı:" FontWeight="Bold" Width="100" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="txtNakliyeFiyati" FontSize="14" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Ödeme Detayları -->
+            <GroupBox Header="Ödeme Detayları" Grid.Column="1" Margin="10,0,0,20" FontWeight="Bold">
+                <StackPanel Margin="10">
+                    <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
+                        <TextBlock Text="Yağ Kesinti Tutarı:" FontWeight="Bold" VerticalAlignment="Center" Width="140"/>
+                        <TextBlock x:Name="txtYagKesintiTutari" FontSize="14" VerticalAlignment="Center" TextAlignment="Right" MinWidth="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
+                        <TextBlock Text="Protein Kesinti Tutarı:" FontWeight="Bold" VerticalAlignment="Center" Width="140"/>
+                        <TextBlock x:Name="txtProteinKesintiTutari" FontSize="14" VerticalAlignment="Center" TextAlignment="Right" MinWidth="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,5">
+                        <TextBlock Text="Net Süt Ödemesi" FontWeight="Medium" FontSize="14"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock x:Name="txtNetSutOdemesi" FontWeight="Bold" FontSize="14"
+                                   VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <CheckBox x:Name="chkYagKesintisi" Content="Yağ kesintisi yap"
+                              VerticalAlignment="Center" HorizontalAlignment="Left"
+                              Margin="10,10,0,5" FontSize="14"
+                              FontWeight="Medium"
+                              Click="ChkYagKesintisi_Click"/>
+
+                    <CheckBox x:Name="chkProteinKesintisi" Content="Protein kesintisi yap"
+                              VerticalAlignment="Center" HorizontalAlignment="Left"
+                              Margin="10,0,0,5" FontSize="14"
+                              FontWeight="Medium"
+                              Click="ChkProteinKesintisi_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
 
         <!-- Başlık Satırı -->
         <Grid Margin="0,0,0,5">
@@ -64,6 +114,7 @@
         <!-- Süt Kayıtları -->
         <StackPanel x:Name="spSatislar" Margin="0,0,0,20"/>
         <Border BorderBrush="Black" BorderThickness="0.1"></Border>
+
         <!-- Özet Bilgiler -->
         <Grid Margin="0,10,0,20">
             <Grid.RowDefinitions>
@@ -71,8 +122,8 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="105"/>
-                <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="105"/>
+                    <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="120"/>
@@ -91,6 +142,42 @@
             <TextBlock Grid.Row="1" Grid.Column="3" x:Name="lblOrtalamaYag" Text="0" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="2"/>
             <TextBlock Grid.Row="1" Grid.Column="4" x:Name="lblOrtalamaProtein" Text="0" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="2"/>
         </Grid>
+
+        <!-- Kesinti Parametreleri -->
+        <GroupBox Header="Kesinti Parametreleri" Margin="0,10,0,20" FontWeight="Bold" Opacity="0">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10,0,0,10">
+                    <TextBlock Text="Yağ Kesinti:" FontWeight="Bold" VerticalAlignment="Center" Width="100"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="txtYagKesintiOrani" FontSize="14" VerticalAlignment="Center" TextAlignment="Right" MinWidth="30"/>
+                        <TextBlock Text="%" VerticalAlignment="Center" Margin="2,0,0,0" FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,10">
+                    <TextBlock Text="Protein Kesinti:" FontWeight="Bold" VerticalAlignment="Center" Width="100"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="txtProteinKesintiOrani" FontSize="14" VerticalAlignment="Center" TextAlignment="Right" MinWidth="30"/>
+                        <TextBlock Text="%" VerticalAlignment="Center" Margin="2,0,0,0" FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" x:Name="spDizemBasiTl" Orientation="Horizontal" Margin="10,0,0,10">
+                    <TextBlock Text="Dizem Başına:" FontWeight="Bold" VerticalAlignment="Center" Width="100"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="txtDizemBasiTl" FontSize="14" VerticalAlignment="Center" TextAlignment="Right" MinWidth="30"/>
+                        <TextBlock Text="TL" VerticalAlignment="Center" Margin="2,0,0,0" FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
     </StackPanel>
     </ScrollViewer>
 </Window>
